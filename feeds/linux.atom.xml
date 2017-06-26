@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>SimonsBlog - linux</title><link href="http://simonsblog.co.uk/" rel="alternate"></link><link href="http://simonsblog.co.uk/feeds/linux.atom.xml" rel="self"></link><id>http://simonsblog.co.uk/</id><updated>2014-05-01T11:41:00+01:00</updated><entry><title>Sockets and cwrap</title><link href="http://simonsblog.co.uk/sockets-and-cwrap.html" rel="alternate"></link><published>2014-05-01T11:41:00+01:00</published><updated>2014-05-01T11:41:00+01:00</updated><author><name>Simon</name></author><id>tag:simonsblog.co.uk,2014-05-01:/sockets-and-cwrap.html</id><summary type="html">&lt;p&gt;Have you ever wanted to run a software stack locally, testing client/server
+interactions, all on the same machine, under a normal user account?&lt;/p&gt;
+&lt;p&gt;Maybe &lt;a class="reference external" href="http://cwrap.org"&gt;cwrap&lt;/a&gt; could help.&lt;/p&gt;
+&lt;p&gt;What is &lt;a class="reference external" href="http://cwrap.org"&gt;cwrap&lt;/a&gt;?&lt;/p&gt;
+&lt;blockquote&gt;
+cwrap is a set of tools to create a fully isolated network environment to
+test client/server components on …&lt;/blockquote&gt;</summary><content type="html">&lt;p&gt;Have you ever wanted to run a software stack locally, testing client/server
+interactions, all on the same machine, under a normal user account?&lt;/p&gt;
+&lt;p&gt;Maybe &lt;a class="reference external" href="http://cwrap.org"&gt;cwrap&lt;/a&gt; could help.&lt;/p&gt;
+&lt;p&gt;What is &lt;a class="reference external" href="http://cwrap.org"&gt;cwrap&lt;/a&gt;?&lt;/p&gt;
+&lt;blockquote&gt;
+cwrap is a set of tools to create a fully isolated network environment to
+test client/server components on a single host.
+It provides synthetic account information, hostname resolution and
+support for privilege separation. The heart of cwrap consists of three
+libraries you can preload to any executable.&lt;/blockquote&gt;
+&lt;p&gt;&lt;a class="reference external" href="http://cwrap.org"&gt;cwrap&lt;/a&gt; consists of three libraries:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;&lt;a class="reference external" href="http://git.samba.org/?p=socket_wrapper.git"&gt;socket_wrapper&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="http://git.samba.org/?p=nss_wrapper.git"&gt;nss_wrapper&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="http://git.samba.org/?p=uid_wrapper.git"&gt;uid_wrapper&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;These libraries allow you to preload to a binary and so replacing library function calls,
+by using &lt;strong&gt;LD_PRELOAD&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;From the &lt;a class="reference external" href="http://man7.org/linux/man-pages/man8/ld.so.8.html"&gt;ld.so&lt;/a&gt; man pages:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;dl class="docutils"&gt;
+&lt;dt&gt;LD_PRELOAD&lt;/dt&gt;
+&lt;dd&gt;A list of additional, user-specified, ELF shared libraries to
+be loaded before all others.  The items of the list can be
+separated by spaces or colons.  This can be used to
+selectively override functions in other shared libraries.&lt;/dd&gt;
+&lt;/dl&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;I'm going to look at &lt;a class="reference external" href="http://git.samba.org/?p=socket_wrapper.git"&gt;socket_wrapper&lt;/a&gt; and some examples of how to redirect
+tcp sockets to use unix sockets.&lt;/p&gt;
+&lt;div class="section" id="installation"&gt;
+&lt;h2&gt;Installation&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;I'm installing socket_wrapper-1.0.1 on Ubuntu 13.04.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;The author of this software is &lt;a class="reference external" href="http://blog.cryptomilk.org"&gt;Andreas Schneider&lt;/a&gt;, so before installing this I'm going to
+import his &lt;a class="reference external" href="http://blog.cryptomilk.org/2013/10/07/new-pgp-key/"&gt;pgp key&lt;/a&gt;.&lt;/p&gt;
+&lt;div class="section" id="pgp-keys"&gt;
+&lt;h3&gt;PGP keys&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;simon@X220:~$ wget --quiet http://www.cryptomilk.org/0xCC014E3D-asn@cryptomilk.org-gpg_key.asc
+simon@X220:~$ gpg --import 0xCC014E3D-asn@cryptomilk.org-gpg_key.asc
+gpg: key CC014E3D: public key &lt;span class="s2"&gt;&amp;quot;Andreas Schneider &amp;lt;asn@cryptomilk.org&amp;gt;&amp;quot;&lt;/span&gt; imported
+gpg: Total number processed: &lt;span class="m"&gt;1&lt;/span&gt;
+gpg:               imported: &lt;span class="m"&gt;1&lt;/span&gt;  &lt;span class="o"&gt;(&lt;/span&gt;RSA: &lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+gpg: no ultimately trusted keys found
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;The project is part of the samba suite of software, so it's available for download
+via the &lt;a class="reference external" href="https://ftp.samba.org/pub/cwrap/"&gt;samba&lt;/a&gt; site.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="download"&gt;
+&lt;h3&gt;Download&lt;/h3&gt;
+&lt;p&gt;The latest version of &lt;a class="reference external" href="http://git.samba.org/?p=socket_wrapper.git"&gt;socket_wrapper&lt;/a&gt; is &lt;a class="reference external" href="https://ftp.samba.org/pub/cwrap/socket_wrapper-1.0.1.tar.gz"&gt;socket_wrapper-1.0.1.tar.gz&lt;/a&gt; (04-Feb-2014 09:04, 36K)&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;simon@X220:~$ mkdir sockets
+simon@X220:~$ &lt;span class="nb"&gt;cd&lt;/span&gt; sockets
+simon@X220:~/sockets$ wget --quiet https://ftp.samba.org/pub/cwrap/socket_wrapper-1.0.1.tar.gz
+simon@X220:~/sockets$ wget --quiet https://ftp.samba.org/pub/cwrap/socket_wrapper-1.0.1.tar.asc
+simon@X220:~/sockets$ gzip -d socket_wrapper-1.0.1.tar.gz
+simon@X220:~/sockets$ gpg --verify socket_wrapper-1.0.1.tar.asc
+gpg: Signature made Tue &lt;span class="m"&gt;04&lt;/span&gt; Feb &lt;span class="m"&gt;2014&lt;/span&gt; &lt;span class="m"&gt;16&lt;/span&gt;:04:36 GMT using RSA key ID CC014E3D
+gpg: Good signature from &lt;span class="s2"&gt;&amp;quot;Andreas Schneider &amp;lt;asn@cryptomilk.org&amp;gt;&amp;quot;&lt;/span&gt;
+gpg:                 aka &lt;span class="s2"&gt;&amp;quot;Andreas Schneider &amp;lt;asn@samba.org&amp;gt;&amp;quot;&lt;/span&gt;
+gpg: WARNING: This key is not certified with a trusted signature!
+gpg:          There is no indication that the signature belongs to the owner.
+Primary key fingerprint: 8DFF 53E1 8F2A BC8D 8F3C  &lt;span class="m"&gt;9223&lt;/span&gt; 7EE0 FC4D CC01 4E3D
+simon@X220:~/sockets$ tar -xf socket_wrapper-1.0.1.tar
+simon@X220:~/sockets$ &lt;span class="nb"&gt;cd&lt;/span&gt; socket_wrapper-1.0.1/
+simon@X220:~/sockets/socket_wrapper-1.0.1$ mkdir builddir
+simon@X220:~/sockets/socket_wrapper-1.0.1$ &lt;span class="nb"&gt;cd&lt;/span&gt; builddir/
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="section" id="requirements"&gt;
+&lt;h3&gt;Requirements&lt;/h3&gt;
+&lt;p&gt;&lt;a class="reference external" href="http://www.cmake.org/"&gt;cmake&lt;/a&gt; is a requirement to build.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;simon@X220:~/sockets/socket_wrapper-1.0.1/builddir$ sudo aptitude install cmake
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="section" id="compile-and-install"&gt;
+&lt;h3&gt;Compile and Install&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;simon@X220:~/sockets/socket_wrapper-1.0.1/builddir$ cmake .. -DCMAKE_INSTALL_PREFIX:PATH&lt;span class="o"&gt;=&lt;/span&gt;~/sockets/bin
+-- The C compiler identification is GNU &lt;span class="m"&gt;4&lt;/span&gt;.7.3
+-- Check &lt;span class="k"&gt;for&lt;/span&gt; working C compiler: /usr/bin/cc
+-- Check &lt;span class="k"&gt;for&lt;/span&gt; working C compiler: /usr/bin/cc -- works
+......
+-- Configuring &lt;span class="k"&gt;done&lt;/span&gt;
+-- Generating &lt;span class="k"&gt;done&lt;/span&gt;
+-- Build files have been written to: /home/simon/sockets/socket_wrapper-1.0.1/builddir
+simon@X220:~/sockets/socket_wrapper-1.0.1/builddir$ make &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; make install
+Scanning dependencies of target socket_wrapper
+&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="m"&gt;100&lt;/span&gt;%&lt;span class="o"&gt;]&lt;/span&gt; Building C object src/CMakeFiles/socket_wrapper.dir/socket_wrapper.c.o
+Linking C shared library libsocket_wrapper.so
+&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="m"&gt;100&lt;/span&gt;%&lt;span class="o"&gt;]&lt;/span&gt; Built target socket_wrapper
+&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="m"&gt;100&lt;/span&gt;%&lt;span class="o"&gt;]&lt;/span&gt; Built target socket_wrapper
+Install the project...
+-- Install configuration: &lt;span class="s2"&gt;&amp;quot;&amp;quot;&lt;/span&gt;
+-- Installing: /home/simon/sockets/bin/lib/pkgconfig/socket_wrapper.pc
+-- Installing: /home/simon/sockets/bin/lib/cmake/socket_wrapper-config-version.cmake
+-- Installing: /home/simon/sockets/bin/lib/cmake/socket_wrapper-config.cmake
+-- Installing: /home/simon/sockets/bin/lib/libsocket_wrapper.so.0.0.1
+-- Installing: /home/simon/sockets/bin/lib/libsocket_wrapper.so.0
+-- Installing: /home/simon/sockets/bin/lib/libsocket_wrapper.so
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="section" id="running-netcat"&gt;
+&lt;h2&gt;Running netcat&lt;/h2&gt;
+&lt;p&gt;In one terminal run netcat binding to IP: 127.0.0.10 on port 7&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;simon@X220:~/sockets/socket_wrapper-1.0.1/builddir$ &lt;span class="nb"&gt;cd&lt;/span&gt; ~/sockets/bin/
+simon@X220:~/sockets/bin$ mktemp -d
+/tmp/tmp.hxyAQf3Pda
+simon@X220:~/sockets/bin$ &lt;span class="nv"&gt;LD_PRELOAD&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;lib/libsocket_wrapper.so &lt;span class="se"&gt;\&lt;/span&gt;
+&amp;gt; &lt;span class="nv"&gt;SOCKET_WRAPPER_DIR&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/tmp/tmp.hxyAQf3Pda &lt;span class="se"&gt;\&lt;/span&gt;
+&amp;gt; &lt;span class="nv"&gt;SOCKET_WRAPPER_DEFAULT_IFACE&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;10&lt;/span&gt; nc -v -l &lt;span class="m"&gt;127&lt;/span&gt;.0.0.10 &lt;span class="m"&gt;7&lt;/span&gt;
+Listening on &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="m"&gt;127&lt;/span&gt;.0.0.10&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;family &lt;span class="m"&gt;0&lt;/span&gt;, port &lt;span class="m"&gt;7&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;In a seperate terminal send a message to that IP and port.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;simon@X220:~/sockets/bin$ &lt;span class="nv"&gt;LD_PRELOAD&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;lib/libsocket_wrapper.so &lt;span class="se"&gt;\&lt;/span&gt;
+&amp;gt; &lt;span class="nv"&gt;SOCKET_WRAPPER_DIR&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/tmp/tmp.hxyAQf3Pda &lt;span class="se"&gt;\&lt;/span&gt;
+&amp;gt; &lt;span class="nv"&gt;SOCKET_WRAPPER_DEFAULT_IFACE&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;10&lt;/span&gt; nc -v &lt;span class="m"&gt;127&lt;/span&gt;.0.0.10 &lt;span class="m"&gt;7&lt;/span&gt;
+Connection to &lt;span class="m"&gt;127&lt;/span&gt;.0.0.10 &lt;span class="m"&gt;7&lt;/span&gt; port &lt;span class="o"&gt;[&lt;/span&gt;tcp/echo&lt;span class="o"&gt;]&lt;/span&gt; succeeded!
+Hello!
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;'Hello!' is then received by the listening netcat&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;simon@X220:~/sockets/bin$ &lt;span class="nv"&gt;LD_PRELOAD&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;lib/libsocket_wrapper.so &lt;span class="se"&gt;\&lt;/span&gt;
+&amp;gt; &lt;span class="nv"&gt;SOCKET_WRAPPER_DIR&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/tmp/tmp.hxyAQf3Pda &lt;span class="se"&gt;\&lt;/span&gt;
+&amp;gt; &lt;span class="nv"&gt;SOCKET_WRAPPER_DEFAULT_IFACE&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;10&lt;/span&gt; nc -v -l &lt;span class="m"&gt;127&lt;/span&gt;.0.0.10 &lt;span class="m"&gt;7&lt;/span&gt;
+Listening on &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="m"&gt;127&lt;/span&gt;.0.0.10&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;family &lt;span class="m"&gt;0&lt;/span&gt;, port &lt;span class="m"&gt;7&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+Connection from &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="m"&gt;127&lt;/span&gt;.0.0.10&lt;span class="o"&gt;]&lt;/span&gt; port &lt;span class="m"&gt;7&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;tcp/echo&lt;span class="o"&gt;]&lt;/span&gt; accepted &lt;span class="o"&gt;(&lt;/span&gt;family &lt;span class="m"&gt;2&lt;/span&gt;, sport &lt;span class="m"&gt;41505&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+Hello!
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Instead of netcat using tcp sockets, SOCKET_WRAPPER_DIR contains the unix sockets created in place of those tcp sockets.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;simon@X220:~/sockets/bin$ file /tmp/tmp.hxyAQf3Pda/* &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; lsof /tmp/tmp.hxyAQf3Pda/*
+/tmp/tmp.hxyAQf3Pda/T0A0007: socket
+/tmp/tmp.hxyAQf3Pda/T0AA221: socket
+COMMAND   PID  USER   FD   TYPE             DEVICE SIZE/OFF    NODE NAME
+nc      &lt;span class="m"&gt;31334&lt;/span&gt; simon    5u  unix 0x0000000000000000      0t0 &lt;span class="m"&gt;2265223&lt;/span&gt; /tmp/tmp.hxyAQf3Pda/T0A0007
+nc      &lt;span class="m"&gt;31505&lt;/span&gt; simon    3u  unix 0x0000000000000000      0t0 &lt;span class="m"&gt;2267187&lt;/span&gt; /tmp/tmp.hxyAQf3Pda/T0AA221
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="section" id="running-nginx"&gt;
+&lt;h2&gt;Running Nginx&lt;/h2&gt;
+&lt;p&gt;I created the most basic of nginx confs as a simple example:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;simon@X220:~$ mkdir -p nginx-local/www
+simon@X220:~$ touch nginx-local/www/test
+simon@X220:~$ &lt;span class="nb"&gt;cd&lt;/span&gt; nginx-local
+simon@X220:~/nginx-local$ vi nginx.conf
+error_log /home/simon/nginx-local/error.log&lt;span class="p"&gt;;&lt;/span&gt;
+worker_processes &lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+events &lt;span class="o"&gt;{&lt;/span&gt;
+    worker_connections &lt;span class="m"&gt;3&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="o"&gt;}&lt;/span&gt;
+http &lt;span class="o"&gt;{&lt;/span&gt;
+    server &lt;span class="o"&gt;{&lt;/span&gt;
+        listen &lt;span class="m"&gt;127&lt;/span&gt;.0.0.10:7&lt;span class="p"&gt;;&lt;/span&gt;
+        root /home/simon/nginx-local/www&lt;span class="p"&gt;;&lt;/span&gt;
+        location / &lt;span class="o"&gt;{&lt;/span&gt;
+            autoindex on&lt;span class="p"&gt;;&lt;/span&gt;
+            access_log off&lt;span class="p"&gt;;&lt;/span&gt;
+        &lt;span class="o"&gt;}&lt;/span&gt;
+    &lt;span class="o"&gt;}&lt;/span&gt;
+&lt;span class="o"&gt;}&lt;/span&gt;
+
+simon@X220:~/nginx-local$ &lt;span class="nv"&gt;LD_PRELOAD&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/home/simon/sockets/bin/lib/libsocket_wrapper.so &lt;span class="se"&gt;\&lt;/span&gt;
+&amp;gt; &lt;span class="nv"&gt;SOCKET_WRAPPER_DIR&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/tmp/tmp.hxyAQf3Pda &lt;span class="se"&gt;\&lt;/span&gt;
+&amp;gt; &lt;span class="nv"&gt;SOCKET_WRAPPER_DEFAULT_IFACE&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;10&lt;/span&gt; &lt;span class="se"&gt;\&lt;/span&gt;
+&amp;gt; /usr/sbin/nginx -c /home/simon/nginx-local/nginx.conf &lt;span class="se"&gt;\&lt;/span&gt;
+&amp;gt; -g &lt;span class="s2"&gt;&amp;quot;pid /home/simon/nginx-local/nginx.pid;&amp;quot;&lt;/span&gt;
+
+
+Note: You may receive an &lt;span class="o"&gt;[&lt;/span&gt;alert&lt;span class="o"&gt;]&lt;/span&gt; warning from nginx, that is cannot &lt;span class="nb"&gt;read&lt;/span&gt; the default error_log.
+As of version &lt;span class="m"&gt;0&lt;/span&gt;.7.53, nginx will use the compiled-in default error log before, reading in
+the config file.
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Next, check that Nginx is running&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;simon@X220:~/nginx-local$ netstat -nlp &lt;span class="p"&gt;|&lt;/span&gt; grep &lt;span class="k"&gt;$(&lt;/span&gt;cat ~/nginx-local/nginx.pid&lt;span class="k"&gt;)&lt;/span&gt;
+&lt;span class="o"&gt;(&lt;/span&gt;Not all processes could be identified, non-owned process info
+ will not be shown, you would have to be root to see it all.&lt;span class="o"&gt;)&lt;/span&gt;
+unix  &lt;span class="m"&gt;2&lt;/span&gt;      &lt;span class="o"&gt;[&lt;/span&gt; ACC &lt;span class="o"&gt;]&lt;/span&gt;     STREAM     LISTENING     &lt;span class="m"&gt;2266669&lt;/span&gt;  &lt;span class="m"&gt;919&lt;/span&gt;/nginx.pid&lt;span class="p"&gt;;&lt;/span&gt;      /tmp/tmp.hxyAQf3Pda/T0A0007
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Connect as a client to the server and capture conversation (SOCKET_WRAPPER_PCAP_FILE)&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;simon@X220:~/nginx-local$ &lt;span class="nv"&gt;LD_PRELOAD&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/home/simon/sockets/bin/lib/libsocket_wrapper.so &lt;span class="se"&gt;\&lt;/span&gt;
+&amp;gt; &lt;span class="nv"&gt;SOCKET_WRAPPER_DIR&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/tmp/tmp.hxyAQf3Pda &lt;span class="se"&gt;\&lt;/span&gt;
+&amp;gt; &lt;span class="nv"&gt;SOCKET_WRAPPER_PCAP_FILE&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/tmp/nginx.pcap &lt;span class="se"&gt;\&lt;/span&gt;
+&amp;gt; &lt;span class="nv"&gt;SOCKET_WRAPPER_DEFAULT_IFACE&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;10&lt;/span&gt; telnet &lt;span class="m"&gt;127&lt;/span&gt;.0.0.10 &lt;span class="m"&gt;7&lt;/span&gt;
+Trying &lt;span class="m"&gt;127&lt;/span&gt;.0.0.10...
+Connected to &lt;span class="m"&gt;127&lt;/span&gt;.0.0.10.
+Escape character is &lt;span class="s1"&gt;&amp;#39;^]&amp;#39;&lt;/span&gt;.
+GET / HTTP/1.1
+Host: &lt;span class="m"&gt;127&lt;/span&gt;.0.0.10
+
+HTTP/1.1 &lt;span class="m"&gt;200&lt;/span&gt; OK
+Server: nginx/1.2.6 &lt;span class="o"&gt;(&lt;/span&gt;Ubuntu&lt;span class="o"&gt;)&lt;/span&gt;
+Date: Thu, &lt;span class="m"&gt;01&lt;/span&gt; May &lt;span class="m"&gt;2014&lt;/span&gt; &lt;span class="m"&gt;15&lt;/span&gt;:26:31 GMT
+Content-Type: text/html
+Transfer-Encoding: chunked
+Connection: keep-alive
+
+&lt;span class="m"&gt;104&lt;/span&gt;
+&amp;lt;html&amp;gt;
+&amp;lt;head&amp;gt;&amp;lt;title&amp;gt;Index of /&amp;lt;/title&amp;gt;&amp;lt;/head&amp;gt;
+&amp;lt;body &lt;span class="nv"&gt;bgcolor&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;white&amp;quot;&lt;/span&gt;&amp;gt;
+&amp;lt;h1&amp;gt;Index of /&amp;lt;/h1&amp;gt;&amp;lt;hr&amp;gt;&amp;lt;pre&amp;gt;&amp;lt;a &lt;span class="nv"&gt;href&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;../&amp;quot;&lt;/span&gt;&amp;gt;../&amp;lt;/a&amp;gt;
+&amp;lt;a &lt;span class="nv"&gt;href&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;test&amp;quot;&lt;/span&gt;&amp;gt;test&amp;lt;/a&amp;gt;                                               &lt;span class="m"&gt;01&lt;/span&gt;-May-2014 &lt;span class="m"&gt;14&lt;/span&gt;:10                   &lt;span class="m"&gt;0&lt;/span&gt;
+&amp;lt;/pre&amp;gt;&amp;lt;hr&amp;gt;&amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+
+&lt;span class="m"&gt;0&lt;/span&gt;
+
+simon@X220:~/nginx-local$ &lt;span class="nb"&gt;kill&lt;/span&gt; -QUIT &lt;span class="k"&gt;$(&lt;/span&gt;cat /home/simon/nginx-local/nginx.pid&lt;span class="k"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;All of this network conversation is caught in the pcap file and so can be loaded into
+wireshark.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;simon@X220:~/nginx-local$ wireshark /tmp/nginx.pcap
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="section" id="conclusion"&gt;
+&lt;h2&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;This throws up a whole host of possibilities to test client/server interactions
+that are required for your application and all tested locally as a normal
+(non root) user.&lt;/p&gt;
+&lt;p&gt;The ability to easily translate IPv4 and IPv6 addresses to a unix sockets,
+and simulate binding to privileged ports (&amp;lt; 1024), allows for
+easier local testing, if your application requires a lot of network interactions
+as part of it's test suite.&lt;/p&gt;
+&lt;p&gt;You may also be interested in the other components of &lt;a class="reference external" href="http://cwrap.org"&gt;cwrap&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class="reference external" href="http://git.samba.org/?p=nss_wrapper.git"&gt;nss_wrapper&lt;/a&gt;&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;Provides information for user and group accounts&lt;/li&gt;
+&lt;li&gt;Network name resolution using a hosts file&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Name resolution could work well with &lt;a class="reference external" href="http://git.samba.org/?p=socket_wrapper.git"&gt;socket_wrapper&lt;/a&gt; and works much the same
+way.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;simon@X220:~/nss_wrapper$ &lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;127.0.0.10  simonsblog.co.uk&amp;quot;&lt;/span&gt; &amp;gt; hosts
+simon@X220:~/nss_wrapper$ &lt;span class="nv"&gt;LD_PRELOAD&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;bin/lib/libnss_wrapper.so&amp;quot;&lt;/span&gt; &lt;span class="se"&gt;\&lt;/span&gt;
+&amp;gt; &lt;span class="nv"&gt;NSS_WRAPPER_HOSTS&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;hosts &lt;span class="se"&gt;\&lt;/span&gt;
+&amp;gt; python -c &lt;span class="s2"&gt;&amp;quot;import socket; print(socket.gethostbyname(&amp;#39;simonsblog.co.uk&amp;#39;))&amp;quot;&lt;/span&gt;
+&lt;span class="m"&gt;127&lt;/span&gt;.0.0.10
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;a class="reference external" href="http://git.samba.org/?p=uid_wrapper.git"&gt;uid_wrapper&lt;/a&gt;&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;Allows uid switching as a normal user.&lt;/li&gt;
+&lt;li&gt;Start any application making it believe it is running as root.&lt;/li&gt;
+&lt;li&gt;Support for user/group changing in the local thread using the syscalls (like glibc).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Check out the article on &lt;a class="reference external" href="https://lwn.net/Articles/595320/"&gt;lwn.net&lt;/a&gt; and &lt;a class="reference external" href="http://cwrap.org"&gt;cwrap&lt;/a&gt; for more info.&lt;/p&gt;
+&lt;/div&gt;
+</content><category term="linux"></category><category term="testing"></category><category term="sockets"></category><category term="cwrap"></category></entry><entry><title>Tiling window manager: i3</title><link href="http://simonsblog.co.uk/tiling-window-manager-i3.html" rel="alternate"></link><published>2012-11-09T17:28:00+00:00</published><updated>2012-11-09T17:28:00+00:00</updated><author><name>Simon</name></author><id>tag:simonsblog.co.uk,2012-11-09:/tiling-window-manager-i3.html</id><summary type="html">&lt;p&gt;After using the &lt;a class="reference external" href="http://awesome.naquadah.org/"&gt;awesome&lt;/a&gt; window manager for the last few years, I’ve
+switched over to a new tiling window manger &lt;a class="reference external" href="http://i3wm.org"&gt;i3&lt;/a&gt; - after trying it out,
+I’ve now completely switched over and really like the ease of use and
+increased functionality it provides.&lt;/p&gt;
+&lt;p&gt;&lt;a class="reference external" href="http://en.wikipedia.org/wiki/Tiling_window_manager"&gt;Tiling window managers&lt;/a&gt; allow me to …&lt;/p&gt;</summary><content type="html">&lt;p&gt;After using the &lt;a class="reference external" href="http://awesome.naquadah.org/"&gt;awesome&lt;/a&gt; window manager for the last few years, I’ve
+switched over to a new tiling window manger &lt;a class="reference external" href="http://i3wm.org"&gt;i3&lt;/a&gt; - after trying it out,
+I’ve now completely switched over and really like the ease of use and
+increased functionality it provides.&lt;/p&gt;
+&lt;p&gt;&lt;a class="reference external" href="http://en.wikipedia.org/wiki/Tiling_window_manager"&gt;Tiling window managers&lt;/a&gt; allow me to manage my screen space much more
+efficiently and mean I can work within multiple windows easily. I like
+the simplicity of &lt;a class="reference external" href="http://i3wm.org"&gt;i3&lt;/a&gt;, it allows for &lt;a class="reference external" href="http://i3wm.org/docs/userguide.html#_changing_the_container_layout"&gt;3 container layouts&lt;/a&gt;
+splith/splitv, stacking, tabbed. I also find it &lt;strong&gt;very&lt;/strong&gt; easy to modify
+your keyboard mappings via a simple (plain text rather than a &lt;a class="reference external" href="http://www.lua.org/"&gt;lua&lt;/a&gt;
+config file in the case of awesome wm) file in your home directory.
+&lt;a class="reference external" href="https://gist.github.com/simonhayward/11316105"&gt;~/.i3/config&lt;/a&gt;.This config file is created for you based on default
+settings when you first use i3.&lt;/p&gt;
+&lt;img alt="i3 example screenshot" class="align-center" src="/images/i3/i3-screen-thumb.png" style="width: 700px; height: 394px;" /&gt;
+&lt;p&gt;&lt;a class="reference external" href="/images/i3/i3-screen.png"&gt;View a screenshot&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;I didn’t need to add much to mine, just some short cuts I would need,
+suspend/lock (I’m using &lt;a class="reference external" href="http://i3wm.org/i3lock/"&gt;i3lock&lt;/a&gt; - which comes with the i3 suite) - the
+defaults are sane and get’s you up and running quickly.&lt;/p&gt;
+&lt;p&gt;&lt;a class="reference external" href="http://i3wm.org"&gt;i3&lt;/a&gt; has good support for multi monitors and uses &lt;a class="reference external" href="http://xorg.freedesktop.org/wiki/Projects/XRandR"&gt;xrandr&lt;/a&gt; by default.&lt;/p&gt;
+&lt;p&gt;What is most impressive is not only the simplicity of the configuration
+but the speed of it, and the minimal memory space it occupies. The
+&lt;a class="reference external" href="http://i3wm.org/docs/"&gt;docs&lt;/a&gt; are extremely well laid out and answer almost all questions you
+may have. There is a good &lt;a class="reference external" href="http://www.youtube.com/watch?v=QnYN2CTb1hM"&gt;google tech talk video on i3&lt;/a&gt; from &lt;a class="reference external" href="http://michael.stapelberg.de/"&gt;Michael
+Stapelberg&lt;/a&gt; outlining the design decisions they took and why they
+decided to built yet another window tiling manager.&lt;/p&gt;
+&lt;p&gt;My main reasons for switching are:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;Speed&lt;/li&gt;
+&lt;li&gt;Simplicity&lt;/li&gt;
+&lt;li&gt;Complete test suite&lt;/li&gt;
+&lt;li&gt;Clean design&lt;/li&gt;
+&lt;li&gt;Great documentation&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;If you are using or considering switching to a tiling manager, I
+recommend trying &lt;a class="reference external" href="http://i3wm.org"&gt;i3&lt;/a&gt;, if you are using ubuntu or debian it’s even
+easier to install as you can use their &lt;a class="reference external" href="http://i3wm.org/docs/repositories.html"&gt;repositories&lt;/a&gt;.&lt;/p&gt;
+</content><category term="window manager"></category><category term="i3"></category><category term="ubuntu"></category><category term="debian"></category><category term="linux"></category></entry><entry><title>Linux window managers</title><link href="http://simonsblog.co.uk/linux-window-managers.html" rel="alternate"></link><published>2011-11-16T11:13:00+00:00</published><updated>2011-11-16T11:13:00+00:00</updated><author><name>Simon</name></author><id>tag:simonsblog.co.uk,2011-11-16:/linux-window-managers.html</id><summary type="html">&lt;p&gt;There seems to be a lot of &lt;a class="reference external" href="http://www.extremetech.com/computing/104581-linux-mint-the-new-ubuntu"&gt;resentment&lt;/a&gt; in regards to &lt;a class="reference external" href="http://www.ubuntu.com/ubuntu"&gt;Ubuntu
+desktops&lt;/a&gt; decision to switch to &lt;a class="reference external" href="http://unity.ubuntu.com/"&gt;unity&lt;/a&gt; as the default window manager
+in linux. The &lt;a class="reference external" href="https://bugs.launchpad.net/unity/+bug/668415/comments/154"&gt;comments&lt;/a&gt; by Mark Shuttleworth are interesting:&lt;/p&gt;
+&lt;blockquote&gt;
+“I admire and respect the fact that you can make free software do
+exactly what you want - that …&lt;/blockquote&gt;</summary><content type="html">&lt;p&gt;There seems to be a lot of &lt;a class="reference external" href="http://www.extremetech.com/computing/104581-linux-mint-the-new-ubuntu"&gt;resentment&lt;/a&gt; in regards to &lt;a class="reference external" href="http://www.ubuntu.com/ubuntu"&gt;Ubuntu
+desktops&lt;/a&gt; decision to switch to &lt;a class="reference external" href="http://unity.ubuntu.com/"&gt;unity&lt;/a&gt; as the default window manager
+in linux. The &lt;a class="reference external" href="https://bugs.launchpad.net/unity/+bug/668415/comments/154"&gt;comments&lt;/a&gt; by Mark Shuttleworth are interesting:&lt;/p&gt;
+&lt;blockquote&gt;
+“I admire and respect the fact that you can make free software do
+exactly what you want - that’s precisely what I set out to support
+in founding Ubuntu. What I did not set out to found was a project
+which pandered to the needs of a few, at the cost to the many.
+Especially when the few can perfectly well help themselves, and the
+many cannot.”&lt;/blockquote&gt;
+&lt;p&gt;I think I sit in the &lt;strong&gt;few&lt;/strong&gt; camp, which is why after trying &lt;a class="reference external" href="http://unity.ubuntu.com/"&gt;unity&lt;/a&gt;,
+and not liking it, chose to run a different window manager and settled
+upon a &lt;a class="reference external" href="http://en.wikipedia.org/wiki/Tiling_window_manager"&gt;tiling window manager&lt;/a&gt; (&lt;a class="reference external" href="http://awesome.naquadah.org/"&gt;awesome&lt;/a&gt;) which is extremely light on
+resources and extremely configurable via a single config file
+(~/.config/awesome/rc.lua).&lt;/p&gt;
+&lt;p&gt;I’ve transitioned from:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;&lt;a class="reference external" href="http://www.gnome.org/"&gt;gnome&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="http://www.xfce.org/"&gt;XFCE&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="http://awesome.naquadah.org/"&gt;awesome&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;This is the point of open source I &lt;em&gt;can&lt;/em&gt; up sticks and move, but what I
+think feels alien to regular open source users (in this I really mean
+everyday desktop/laptop users) is that this decision has felt forced
+upon us, sure I can apt-get install &lt;em&gt;alternative window manager&lt;/em&gt; but it
+still felt like the rug was pulled out from under us.&lt;/p&gt;
+&lt;p&gt;Saying that I’m happily in the &lt;em&gt;few&lt;/em&gt; camp rather than the &lt;em&gt;helpless&lt;/em&gt;
+camp, if anything it’s the real reason I use &lt;a class="reference external" href="http://en.wikipedia.org/wiki/Linux"&gt;linux&lt;/a&gt;. It’s also
+encouraged me to look around at other options and this being open source
+there are &lt;a class="reference external" href="http://en.wikipedia.org/wiki/X_window_manager"&gt;plenty&lt;/a&gt; of other options, and I’m actually happier now with
+a &lt;a class="reference external" href="http://en.wikipedia.org/wiki/Tiling_window_manager"&gt;tiling window manager&lt;/a&gt;, it doesn’t suck up much memory and cpu but
+the main benefit for me is that I tend to work much more from the
+keyboard, the mouse is used sparingly. The “Mod4” key (this is normally
+the Windows key on most keyboards) is your friend, one of the best
+resources I’ve found is the &lt;a class="reference external" href="https://wiki.archlinux.org/index.php/Awesome"&gt;arch linux guide&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;I’ve switched to &lt;a class="reference external" href="http://awesome.naquadah.org/"&gt;awesome&lt;/a&gt; on an old &lt;a class="reference external" href="https://wiki.archlinux.org/index.php/Awesome#Mod4_key_vs._IBM_ThinkPad_users"&gt;thinkpad&lt;/a&gt; running &lt;a class="reference external" href="http://www.gentoo.org/"&gt;gentoo&lt;/a&gt; and
+my desktop at home and work and another laptop which run &lt;a class="reference external" href="http://releases.ubuntu.com/11.10/"&gt;Ubuntu
+11.10&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;The point is there is &lt;strong&gt;choice&lt;/strong&gt; and if you are one of the &lt;em&gt;few&lt;/em&gt; or even
+just started out using &lt;a class="reference external" href="http://www.ubuntu.com/ubuntu"&gt;ubuntu&lt;/a&gt; or any other distribution and you don’t
+like this or you don’t like that, then look around for alternatives,
+there is normally someone else who has done the work for you and
+developed something which is more suitable.&lt;/p&gt;
+&lt;p&gt;Here’s my &lt;a class="reference external" href="https://gist.github.com/1369928"&gt;rc.lua config file&lt;/a&gt;, it does what I need it to do, so change
+it to suit &lt;em&gt;your&lt;/em&gt; needs, and remember free software &lt;strong&gt;can&lt;/strong&gt; do exactly
+what you want, and a little time is the only investment you need to pay.&lt;/p&gt;
+</content><category term="awesome"></category><category term="ubuntu"></category><category term="window manager"></category></entry><entry><title>Add munin monitoring in 5 minutes</title><link href="http://simonsblog.co.uk/add-munin-monitoring-in-5-minutes.html" rel="alternate"></link><published>2011-08-31T14:49:00+01:00</published><updated>2011-08-31T14:49:00+01:00</updated><author><name>Simon</name></author><id>tag:simonsblog.co.uk,2011-08-31:/add-munin-monitoring-in-5-minutes.html</id><summary type="html">&lt;p&gt;This site is set up on a &lt;a class="reference external" href="http://linode.com"&gt;Linode VPS&lt;/a&gt;, the OS is &lt;a class="reference external" href="http://www.debian.org"&gt;debian&lt;/a&gt; squeeze 32
+bit, and I wanted some basic monitoring in place, so knowing how quick
+&lt;a class="reference external" href="http://munin-monitoring.org"&gt;Munin&lt;/a&gt; is to set up, I did indeed have monitoring up and running on
+this VM in no time at all.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ sudo …&lt;/pre&gt;&lt;/div&gt;</summary><content type="html">&lt;p&gt;This site is set up on a &lt;a class="reference external" href="http://linode.com"&gt;Linode VPS&lt;/a&gt;, the OS is &lt;a class="reference external" href="http://www.debian.org"&gt;debian&lt;/a&gt; squeeze 32
+bit, and I wanted some basic monitoring in place, so knowing how quick
+&lt;a class="reference external" href="http://munin-monitoring.org"&gt;Munin&lt;/a&gt; is to set up, I did indeed have monitoring up and running on
+this VM in no time at all.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ sudo aptitude install munin
+$ sudo aptitude install munin-plugins-extra
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;It’s then just a case of creating symbolic links to those plugins you
+want to use. I’m using &lt;a class="reference external" href="http://nginx.org"&gt;nginx&lt;/a&gt; and used these &lt;a class="reference external" href="https://github.com/perusio/nginx-munin"&gt;perl scripts&lt;/a&gt; to add
+monitoring and added a server config for these plugins to query on the
+nginx status.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ git clone https://github.com/perusio/nginx-munin
+$ mv nginx-munin/nginx_* /usr/share/munin/plugins/
+$ &lt;span class="nb"&gt;cd&lt;/span&gt; /etc/munin/plugins
+$ ln -s /usr/share/munin/plugins/nginx_connection_request nginx_connection_request
+$ ln -s /usr/share/munin/plugins/nginx_memory nginx_memory
+$ ln -s /usr/share/munin/plugins/nginx_request nginx_request
+$ ln -s /usr/share/munin/plugins/nginx_status nginx_status
+$ sudo aptitude install libio-all-lwp-perl &lt;span class="c1"&gt;# nginx plugins have dependencies&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;I’ve compiled nginx from source, so had to recompile with the
+&lt;em&gt;http_stub_status_module&lt;/em&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ wget http://nginx.org/download/nginx-1.0.5.tar.gz
+$ tar -zxvf nginx-1.0.5.tar.gz &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; mv nginx-1.0.5 nginx-src &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class="nb"&gt;cd&lt;/span&gt; nginx-src
+$ ./configure --prefix&lt;span class="o"&gt;=&lt;/span&gt;/opt/nginx-1.0.5 --user&lt;span class="o"&gt;=&lt;/span&gt;nginx --group&lt;span class="o"&gt;=&lt;/span&gt;nginx &lt;span class="se"&gt;\&lt;/span&gt;
+--with-http_ssl_module --with-ipv6 --with-http_stub_status_module
+$ make
+$ make install
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Then add an server config for nginx monitoring:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;server &lt;span class="o"&gt;{&lt;/span&gt;
+   server_name munin.simonsblog.co.uk&lt;span class="p"&gt;;&lt;/span&gt;
+   root /var/cache/munin/www/&lt;span class="p"&gt;;&lt;/span&gt;
+   location / &lt;span class="o"&gt;{&lt;/span&gt;
+   index index.html&lt;span class="p"&gt;;&lt;/span&gt;
+   access_log off&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="o"&gt;}&lt;/span&gt;
+server &lt;span class="o"&gt;{&lt;/span&gt;
+    server_name nginx.local&lt;span class="p"&gt;;&lt;/span&gt;
+    allow &lt;span class="m"&gt;127&lt;/span&gt;.0.0.1&lt;span class="p"&gt;;&lt;/span&gt;
+    deny all&lt;span class="p"&gt;;&lt;/span&gt;
+    location /nginx_status &lt;span class="o"&gt;{&lt;/span&gt;
+    stub_status on&lt;span class="p"&gt;;&lt;/span&gt;
+    access_log off&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="o"&gt;}&lt;/span&gt;
+&lt;span class="o"&gt;}&lt;/span&gt;
+
+$ chmod -R &lt;span class="m"&gt;755&lt;/span&gt; /usr/share/munin/plugins/
+$ /etc/init.d/nginx stop
+$ ln -sfn /opt/nginx-1.0.5 /opt/nginx &lt;span class="c1"&gt;# point to newly compiled nginx&lt;/span&gt;
+$ /etc/init.d/nginx start
+$ /etc/init.d/munin-node start
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;You should then have a working munin monitoring installation. For the
+curious you can view this via the subdomain (munin) on this domain.&lt;/p&gt;
+</content><category term="munin"></category><category term="debian"></category><category term="monitoring"></category></entry></feed>

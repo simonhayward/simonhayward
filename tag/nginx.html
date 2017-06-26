@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <title>SimonsBlog - nginx</title>
+        <link rel="stylesheet" href="http://simonsblog.co.uk/theme/css/main.css" />
+        <link href="http://simonsblog.co.uk/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="SimonsBlog Atom Feed" />
+
+        <!--[if IE]>
+            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="http://simonsblog.co.uk/">SimonsBlog </a></h1>
+                <nav><ul>
+                    <li><a href="http://simonsblog.co.uk/category/cycling.html">cycling</a></li>
+                    <li><a href="http://simonsblog.co.uk/category/linux.html">linux</a></li>
+                    <li><a href="http://simonsblog.co.uk/category/misc.html">misc</a></li>
+                    <li><a href="http://simonsblog.co.uk/category/python.html">python</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+
+            <aside id="featured" class="body">
+                <article>
+                    <h1 class="entry-title"><a href="http://simonsblog.co.uk/git-a-m-initial-commit.html">git -a -m &quot;initial commit&quot;</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2011-08-20T16:20:00+01:00">
+                Published: Sat 20 August 2011
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="http://simonsblog.co.uk/author/simon.html">Simon</a>
+        </address>
+<p>In <a href="http://simonsblog.co.uk/category/misc.html">misc</a>.</p>
+<p>tags: <a href="http://simonsblog.co.uk/tag/talks.html">talks</a> <a href="http://simonsblog.co.uk/tag/open-source.html">open source</a> <a href="http://simonsblog.co.uk/tag/oggcamp.html">oggcamp</a> <a href="http://simonsblog.co.uk/tag/blog.html">blog</a> <a href="http://simonsblog.co.uk/tag/python.html">python</a> <a href="http://simonsblog.co.uk/tag/nginx.html">nginx</a> <a href="http://simonsblog.co.uk/tag/gunicorn.html">gunicorn</a> <a href="http://simonsblog.co.uk/tag/django.html">django</a> </p>
+</footer><!-- /.post-info --><p>I’ve decided to set this blog up after hearing a talk given at
+<a class="reference external" href="http://oggcamp.org/">OggCamp</a> by <a class="reference external" href="http://www.lornajane.net/">LornaJane Mitchell</a> entitled: careers in Open Source.</p>
+<p>It was refreshing to hear her enthusiasm for open source but also her
+frankness about what got her started and what has lead on from her doing
+more in open source and how we and others can benefit from giving back
+to the <strong>open source community</strong>.</p>
+<p>The sunday morning (<em>hangover</em>) slot for a talk is never the best time,
+but gave what I thought and it seems <a class="reference external" href="https://twitter.com/#!/search/oggcamp">others</a> an inspiring talk to get
+more involved with open source and so enhance not only your career
+prospects but also to enhance you as a person.</p>
+<p>One of these goals is to do something like starting a blog to which this
+is my attempt. Like all new things I hope it doesn’t become like a new
+gym membership that sees frantic use for the first few weeks/months,
+then tails off to a slow decline. I hope not, but we’ll see, with
+<a class="reference external" href="http://twitter.com/simhay">twitter</a> / <a class="reference external" href="http://identi.ca/simhay">identi.ca</a> / <a class="reference external" href="https://plus.google.com/">google+</a> these things can all sap time, but a
+point she made which I think rings true is don’t try and write the
+perfect blog entry, if something worked for you blog about it, post it
+and get on with your life. It may contain typos and it may not be
+grammatically correct but if someone searches on google and finds your
+solution can also help them with their problem, then its all good. An
+<em>agile</em> approach to blogging, release early and often.</p>
+<p>This is true for me as I often have one line solutions to problems that
+I’ve found or written that I might stash away to my <a class="reference external" href="https://one.ubuntu.com/">~/UbuntuOne</a>
+account for later reference, maybe that also needs to be added to my
+blog from now on.</p>
+<p>As well as wanting to set up a blog I wanted to use <a class="reference external" href="http://www.python.org/">python</a>,
+<a class="reference external" href="http://gunicorn.org/">gunicorn</a> &amp; <a class="reference external" href="http://nginx.net/">nginx</a>, the following is a list of technologies I used:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://www.djangoproject.com/">django</a></li>
+<li><a class="reference external" href="http://nginx.net/">nginx</a></li>
+<li><a class="reference external" href="http://gunicorn.org/">gunicorn</a></li>
+<li><a class="reference external" href="http://supervisord.org/">supervisord</a></li>
+<li><a class="reference external" href="http://pypi.python.org/pypi/virtualenv">virtualenv</a></li>
+<li><a class="reference external" href="http://docs.fabfile.org/">fabric</a></li>
+</ul>
+<p>I wanted to get this blog up and running ASAP, so taken mostly from
+<a class="reference external" href="http://www.b-list.org/">James Bennetts</a> great book <a class="reference external" href="http://www.amazon.co.uk/Practical-Django-Projects-Experts-Development/dp/1430219386">Practical Django Projects</a>, I purchased a
+domain name, set up a <a class="reference external" href="https://github.com/simonhayward/simonsblog_django">github</a> repo, set up a <a class="reference external" href="http://www.linode.com/">linode VPS</a> and so now
+have a functioning blog.</p>
+<p>It’s been fun setting this up and that’s one of the main reasons I’ve
+chosen <a class="reference external" href="https://www.djangoproject.com/">django</a> (not only because I’ve been listening to and trying to
+learn gypsy jazz guitar like the <strong>real</strong> <a class="reference external" href="http://en.wikipedia.org/wiki/Django_Reinhardt">Django Reinhardt</a>) but because it
+encourages reuse, simplicity and application decoupling. I love the line
+taken from the <a class="reference external" href="http://www.amazon.co.uk/Practical-Django-Projects-Experts-Development/dp/1430219386">Practical Django Projects</a> book:</p>
+<blockquote>
+<em>“At the end, you’ll come to a wonderful realization - that web
+development is fun again”</em></blockquote>
+<p>So all of these feels a bit like starting a new project (hence git -a -m
+“initial commit”), with many more commits to come..</p>
+                </article>
+            </aside><!-- /#featured -->
+        <section id="extras" class="body">
+                <div class="blogroll">
+                        <h2>links</h2>
+                        <ul>
+                            <li><a href="http://getpelican.com/">Pelican</a></li>
+                            <li><a href="http://python.org/">Python.org</a></li>
+                            <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
+                            <li><a href="#">You can modify those links in your config file</a></li>
+                        </ul>
+                </div><!-- /.blogroll -->
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="http://simonsblog.co.uk/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                            <li><a href="#">You can add links in your config file</a></li>
+                            <li><a href="#">Another social link</a></li>
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

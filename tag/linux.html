@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <title>SimonsBlog - linux</title>
+        <link rel="stylesheet" href="http://simonsblog.co.uk/theme/css/main.css" />
+        <link href="http://simonsblog.co.uk/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="SimonsBlog Atom Feed" />
+
+        <!--[if IE]>
+            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="http://simonsblog.co.uk/">SimonsBlog </a></h1>
+                <nav><ul>
+                    <li><a href="http://simonsblog.co.uk/category/cycling.html">cycling</a></li>
+                    <li><a href="http://simonsblog.co.uk/category/linux.html">linux</a></li>
+                    <li><a href="http://simonsblog.co.uk/category/misc.html">misc</a></li>
+                    <li><a href="http://simonsblog.co.uk/category/python.html">python</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+
+            <aside id="featured" class="body">
+                <article>
+                    <h1 class="entry-title"><a href="http://simonsblog.co.uk/sockets-and-cwrap.html">Sockets and cwrap</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2014-05-01T11:41:00+01:00">
+                Published: Thu 01 May 2014
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="http://simonsblog.co.uk/author/simon.html">Simon</a>
+        </address>
+<p>In <a href="http://simonsblog.co.uk/category/linux.html">linux</a>.</p>
+<p>tags: <a href="http://simonsblog.co.uk/tag/linux.html">linux</a> <a href="http://simonsblog.co.uk/tag/testing.html">testing</a> <a href="http://simonsblog.co.uk/tag/sockets.html">sockets</a> <a href="http://simonsblog.co.uk/tag/cwrap.html">cwrap</a> </p>
+</footer><!-- /.post-info --><p>Have you ever wanted to run a software stack locally, testing client/server
+interactions, all on the same machine, under a normal user account?</p>
+<p>Maybe <a class="reference external" href="http://cwrap.org">cwrap</a> could help.</p>
+<p>What is <a class="reference external" href="http://cwrap.org">cwrap</a>?</p>
+<blockquote>
+cwrap is a set of tools to create a fully isolated network environment to
+test client/server components on a single host.
+It provides synthetic account information, hostname resolution and
+support for privilege separation. The heart of cwrap consists of three
+libraries you can preload to any executable.</blockquote>
+<p><a class="reference external" href="http://cwrap.org">cwrap</a> consists of three libraries:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://git.samba.org/?p=socket_wrapper.git">socket_wrapper</a></li>
+<li><a class="reference external" href="http://git.samba.org/?p=nss_wrapper.git">nss_wrapper</a></li>
+<li><a class="reference external" href="http://git.samba.org/?p=uid_wrapper.git">uid_wrapper</a></li>
+</ul>
+<p>These libraries allow you to preload to a binary and so replacing library function calls,
+by using <strong>LD_PRELOAD</strong>.</p>
+<p>From the <a class="reference external" href="http://man7.org/linux/man-pages/man8/ld.so.8.html">ld.so</a> man pages:</p>
+<blockquote>
+<dl class="docutils">
+<dt>LD_PRELOAD</dt>
+<dd>A list of additional, user-specified, ELF shared libraries to
+be loaded before all others.  The items of the list can be
+separated by spaces or colons.  This can be used to
+selectively override functions in other shared libraries.</dd>
+</dl>
+</blockquote>
+<p>I'm going to look at <a class="reference external" href="http://git.samba.org/?p=socket_wrapper.git">socket_wrapper</a> and some examples of how to redirect
+tcp sockets to use unix sockets.</p>
+<div class="section" id="installation">
+<h2>Installation</h2>
+<p><strong>I'm installing socket_wrapper-1.0.1 on Ubuntu 13.04.</strong></p>
+<p>The author of this software is <a class="reference external" href="http://blog.cryptomilk.org">Andreas Schneider</a>, so before installing this I'm going to
+import his <a class="reference external" href="http://blog.cryptomilk.org/2013/10/07/new-pgp-key/">pgp key</a>.</p>
+<div class="section" id="pgp-keys">
+<h3>PGP keys</h3>
+<div class="highlight"><pre><span></span>simon@X220:~$ wget --quiet http://www.cryptomilk.org/0xCC014E3D-asn@cryptomilk.org-gpg_key.asc
+simon@X220:~$ gpg --import 0xCC014E3D-asn@cryptomilk.org-gpg_key.asc
+gpg: key CC014E3D: public key <span class="s2">&quot;Andreas Schneider &lt;asn@cryptomilk.org&gt;&quot;</span> imported
+gpg: Total number processed: <span class="m">1</span>
+gpg:               imported: <span class="m">1</span>  <span class="o">(</span>RSA: <span class="m">1</span><span class="o">)</span>
+gpg: no ultimately trusted keys found
+</pre></div>
+<p>The project is part of the samba suite of software, so it's available for download
+via the <a class="reference external" href="https://ftp.samba.org/pub/cwrap/">samba</a> site.</p>
+</div>
+<div class="section" id="download">
+<h3>Download</h3>
+<p>The latest version of <a class="reference external" href="http://git.samba.org/?p=socket_wrapper.git">socket_wrapper</a> is <a class="reference external" href="https://ftp.samba.org/pub/cwrap/socket_wrapper-1.0.1.tar.gz">socket_wrapper-1.0.1.tar.gz</a> (04-Feb-2014 09:04, 36K)</p>
+<div class="highlight"><pre><span></span>simon@X220:~$ mkdir sockets
+simon@X220:~$ <span class="nb">cd</span> sockets
+simon@X220:~/sockets$ wget --quiet https://ftp.samba.org/pub/cwrap/socket_wrapper-1.0.1.tar.gz
+simon@X220:~/sockets$ wget --quiet https://ftp.samba.org/pub/cwrap/socket_wrapper-1.0.1.tar.asc
+simon@X220:~/sockets$ gzip -d socket_wrapper-1.0.1.tar.gz
+simon@X220:~/sockets$ gpg --verify socket_wrapper-1.0.1.tar.asc
+gpg: Signature made Tue <span class="m">04</span> Feb <span class="m">2014</span> <span class="m">16</span>:04:36 GMT using RSA key ID CC014E3D
+gpg: Good signature from <span class="s2">&quot;Andreas Schneider &lt;asn@cryptomilk.org&gt;&quot;</span>
+gpg:                 aka <span class="s2">&quot;Andreas Schneider &lt;asn@samba.org&gt;&quot;</span>
+gpg: WARNING: This key is not certified with a trusted signature!
+gpg:          There is no indication that the signature belongs to the owner.
+Primary key fingerprint: 8DFF 53E1 8F2A BC8D 8F3C  <span class="m">9223</span> 7EE0 FC4D CC01 4E3D
+simon@X220:~/sockets$ tar -xf socket_wrapper-1.0.1.tar
+simon@X220:~/sockets$ <span class="nb">cd</span> socket_wrapper-1.0.1/
+simon@X220:~/sockets/socket_wrapper-1.0.1$ mkdir builddir
+simon@X220:~/sockets/socket_wrapper-1.0.1$ <span class="nb">cd</span> builddir/
+</pre></div>
+</div>
+<div class="section" id="requirements">
+<h3>Requirements</h3>
+<p><a class="reference external" href="http://www.cmake.org/">cmake</a> is a requirement to build.</p>
+<div class="highlight"><pre><span></span>simon@X220:~/sockets/socket_wrapper-1.0.1/builddir$ sudo aptitude install cmake
+</pre></div>
+</div>
+<div class="section" id="compile-and-install">
+<h3>Compile and Install</h3>
+<div class="highlight"><pre><span></span>simon@X220:~/sockets/socket_wrapper-1.0.1/builddir$ cmake .. -DCMAKE_INSTALL_PREFIX:PATH<span class="o">=</span>~/sockets/bin
+-- The C compiler identification is GNU <span class="m">4</span>.7.3
+-- Check <span class="k">for</span> working C compiler: /usr/bin/cc
+-- Check <span class="k">for</span> working C compiler: /usr/bin/cc -- works
+......
+-- Configuring <span class="k">done</span>
+-- Generating <span class="k">done</span>
+-- Build files have been written to: /home/simon/sockets/socket_wrapper-1.0.1/builddir
+simon@X220:~/sockets/socket_wrapper-1.0.1/builddir$ make <span class="o">&amp;&amp;</span> make install
+Scanning dependencies of target socket_wrapper
+<span class="o">[</span><span class="m">100</span>%<span class="o">]</span> Building C object src/CMakeFiles/socket_wrapper.dir/socket_wrapper.c.o
+Linking C shared library libsocket_wrapper.so
+<span class="o">[</span><span class="m">100</span>%<span class="o">]</span> Built target socket_wrapper
+<span class="o">[</span><span class="m">100</span>%<span class="o">]</span> Built target socket_wrapper
+Install the project...
+-- Install configuration: <span class="s2">&quot;&quot;</span>
+-- Installing: /home/simon/sockets/bin/lib/pkgconfig/socket_wrapper.pc
+-- Installing: /home/simon/sockets/bin/lib/cmake/socket_wrapper-config-version.cmake
+-- Installing: /home/simon/sockets/bin/lib/cmake/socket_wrapper-config.cmake
+-- Installing: /home/simon/sockets/bin/lib/libsocket_wrapper.so.0.0.1
+-- Installing: /home/simon/sockets/bin/lib/libsocket_wrapper.so.0
+-- Installing: /home/simon/sockets/bin/lib/libsocket_wrapper.so
+</pre></div>
+</div>
+</div>
+<div class="section" id="running-netcat">
+<h2>Running netcat</h2>
+<p>In one terminal run netcat binding to IP: 127.0.0.10 on port 7</p>
+<div class="highlight"><pre><span></span>simon@X220:~/sockets/socket_wrapper-1.0.1/builddir$ <span class="nb">cd</span> ~/sockets/bin/
+simon@X220:~/sockets/bin$ mktemp -d
+/tmp/tmp.hxyAQf3Pda
+simon@X220:~/sockets/bin$ <span class="nv">LD_PRELOAD</span><span class="o">=</span>lib/libsocket_wrapper.so <span class="se">\</span>
+&gt; <span class="nv">SOCKET_WRAPPER_DIR</span><span class="o">=</span>/tmp/tmp.hxyAQf3Pda <span class="se">\</span>
+&gt; <span class="nv">SOCKET_WRAPPER_DEFAULT_IFACE</span><span class="o">=</span><span class="m">10</span> nc -v -l <span class="m">127</span>.0.0.10 <span class="m">7</span>
+Listening on <span class="o">[</span><span class="m">127</span>.0.0.10<span class="o">]</span> <span class="o">(</span>family <span class="m">0</span>, port <span class="m">7</span><span class="o">)</span>
+</pre></div>
+<p>In a seperate terminal send a message to that IP and port.</p>
+<div class="highlight"><pre><span></span>simon@X220:~/sockets/bin$ <span class="nv">LD_PRELOAD</span><span class="o">=</span>lib/libsocket_wrapper.so <span class="se">\</span>
+&gt; <span class="nv">SOCKET_WRAPPER_DIR</span><span class="o">=</span>/tmp/tmp.hxyAQf3Pda <span class="se">\</span>
+&gt; <span class="nv">SOCKET_WRAPPER_DEFAULT_IFACE</span><span class="o">=</span><span class="m">10</span> nc -v <span class="m">127</span>.0.0.10 <span class="m">7</span>
+Connection to <span class="m">127</span>.0.0.10 <span class="m">7</span> port <span class="o">[</span>tcp/echo<span class="o">]</span> succeeded!
+Hello!
+</pre></div>
+<p>'Hello!' is then received by the listening netcat</p>
+<div class="highlight"><pre><span></span>simon@X220:~/sockets/bin$ <span class="nv">LD_PRELOAD</span><span class="o">=</span>lib/libsocket_wrapper.so <span class="se">\</span>
+&gt; <span class="nv">SOCKET_WRAPPER_DIR</span><span class="o">=</span>/tmp/tmp.hxyAQf3Pda <span class="se">\</span>
+&gt; <span class="nv">SOCKET_WRAPPER_DEFAULT_IFACE</span><span class="o">=</span><span class="m">10</span> nc -v -l <span class="m">127</span>.0.0.10 <span class="m">7</span>
+Listening on <span class="o">[</span><span class="m">127</span>.0.0.10<span class="o">]</span> <span class="o">(</span>family <span class="m">0</span>, port <span class="m">7</span><span class="o">)</span>
+Connection from <span class="o">[</span><span class="m">127</span>.0.0.10<span class="o">]</span> port <span class="m">7</span> <span class="o">[</span>tcp/echo<span class="o">]</span> accepted <span class="o">(</span>family <span class="m">2</span>, sport <span class="m">41505</span><span class="o">)</span>
+Hello!
+</pre></div>
+<p>Instead of netcat using tcp sockets, SOCKET_WRAPPER_DIR contains the unix sockets created in place of those tcp sockets.</p>
+<div class="highlight"><pre><span></span>simon@X220:~/sockets/bin$ file /tmp/tmp.hxyAQf3Pda/* <span class="o">&amp;&amp;</span> lsof /tmp/tmp.hxyAQf3Pda/*
+/tmp/tmp.hxyAQf3Pda/T0A0007: socket
+/tmp/tmp.hxyAQf3Pda/T0AA221: socket
+COMMAND   PID  USER   FD   TYPE             DEVICE SIZE/OFF    NODE NAME
+nc      <span class="m">31334</span> simon    5u  unix 0x0000000000000000      0t0 <span class="m">2265223</span> /tmp/tmp.hxyAQf3Pda/T0A0007
+nc      <span class="m">31505</span> simon    3u  unix 0x0000000000000000      0t0 <span class="m">2267187</span> /tmp/tmp.hxyAQf3Pda/T0AA221
+</pre></div>
+</div>
+<div class="section" id="running-nginx">
+<h2>Running Nginx</h2>
+<p>I created the most basic of nginx confs as a simple example:</p>
+<div class="highlight"><pre><span></span>simon@X220:~$ mkdir -p nginx-local/www
+simon@X220:~$ touch nginx-local/www/test
+simon@X220:~$ <span class="nb">cd</span> nginx-local
+simon@X220:~/nginx-local$ vi nginx.conf
+error_log /home/simon/nginx-local/error.log<span class="p">;</span>
+worker_processes <span class="m">1</span><span class="p">;</span>
+events <span class="o">{</span>
+    worker_connections <span class="m">3</span><span class="p">;</span>
+<span class="o">}</span>
+http <span class="o">{</span>
+    server <span class="o">{</span>
+        listen <span class="m">127</span>.0.0.10:7<span class="p">;</span>
+        root /home/simon/nginx-local/www<span class="p">;</span>
+        location / <span class="o">{</span>
+            autoindex on<span class="p">;</span>
+            access_log off<span class="p">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+simon@X220:~/nginx-local$ <span class="nv">LD_PRELOAD</span><span class="o">=</span>/home/simon/sockets/bin/lib/libsocket_wrapper.so <span class="se">\</span>
+&gt; <span class="nv">SOCKET_WRAPPER_DIR</span><span class="o">=</span>/tmp/tmp.hxyAQf3Pda <span class="se">\</span>
+&gt; <span class="nv">SOCKET_WRAPPER_DEFAULT_IFACE</span><span class="o">=</span><span class="m">10</span> <span class="se">\</span>
+&gt; /usr/sbin/nginx -c /home/simon/nginx-local/nginx.conf <span class="se">\</span>
+&gt; -g <span class="s2">&quot;pid /home/simon/nginx-local/nginx.pid;&quot;</span>
+
+
+Note: You may receive an <span class="o">[</span>alert<span class="o">]</span> warning from nginx, that is cannot <span class="nb">read</span> the default error_log.
+As of version <span class="m">0</span>.7.53, nginx will use the compiled-in default error log before, reading in
+the config file.
+</pre></div>
+<p>Next, check that Nginx is running</p>
+<div class="highlight"><pre><span></span>simon@X220:~/nginx-local$ netstat -nlp <span class="p">|</span> grep <span class="k">$(</span>cat ~/nginx-local/nginx.pid<span class="k">)</span>
+<span class="o">(</span>Not all processes could be identified, non-owned process info
+ will not be shown, you would have to be root to see it all.<span class="o">)</span>
+unix  <span class="m">2</span>      <span class="o">[</span> ACC <span class="o">]</span>     STREAM     LISTENING     <span class="m">2266669</span>  <span class="m">919</span>/nginx.pid<span class="p">;</span>      /tmp/tmp.hxyAQf3Pda/T0A0007
+</pre></div>
+<p>Connect as a client to the server and capture conversation (SOCKET_WRAPPER_PCAP_FILE)</p>
+<div class="highlight"><pre><span></span>simon@X220:~/nginx-local$ <span class="nv">LD_PRELOAD</span><span class="o">=</span>/home/simon/sockets/bin/lib/libsocket_wrapper.so <span class="se">\</span>
+&gt; <span class="nv">SOCKET_WRAPPER_DIR</span><span class="o">=</span>/tmp/tmp.hxyAQf3Pda <span class="se">\</span>
+&gt; <span class="nv">SOCKET_WRAPPER_PCAP_FILE</span><span class="o">=</span>/tmp/nginx.pcap <span class="se">\</span>
+&gt; <span class="nv">SOCKET_WRAPPER_DEFAULT_IFACE</span><span class="o">=</span><span class="m">10</span> telnet <span class="m">127</span>.0.0.10 <span class="m">7</span>
+Trying <span class="m">127</span>.0.0.10...
+Connected to <span class="m">127</span>.0.0.10.
+Escape character is <span class="s1">&#39;^]&#39;</span>.
+GET / HTTP/1.1
+Host: <span class="m">127</span>.0.0.10
+
+HTTP/1.1 <span class="m">200</span> OK
+Server: nginx/1.2.6 <span class="o">(</span>Ubuntu<span class="o">)</span>
+Date: Thu, <span class="m">01</span> May <span class="m">2014</span> <span class="m">15</span>:26:31 GMT
+Content-Type: text/html
+Transfer-Encoding: chunked
+Connection: keep-alive
+
+<span class="m">104</span>
+&lt;html&gt;
+&lt;head&gt;&lt;title&gt;Index of /&lt;/title&gt;&lt;/head&gt;
+&lt;body <span class="nv">bgcolor</span><span class="o">=</span><span class="s2">&quot;white&quot;</span>&gt;
+&lt;h1&gt;Index of /&lt;/h1&gt;&lt;hr&gt;&lt;pre&gt;&lt;a <span class="nv">href</span><span class="o">=</span><span class="s2">&quot;../&quot;</span>&gt;../&lt;/a&gt;
+&lt;a <span class="nv">href</span><span class="o">=</span><span class="s2">&quot;test&quot;</span>&gt;test&lt;/a&gt;                                               <span class="m">01</span>-May-2014 <span class="m">14</span>:10                   <span class="m">0</span>
+&lt;/pre&gt;&lt;hr&gt;&lt;/body&gt;
+&lt;/html&gt;
+
+<span class="m">0</span>
+
+simon@X220:~/nginx-local$ <span class="nb">kill</span> -QUIT <span class="k">$(</span>cat /home/simon/nginx-local/nginx.pid<span class="k">)</span>
+</pre></div>
+<p>All of this network conversation is caught in the pcap file and so can be loaded into
+wireshark.</p>
+<div class="highlight"><pre><span></span>simon@X220:~/nginx-local$ wireshark /tmp/nginx.pcap
+</pre></div>
+</div>
+<div class="section" id="conclusion">
+<h2>Conclusion</h2>
+<p>This throws up a whole host of possibilities to test client/server interactions
+that are required for your application and all tested locally as a normal
+(non root) user.</p>
+<p>The ability to easily translate IPv4 and IPv6 addresses to a unix sockets,
+and simulate binding to privileged ports (&lt; 1024), allows for
+easier local testing, if your application requires a lot of network interactions
+as part of it's test suite.</p>
+<p>You may also be interested in the other components of <a class="reference external" href="http://cwrap.org">cwrap</a></p>
+<p><a class="reference external" href="http://git.samba.org/?p=nss_wrapper.git">nss_wrapper</a></p>
+<ul class="simple">
+<li>Provides information for user and group accounts</li>
+<li>Network name resolution using a hosts file</li>
+</ul>
+<p>Name resolution could work well with <a class="reference external" href="http://git.samba.org/?p=socket_wrapper.git">socket_wrapper</a> and works much the same
+way.</p>
+<div class="highlight"><pre><span></span>simon@X220:~/nss_wrapper$ <span class="nb">echo</span> <span class="s2">&quot;127.0.0.10  simonsblog.co.uk&quot;</span> &gt; hosts
+simon@X220:~/nss_wrapper$ <span class="nv">LD_PRELOAD</span><span class="o">=</span><span class="s2">&quot;bin/lib/libnss_wrapper.so&quot;</span> <span class="se">\</span>
+&gt; <span class="nv">NSS_WRAPPER_HOSTS</span><span class="o">=</span>hosts <span class="se">\</span>
+&gt; python -c <span class="s2">&quot;import socket; print(socket.gethostbyname(&#39;simonsblog.co.uk&#39;))&quot;</span>
+<span class="m">127</span>.0.0.10
+</pre></div>
+<p><a class="reference external" href="http://git.samba.org/?p=uid_wrapper.git">uid_wrapper</a></p>
+<ul class="simple">
+<li>Allows uid switching as a normal user.</li>
+<li>Start any application making it believe it is running as root.</li>
+<li>Support for user/group changing in the local thread using the syscalls (like glibc).</li>
+</ul>
+<p>Check out the article on <a class="reference external" href="https://lwn.net/Articles/595320/">lwn.net</a> and <a class="reference external" href="http://cwrap.org">cwrap</a> for more info.</p>
+</div>
+                </article>
+            </aside><!-- /#featured -->
+                <section id="content" class="body">
+                    <h1>Other articles</h1>
+                    <hr />
+                    <ol id="posts-list" class="hfeed">
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="http://simonsblog.co.uk/tiling-window-manager-i3.html" rel="bookmark"
+                           title="Permalink to Tiling window manager: i3">Tiling window manager: i3</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2012-11-09T17:28:00+00:00">
+                Published: Fri 09 November 2012
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="http://simonsblog.co.uk/author/simon.html">Simon</a>
+        </address>
+<p>In <a href="http://simonsblog.co.uk/category/linux.html">linux</a>.</p>
+<p>tags: <a href="http://simonsblog.co.uk/tag/window-manager.html">window manager</a> <a href="http://simonsblog.co.uk/tag/i3.html">i3</a> <a href="http://simonsblog.co.uk/tag/ubuntu.html">ubuntu</a> <a href="http://simonsblog.co.uk/tag/debian.html">debian</a> <a href="http://simonsblog.co.uk/tag/linux.html">linux</a> </p>
+</footer><!-- /.post-info -->                <p>After using the <a class="reference external" href="http://awesome.naquadah.org/">awesome</a> window manager for the last few years, I’ve
+switched over to a new tiling window manger <a class="reference external" href="http://i3wm.org">i3</a> - after trying it out,
+I’ve now completely switched over and really like the ease of use and
+increased functionality it provides.</p>
+<p><a class="reference external" href="http://en.wikipedia.org/wiki/Tiling_window_manager">Tiling window managers</a> allow me to …</p>
+                <a class="readmore" href="http://simonsblog.co.uk/tiling-window-manager-i3.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="http://simonsblog.co.uk/favourite-quotes.html" rel="bookmark"
+                           title="Permalink to Favourite quotes">Favourite quotes</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2012-06-25T17:05:00+01:00">
+                Published: Mon 25 June 2012
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="http://simonsblog.co.uk/author/simon.html">Simon</a>
+        </address>
+<p>In <a href="http://simonsblog.co.uk/category/misc.html">misc</a>.</p>
+<p>tags: <a href="http://simonsblog.co.uk/tag/python.html">python</a> <a href="http://simonsblog.co.uk/tag/quotes.html">quotes</a> <a href="http://simonsblog.co.uk/tag/linux.html">linux</a> </p>
+</footer><!-- /.post-info -->                <p>A selection of my favourite quotes I’ve come across recently…</p>
+<ul class="simple">
+<li><ul class="first">
+<li><strong>L1 cache</strong> - 3s grabbing a piece of paper</li>
+<li><strong>L2 cache</strong> - 14s picking a book from a shelf</li>
+<li><strong>System RAM</strong> - 4m walk down the hall</li>
+<li><strong>Hard drive seek</strong> - Like leaving the building to roam the
+earth for one year and …</li></ul></li></ul>
+                <a class="readmore" href="http://simonsblog.co.uk/favourite-quotes.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+                </ol><!-- /#posts-list -->
+                </section><!-- /#content -->
+        <section id="extras" class="body">
+                <div class="blogroll">
+                        <h2>links</h2>
+                        <ul>
+                            <li><a href="http://getpelican.com/">Pelican</a></li>
+                            <li><a href="http://python.org/">Python.org</a></li>
+                            <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
+                            <li><a href="#">You can modify those links in your config file</a></li>
+                        </ul>
+                </div><!-- /.blogroll -->
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="http://simonsblog.co.uk/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                            <li><a href="#">You can add links in your config file</a></li>
+                            <li><a href="#">Another social link</a></li>
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <title>Rotate arbitrary</title>
+        <link rel="stylesheet" href="http://simonsblog.co.uk/theme/css/main.css" />
+        <link href="http://simonsblog.co.uk/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="SimonsBlog Atom Feed" />
+
+        <!--[if IE]>
+            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="http://simonsblog.co.uk/">SimonsBlog </a></h1>
+                <nav><ul>
+                    <li><a href="http://simonsblog.co.uk/category/cycling.html">cycling</a></li>
+                    <li><a href="http://simonsblog.co.uk/category/linux.html">linux</a></li>
+                    <li><a href="http://simonsblog.co.uk/category/misc.html">misc</a></li>
+                    <li class="active"><a href="http://simonsblog.co.uk/category/python.html">python</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="http://simonsblog.co.uk/rotate-arbitrary.html" rel="bookmark"
+           title="Permalink to Rotate arbitrary">Rotate arbitrary</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2012-07-21T16:13:00+01:00">
+                Published: Sat 21 July 2012
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="http://simonsblog.co.uk/author/simon.html">Simon</a>
+        </address>
+<p>In <a href="http://simonsblog.co.uk/category/python.html">python</a>.</p>
+<p>tags: <a href="http://simonsblog.co.uk/tag/open-source.html">open source</a> <a href="http://simonsblog.co.uk/tag/python.html">python</a> </p>
+</footer><!-- /.post-info -->      <p>Another way to rotate by arbitrary values.</p>
+<p>You can in python 2.x - just str.encode(“rot13”) - but for other
+rotations you could use the following (for ascii):</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">string</span> <span class="kn">import</span> <span class="n">ascii_uppercase</span> <span class="k">as</span> <span class="n">uc</span><span class="p">,</span> <span class="n">ascii_lowercase</span> <span class="k">as</span> <span class="n">lc</span><span class="p">,</span> <span class="n">maketrans</span>
+
+
+<span class="k">def</span> <span class="nf">rot_func</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">encode</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">rotate</span><span class="o">=</span><span class="mi">13</span><span class="p">):</span>
+    <span class="n">letters</span> <span class="o">=</span> <span class="n">uc</span> <span class="o">+</span> <span class="n">lc</span>
+    <span class="n">rot</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span><span class="n">x</span><span class="p">[:</span><span class="n">rotate</span><span class="p">][::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="n">rotate</span><span class="p">:][::</span><span class="o">-</span><span class="mi">1</span><span class="p">])[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">(</span><span class="n">uc</span><span class="p">,</span><span class="n">lc</span><span class="p">))</span>
+    <span class="n">src</span><span class="p">,</span> <span class="n">trg</span> <span class="o">=</span> <span class="p">(</span><span class="n">letters</span><span class="p">,</span> <span class="n">rot</span><span class="p">)</span> <span class="k">if</span> <span class="n">encode</span> <span class="k">else</span> <span class="p">(</span><span class="n">rot</span><span class="p">,</span> <span class="n">letters</span><span class="p">)</span>
+    <span class="n">trans</span> <span class="o">=</span> <span class="n">maketrans</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">trg</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">text</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">trans</span><span class="p">)</span>
+
+<span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;Text to ROT&quot;</span>
+<span class="n">encoded</span> <span class="o">=</span> <span class="n">rot_func</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+<span class="n">decoded</span> <span class="o">=</span> <span class="n">rot_func</span><span class="p">(</span><span class="n">encoded</span><span class="p">,</span> <span class="n">encode</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">Text:</span><span class="se">\t</span><span class="s2">{text}</span>
+<span class="s2">Encode:</span><span class="se">\t</span><span class="s2">{encoded}</span>
+<span class="s2">Decode:</span><span class="se">\t</span><span class="s2">{decoded}</span>
+<span class="s2">&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="nb">locals</span><span class="p">()))</span>
+</pre></div>
+<p><a class="reference external" href="https://gist.github.com/3156361">Github gist</a></p>
+
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="blogroll">
+                        <h2>links</h2>
+                        <ul>
+                            <li><a href="http://getpelican.com/">Pelican</a></li>
+                            <li><a href="http://python.org/">Python.org</a></li>
+                            <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
+                            <li><a href="#">You can modify those links in your config file</a></li>
+                        </ul>
+                </div><!-- /.blogroll -->
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="http://simonsblog.co.uk/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                            <li><a href="#">You can add links in your config file</a></li>
+                            <li><a href="#">Another social link</a></li>
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

@@ -1,0 +1,1336 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>SimonsBlog</title><link href="http://simonsblog.co.uk/" rel="alternate"></link><link href="http://simonsblog.co.uk/feeds/all.atom.xml" rel="self"></link><id>http://simonsblog.co.uk/</id><updated>2014-09-20T17:15:00+01:00</updated><entry><title>Upgrade Python in Virtualenv</title><link href="http://simonsblog.co.uk/upgrade-python-in-virtualenv.html" rel="alternate"></link><published>2014-09-20T17:15:00+01:00</published><updated>2014-09-20T17:15:00+01:00</updated><author><name>Simon</name></author><id>tag:simonsblog.co.uk,2014-09-20:/upgrade-python-in-virtualenv.html</id><summary type="html">&lt;p&gt;You can simply create a new &lt;a class="reference external" href="http://www.virtualenv.org"&gt;virtualenv&lt;/a&gt; from scratch with the new version
+of &lt;a class="reference external" href="https://www.python.org"&gt;Python&lt;/a&gt; installed, but you can also upgrade your Python binary in place
+of the old.&lt;/p&gt;
+&lt;div class="section" id="upgrade"&gt;
+&lt;h2&gt;Upgrade&lt;/h2&gt;
+&lt;p&gt;I keep my python virtual environments in a hidden folder &lt;em&gt;.virtualenvs&lt;/em&gt;
+in my home directory.&lt;/p&gt;
+&lt;p&gt;Inside my project I can …&lt;/p&gt;&lt;/div&gt;</summary><content type="html">&lt;p&gt;You can simply create a new &lt;a class="reference external" href="http://www.virtualenv.org"&gt;virtualenv&lt;/a&gt; from scratch with the new version
+of &lt;a class="reference external" href="https://www.python.org"&gt;Python&lt;/a&gt; installed, but you can also upgrade your Python binary in place
+of the old.&lt;/p&gt;
+&lt;div class="section" id="upgrade"&gt;
+&lt;h2&gt;Upgrade&lt;/h2&gt;
+&lt;p&gt;I keep my python virtual environments in a hidden folder &lt;em&gt;.virtualenvs&lt;/em&gt;
+in my home directory.&lt;/p&gt;
+&lt;p&gt;Inside my project I can see the current python 3.3 version&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;simon@X220:~$ &lt;span class="nb"&gt;cd&lt;/span&gt; .virtualenvs/
+simon@X220:~/.virtualenvs$ ls -l project/bin/python*
+lrwxrwxrwx &lt;span class="m"&gt;1&lt;/span&gt; simon simon       &lt;span class="m"&gt;9&lt;/span&gt; Apr  &lt;span class="m"&gt;4&lt;/span&gt; &lt;span class="m"&gt;16&lt;/span&gt;:03 project/bin/python -&amp;gt; python3.3
+lrwxrwxrwx &lt;span class="m"&gt;1&lt;/span&gt; simon simon       &lt;span class="m"&gt;9&lt;/span&gt; Apr  &lt;span class="m"&gt;4&lt;/span&gt; &lt;span class="m"&gt;16&lt;/span&gt;:03 project/bin/python3 -&amp;gt; python3.3
+-rwxrwxr-x &lt;span class="m"&gt;1&lt;/span&gt; simon simon &lt;span class="m"&gt;3928976&lt;/span&gt; Apr  &lt;span class="m"&gt;4&lt;/span&gt; &lt;span class="m"&gt;16&lt;/span&gt;:03 project/bin/python3.3
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;If you want to go from &lt;a class="reference external" href="https://www.python.org/download/releases/3.3.2/"&gt;Python 3.3.2&lt;/a&gt; to &lt;a class="reference external" href="https://www.python.org/download/releases/3.4.1/"&gt;Python 3.4.1&lt;/a&gt; you can &lt;a class="reference external" href="https://www.python.org/download"&gt;download&lt;/a&gt; and
+compile each release individually or if you are using &lt;a class="reference external" href="http://www.ubuntu.com"&gt;Ubuntu&lt;/a&gt; and you want
+to get a range of &lt;a class="reference external" href="https://www.python.org"&gt;Python&lt;/a&gt; versions, you can add the &lt;a class="reference external" href="https://launchpad.net/~fkrull/+archive/ubuntu/deadsnakes"&gt;Dead snakes&lt;/a&gt;
+PPA to get versions from 2.3 right through to 3.4&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;simon@X220:~/.virtualenvs$ sudo add-apt-repository ppa:fkrull/deadsnakes
+simon@X220:~/.virtualenvs$ sudo apt-get update
+simon@X220:~/.virtualenvs$ sudo aptitude install python3.4 python3.4-dev
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;You can now install this python version, by re-running the virtualenv
+initialisation over the top of your current one.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;simon@X220:~/.virtualenvs$ virtualenv -p python3.4 project
+simon@X220:~/.virtualenvs$ ls -l project/bin/python*
+lrwxrwxrwx &lt;span class="m"&gt;1&lt;/span&gt; simon simon       &lt;span class="m"&gt;9&lt;/span&gt; Sep &lt;span class="m"&gt;20&lt;/span&gt; &lt;span class="m"&gt;17&lt;/span&gt;:59 project/bin/python -&amp;gt; python3.4
+lrwxrwxrwx &lt;span class="m"&gt;1&lt;/span&gt; simon simon       &lt;span class="m"&gt;9&lt;/span&gt; Sep &lt;span class="m"&gt;20&lt;/span&gt; &lt;span class="m"&gt;17&lt;/span&gt;:59 project/bin/python3 -&amp;gt; python3.4
+-rwxrwxr-x &lt;span class="m"&gt;1&lt;/span&gt; simon simon &lt;span class="m"&gt;3928976&lt;/span&gt; Apr  &lt;span class="m"&gt;4&lt;/span&gt; &lt;span class="m"&gt;16&lt;/span&gt;:03 project/bin/python3.3
+-rwxrwxr-x &lt;span class="m"&gt;1&lt;/span&gt; simon simon &lt;span class="m"&gt;3508112&lt;/span&gt; Sep &lt;span class="m"&gt;20&lt;/span&gt; &lt;span class="m"&gt;17&lt;/span&gt;:59 project/bin/python3.4
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Your previous version is still there, as well as your new version, but the
+default symbolic link now points to your latest version.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;simon@X220:~/.virtualenvs$ &lt;span class="nb"&gt;source&lt;/span&gt; project/bin/activate &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; python -V
+Python &lt;span class="m"&gt;3&lt;/span&gt;.4.1
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;One thing you will have to do is to &lt;strong&gt;re-install all your module requirements&lt;/strong&gt;
+after the upgrade.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;project&lt;span class="o"&gt;)&lt;/span&gt;simon@dev-wishiwashi:~/Devel/project$ pip install -r requirements.txt
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+</content><category term="open source"></category><category term="python"></category><category term="django"></category><category term="virtualenv"></category></entry><entry><title>Sockets and cwrap</title><link href="http://simonsblog.co.uk/sockets-and-cwrap.html" rel="alternate"></link><published>2014-05-01T11:41:00+01:00</published><updated>2014-05-01T11:41:00+01:00</updated><author><name>Simon</name></author><id>tag:simonsblog.co.uk,2014-05-01:/sockets-and-cwrap.html</id><summary type="html">&lt;p&gt;Have you ever wanted to run a software stack locally, testing client/server
+interactions, all on the same machine, under a normal user account?&lt;/p&gt;
+&lt;p&gt;Maybe &lt;a class="reference external" href="http://cwrap.org"&gt;cwrap&lt;/a&gt; could help.&lt;/p&gt;
+&lt;p&gt;What is &lt;a class="reference external" href="http://cwrap.org"&gt;cwrap&lt;/a&gt;?&lt;/p&gt;
+&lt;blockquote&gt;
+cwrap is a set of tools to create a fully isolated network environment to
+test client/server components on …&lt;/blockquote&gt;</summary><content type="html">&lt;p&gt;Have you ever wanted to run a software stack locally, testing client/server
+interactions, all on the same machine, under a normal user account?&lt;/p&gt;
+&lt;p&gt;Maybe &lt;a class="reference external" href="http://cwrap.org"&gt;cwrap&lt;/a&gt; could help.&lt;/p&gt;
+&lt;p&gt;What is &lt;a class="reference external" href="http://cwrap.org"&gt;cwrap&lt;/a&gt;?&lt;/p&gt;
+&lt;blockquote&gt;
+cwrap is a set of tools to create a fully isolated network environment to
+test client/server components on a single host.
+It provides synthetic account information, hostname resolution and
+support for privilege separation. The heart of cwrap consists of three
+libraries you can preload to any executable.&lt;/blockquote&gt;
+&lt;p&gt;&lt;a class="reference external" href="http://cwrap.org"&gt;cwrap&lt;/a&gt; consists of three libraries:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;&lt;a class="reference external" href="http://git.samba.org/?p=socket_wrapper.git"&gt;socket_wrapper&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="http://git.samba.org/?p=nss_wrapper.git"&gt;nss_wrapper&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="http://git.samba.org/?p=uid_wrapper.git"&gt;uid_wrapper&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;These libraries allow you to preload to a binary and so replacing library function calls,
+by using &lt;strong&gt;LD_PRELOAD&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;From the &lt;a class="reference external" href="http://man7.org/linux/man-pages/man8/ld.so.8.html"&gt;ld.so&lt;/a&gt; man pages:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;dl class="docutils"&gt;
+&lt;dt&gt;LD_PRELOAD&lt;/dt&gt;
+&lt;dd&gt;A list of additional, user-specified, ELF shared libraries to
+be loaded before all others.  The items of the list can be
+separated by spaces or colons.  This can be used to
+selectively override functions in other shared libraries.&lt;/dd&gt;
+&lt;/dl&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;I'm going to look at &lt;a class="reference external" href="http://git.samba.org/?p=socket_wrapper.git"&gt;socket_wrapper&lt;/a&gt; and some examples of how to redirect
+tcp sockets to use unix sockets.&lt;/p&gt;
+&lt;div class="section" id="installation"&gt;
+&lt;h2&gt;Installation&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;I'm installing socket_wrapper-1.0.1 on Ubuntu 13.04.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;The author of this software is &lt;a class="reference external" href="http://blog.cryptomilk.org"&gt;Andreas Schneider&lt;/a&gt;, so before installing this I'm going to
+import his &lt;a class="reference external" href="http://blog.cryptomilk.org/2013/10/07/new-pgp-key/"&gt;pgp key&lt;/a&gt;.&lt;/p&gt;
+&lt;div class="section" id="pgp-keys"&gt;
+&lt;h3&gt;PGP keys&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;simon@X220:~$ wget --quiet http://www.cryptomilk.org/0xCC014E3D-asn@cryptomilk.org-gpg_key.asc
+simon@X220:~$ gpg --import 0xCC014E3D-asn@cryptomilk.org-gpg_key.asc
+gpg: key CC014E3D: public key &lt;span class="s2"&gt;&amp;quot;Andreas Schneider &amp;lt;asn@cryptomilk.org&amp;gt;&amp;quot;&lt;/span&gt; imported
+gpg: Total number processed: &lt;span class="m"&gt;1&lt;/span&gt;
+gpg:               imported: &lt;span class="m"&gt;1&lt;/span&gt;  &lt;span class="o"&gt;(&lt;/span&gt;RSA: &lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+gpg: no ultimately trusted keys found
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;The project is part of the samba suite of software, so it's available for download
+via the &lt;a class="reference external" href="https://ftp.samba.org/pub/cwrap/"&gt;samba&lt;/a&gt; site.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="download"&gt;
+&lt;h3&gt;Download&lt;/h3&gt;
+&lt;p&gt;The latest version of &lt;a class="reference external" href="http://git.samba.org/?p=socket_wrapper.git"&gt;socket_wrapper&lt;/a&gt; is &lt;a class="reference external" href="https://ftp.samba.org/pub/cwrap/socket_wrapper-1.0.1.tar.gz"&gt;socket_wrapper-1.0.1.tar.gz&lt;/a&gt; (04-Feb-2014 09:04, 36K)&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;simon@X220:~$ mkdir sockets
+simon@X220:~$ &lt;span class="nb"&gt;cd&lt;/span&gt; sockets
+simon@X220:~/sockets$ wget --quiet https://ftp.samba.org/pub/cwrap/socket_wrapper-1.0.1.tar.gz
+simon@X220:~/sockets$ wget --quiet https://ftp.samba.org/pub/cwrap/socket_wrapper-1.0.1.tar.asc
+simon@X220:~/sockets$ gzip -d socket_wrapper-1.0.1.tar.gz
+simon@X220:~/sockets$ gpg --verify socket_wrapper-1.0.1.tar.asc
+gpg: Signature made Tue &lt;span class="m"&gt;04&lt;/span&gt; Feb &lt;span class="m"&gt;2014&lt;/span&gt; &lt;span class="m"&gt;16&lt;/span&gt;:04:36 GMT using RSA key ID CC014E3D
+gpg: Good signature from &lt;span class="s2"&gt;&amp;quot;Andreas Schneider &amp;lt;asn@cryptomilk.org&amp;gt;&amp;quot;&lt;/span&gt;
+gpg:                 aka &lt;span class="s2"&gt;&amp;quot;Andreas Schneider &amp;lt;asn@samba.org&amp;gt;&amp;quot;&lt;/span&gt;
+gpg: WARNING: This key is not certified with a trusted signature!
+gpg:          There is no indication that the signature belongs to the owner.
+Primary key fingerprint: 8DFF 53E1 8F2A BC8D 8F3C  &lt;span class="m"&gt;9223&lt;/span&gt; 7EE0 FC4D CC01 4E3D
+simon@X220:~/sockets$ tar -xf socket_wrapper-1.0.1.tar
+simon@X220:~/sockets$ &lt;span class="nb"&gt;cd&lt;/span&gt; socket_wrapper-1.0.1/
+simon@X220:~/sockets/socket_wrapper-1.0.1$ mkdir builddir
+simon@X220:~/sockets/socket_wrapper-1.0.1$ &lt;span class="nb"&gt;cd&lt;/span&gt; builddir/
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="section" id="requirements"&gt;
+&lt;h3&gt;Requirements&lt;/h3&gt;
+&lt;p&gt;&lt;a class="reference external" href="http://www.cmake.org/"&gt;cmake&lt;/a&gt; is a requirement to build.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;simon@X220:~/sockets/socket_wrapper-1.0.1/builddir$ sudo aptitude install cmake
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="section" id="compile-and-install"&gt;
+&lt;h3&gt;Compile and Install&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;simon@X220:~/sockets/socket_wrapper-1.0.1/builddir$ cmake .. -DCMAKE_INSTALL_PREFIX:PATH&lt;span class="o"&gt;=&lt;/span&gt;~/sockets/bin
+-- The C compiler identification is GNU &lt;span class="m"&gt;4&lt;/span&gt;.7.3
+-- Check &lt;span class="k"&gt;for&lt;/span&gt; working C compiler: /usr/bin/cc
+-- Check &lt;span class="k"&gt;for&lt;/span&gt; working C compiler: /usr/bin/cc -- works
+......
+-- Configuring &lt;span class="k"&gt;done&lt;/span&gt;
+-- Generating &lt;span class="k"&gt;done&lt;/span&gt;
+-- Build files have been written to: /home/simon/sockets/socket_wrapper-1.0.1/builddir
+simon@X220:~/sockets/socket_wrapper-1.0.1/builddir$ make &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; make install
+Scanning dependencies of target socket_wrapper
+&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="m"&gt;100&lt;/span&gt;%&lt;span class="o"&gt;]&lt;/span&gt; Building C object src/CMakeFiles/socket_wrapper.dir/socket_wrapper.c.o
+Linking C shared library libsocket_wrapper.so
+&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="m"&gt;100&lt;/span&gt;%&lt;span class="o"&gt;]&lt;/span&gt; Built target socket_wrapper
+&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="m"&gt;100&lt;/span&gt;%&lt;span class="o"&gt;]&lt;/span&gt; Built target socket_wrapper
+Install the project...
+-- Install configuration: &lt;span class="s2"&gt;&amp;quot;&amp;quot;&lt;/span&gt;
+-- Installing: /home/simon/sockets/bin/lib/pkgconfig/socket_wrapper.pc
+-- Installing: /home/simon/sockets/bin/lib/cmake/socket_wrapper-config-version.cmake
+-- Installing: /home/simon/sockets/bin/lib/cmake/socket_wrapper-config.cmake
+-- Installing: /home/simon/sockets/bin/lib/libsocket_wrapper.so.0.0.1
+-- Installing: /home/simon/sockets/bin/lib/libsocket_wrapper.so.0
+-- Installing: /home/simon/sockets/bin/lib/libsocket_wrapper.so
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="section" id="running-netcat"&gt;
+&lt;h2&gt;Running netcat&lt;/h2&gt;
+&lt;p&gt;In one terminal run netcat binding to IP: 127.0.0.10 on port 7&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;simon@X220:~/sockets/socket_wrapper-1.0.1/builddir$ &lt;span class="nb"&gt;cd&lt;/span&gt; ~/sockets/bin/
+simon@X220:~/sockets/bin$ mktemp -d
+/tmp/tmp.hxyAQf3Pda
+simon@X220:~/sockets/bin$ &lt;span class="nv"&gt;LD_PRELOAD&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;lib/libsocket_wrapper.so &lt;span class="se"&gt;\&lt;/span&gt;
+&amp;gt; &lt;span class="nv"&gt;SOCKET_WRAPPER_DIR&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/tmp/tmp.hxyAQf3Pda &lt;span class="se"&gt;\&lt;/span&gt;
+&amp;gt; &lt;span class="nv"&gt;SOCKET_WRAPPER_DEFAULT_IFACE&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;10&lt;/span&gt; nc -v -l &lt;span class="m"&gt;127&lt;/span&gt;.0.0.10 &lt;span class="m"&gt;7&lt;/span&gt;
+Listening on &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="m"&gt;127&lt;/span&gt;.0.0.10&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;family &lt;span class="m"&gt;0&lt;/span&gt;, port &lt;span class="m"&gt;7&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;In a seperate terminal send a message to that IP and port.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;simon@X220:~/sockets/bin$ &lt;span class="nv"&gt;LD_PRELOAD&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;lib/libsocket_wrapper.so &lt;span class="se"&gt;\&lt;/span&gt;
+&amp;gt; &lt;span class="nv"&gt;SOCKET_WRAPPER_DIR&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/tmp/tmp.hxyAQf3Pda &lt;span class="se"&gt;\&lt;/span&gt;
+&amp;gt; &lt;span class="nv"&gt;SOCKET_WRAPPER_DEFAULT_IFACE&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;10&lt;/span&gt; nc -v &lt;span class="m"&gt;127&lt;/span&gt;.0.0.10 &lt;span class="m"&gt;7&lt;/span&gt;
+Connection to &lt;span class="m"&gt;127&lt;/span&gt;.0.0.10 &lt;span class="m"&gt;7&lt;/span&gt; port &lt;span class="o"&gt;[&lt;/span&gt;tcp/echo&lt;span class="o"&gt;]&lt;/span&gt; succeeded!
+Hello!
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;'Hello!' is then received by the listening netcat&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;simon@X220:~/sockets/bin$ &lt;span class="nv"&gt;LD_PRELOAD&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;lib/libsocket_wrapper.so &lt;span class="se"&gt;\&lt;/span&gt;
+&amp;gt; &lt;span class="nv"&gt;SOCKET_WRAPPER_DIR&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/tmp/tmp.hxyAQf3Pda &lt;span class="se"&gt;\&lt;/span&gt;
+&amp;gt; &lt;span class="nv"&gt;SOCKET_WRAPPER_DEFAULT_IFACE&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;10&lt;/span&gt; nc -v -l &lt;span class="m"&gt;127&lt;/span&gt;.0.0.10 &lt;span class="m"&gt;7&lt;/span&gt;
+Listening on &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="m"&gt;127&lt;/span&gt;.0.0.10&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;family &lt;span class="m"&gt;0&lt;/span&gt;, port &lt;span class="m"&gt;7&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+Connection from &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="m"&gt;127&lt;/span&gt;.0.0.10&lt;span class="o"&gt;]&lt;/span&gt; port &lt;span class="m"&gt;7&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;tcp/echo&lt;span class="o"&gt;]&lt;/span&gt; accepted &lt;span class="o"&gt;(&lt;/span&gt;family &lt;span class="m"&gt;2&lt;/span&gt;, sport &lt;span class="m"&gt;41505&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+Hello!
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Instead of netcat using tcp sockets, SOCKET_WRAPPER_DIR contains the unix sockets created in place of those tcp sockets.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;simon@X220:~/sockets/bin$ file /tmp/tmp.hxyAQf3Pda/* &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; lsof /tmp/tmp.hxyAQf3Pda/*
+/tmp/tmp.hxyAQf3Pda/T0A0007: socket
+/tmp/tmp.hxyAQf3Pda/T0AA221: socket
+COMMAND   PID  USER   FD   TYPE             DEVICE SIZE/OFF    NODE NAME
+nc      &lt;span class="m"&gt;31334&lt;/span&gt; simon    5u  unix 0x0000000000000000      0t0 &lt;span class="m"&gt;2265223&lt;/span&gt; /tmp/tmp.hxyAQf3Pda/T0A0007
+nc      &lt;span class="m"&gt;31505&lt;/span&gt; simon    3u  unix 0x0000000000000000      0t0 &lt;span class="m"&gt;2267187&lt;/span&gt; /tmp/tmp.hxyAQf3Pda/T0AA221
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="section" id="running-nginx"&gt;
+&lt;h2&gt;Running Nginx&lt;/h2&gt;
+&lt;p&gt;I created the most basic of nginx confs as a simple example:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;simon@X220:~$ mkdir -p nginx-local/www
+simon@X220:~$ touch nginx-local/www/test
+simon@X220:~$ &lt;span class="nb"&gt;cd&lt;/span&gt; nginx-local
+simon@X220:~/nginx-local$ vi nginx.conf
+error_log /home/simon/nginx-local/error.log&lt;span class="p"&gt;;&lt;/span&gt;
+worker_processes &lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+events &lt;span class="o"&gt;{&lt;/span&gt;
+    worker_connections &lt;span class="m"&gt;3&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="o"&gt;}&lt;/span&gt;
+http &lt;span class="o"&gt;{&lt;/span&gt;
+    server &lt;span class="o"&gt;{&lt;/span&gt;
+        listen &lt;span class="m"&gt;127&lt;/span&gt;.0.0.10:7&lt;span class="p"&gt;;&lt;/span&gt;
+        root /home/simon/nginx-local/www&lt;span class="p"&gt;;&lt;/span&gt;
+        location / &lt;span class="o"&gt;{&lt;/span&gt;
+            autoindex on&lt;span class="p"&gt;;&lt;/span&gt;
+            access_log off&lt;span class="p"&gt;;&lt;/span&gt;
+        &lt;span class="o"&gt;}&lt;/span&gt;
+    &lt;span class="o"&gt;}&lt;/span&gt;
+&lt;span class="o"&gt;}&lt;/span&gt;
+
+simon@X220:~/nginx-local$ &lt;span class="nv"&gt;LD_PRELOAD&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/home/simon/sockets/bin/lib/libsocket_wrapper.so &lt;span class="se"&gt;\&lt;/span&gt;
+&amp;gt; &lt;span class="nv"&gt;SOCKET_WRAPPER_DIR&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/tmp/tmp.hxyAQf3Pda &lt;span class="se"&gt;\&lt;/span&gt;
+&amp;gt; &lt;span class="nv"&gt;SOCKET_WRAPPER_DEFAULT_IFACE&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;10&lt;/span&gt; &lt;span class="se"&gt;\&lt;/span&gt;
+&amp;gt; /usr/sbin/nginx -c /home/simon/nginx-local/nginx.conf &lt;span class="se"&gt;\&lt;/span&gt;
+&amp;gt; -g &lt;span class="s2"&gt;&amp;quot;pid /home/simon/nginx-local/nginx.pid;&amp;quot;&lt;/span&gt;
+
+
+Note: You may receive an &lt;span class="o"&gt;[&lt;/span&gt;alert&lt;span class="o"&gt;]&lt;/span&gt; warning from nginx, that is cannot &lt;span class="nb"&gt;read&lt;/span&gt; the default error_log.
+As of version &lt;span class="m"&gt;0&lt;/span&gt;.7.53, nginx will use the compiled-in default error log before, reading in
+the config file.
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Next, check that Nginx is running&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;simon@X220:~/nginx-local$ netstat -nlp &lt;span class="p"&gt;|&lt;/span&gt; grep &lt;span class="k"&gt;$(&lt;/span&gt;cat ~/nginx-local/nginx.pid&lt;span class="k"&gt;)&lt;/span&gt;
+&lt;span class="o"&gt;(&lt;/span&gt;Not all processes could be identified, non-owned process info
+ will not be shown, you would have to be root to see it all.&lt;span class="o"&gt;)&lt;/span&gt;
+unix  &lt;span class="m"&gt;2&lt;/span&gt;      &lt;span class="o"&gt;[&lt;/span&gt; ACC &lt;span class="o"&gt;]&lt;/span&gt;     STREAM     LISTENING     &lt;span class="m"&gt;2266669&lt;/span&gt;  &lt;span class="m"&gt;919&lt;/span&gt;/nginx.pid&lt;span class="p"&gt;;&lt;/span&gt;      /tmp/tmp.hxyAQf3Pda/T0A0007
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Connect as a client to the server and capture conversation (SOCKET_WRAPPER_PCAP_FILE)&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;simon@X220:~/nginx-local$ &lt;span class="nv"&gt;LD_PRELOAD&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/home/simon/sockets/bin/lib/libsocket_wrapper.so &lt;span class="se"&gt;\&lt;/span&gt;
+&amp;gt; &lt;span class="nv"&gt;SOCKET_WRAPPER_DIR&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/tmp/tmp.hxyAQf3Pda &lt;span class="se"&gt;\&lt;/span&gt;
+&amp;gt; &lt;span class="nv"&gt;SOCKET_WRAPPER_PCAP_FILE&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/tmp/nginx.pcap &lt;span class="se"&gt;\&lt;/span&gt;
+&amp;gt; &lt;span class="nv"&gt;SOCKET_WRAPPER_DEFAULT_IFACE&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;10&lt;/span&gt; telnet &lt;span class="m"&gt;127&lt;/span&gt;.0.0.10 &lt;span class="m"&gt;7&lt;/span&gt;
+Trying &lt;span class="m"&gt;127&lt;/span&gt;.0.0.10...
+Connected to &lt;span class="m"&gt;127&lt;/span&gt;.0.0.10.
+Escape character is &lt;span class="s1"&gt;&amp;#39;^]&amp;#39;&lt;/span&gt;.
+GET / HTTP/1.1
+Host: &lt;span class="m"&gt;127&lt;/span&gt;.0.0.10
+
+HTTP/1.1 &lt;span class="m"&gt;200&lt;/span&gt; OK
+Server: nginx/1.2.6 &lt;span class="o"&gt;(&lt;/span&gt;Ubuntu&lt;span class="o"&gt;)&lt;/span&gt;
+Date: Thu, &lt;span class="m"&gt;01&lt;/span&gt; May &lt;span class="m"&gt;2014&lt;/span&gt; &lt;span class="m"&gt;15&lt;/span&gt;:26:31 GMT
+Content-Type: text/html
+Transfer-Encoding: chunked
+Connection: keep-alive
+
+&lt;span class="m"&gt;104&lt;/span&gt;
+&amp;lt;html&amp;gt;
+&amp;lt;head&amp;gt;&amp;lt;title&amp;gt;Index of /&amp;lt;/title&amp;gt;&amp;lt;/head&amp;gt;
+&amp;lt;body &lt;span class="nv"&gt;bgcolor&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;white&amp;quot;&lt;/span&gt;&amp;gt;
+&amp;lt;h1&amp;gt;Index of /&amp;lt;/h1&amp;gt;&amp;lt;hr&amp;gt;&amp;lt;pre&amp;gt;&amp;lt;a &lt;span class="nv"&gt;href&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;../&amp;quot;&lt;/span&gt;&amp;gt;../&amp;lt;/a&amp;gt;
+&amp;lt;a &lt;span class="nv"&gt;href&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;test&amp;quot;&lt;/span&gt;&amp;gt;test&amp;lt;/a&amp;gt;                                               &lt;span class="m"&gt;01&lt;/span&gt;-May-2014 &lt;span class="m"&gt;14&lt;/span&gt;:10                   &lt;span class="m"&gt;0&lt;/span&gt;
+&amp;lt;/pre&amp;gt;&amp;lt;hr&amp;gt;&amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+
+&lt;span class="m"&gt;0&lt;/span&gt;
+
+simon@X220:~/nginx-local$ &lt;span class="nb"&gt;kill&lt;/span&gt; -QUIT &lt;span class="k"&gt;$(&lt;/span&gt;cat /home/simon/nginx-local/nginx.pid&lt;span class="k"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;All of this network conversation is caught in the pcap file and so can be loaded into
+wireshark.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;simon@X220:~/nginx-local$ wireshark /tmp/nginx.pcap
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="section" id="conclusion"&gt;
+&lt;h2&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;This throws up a whole host of possibilities to test client/server interactions
+that are required for your application and all tested locally as a normal
+(non root) user.&lt;/p&gt;
+&lt;p&gt;The ability to easily translate IPv4 and IPv6 addresses to a unix sockets,
+and simulate binding to privileged ports (&amp;lt; 1024), allows for
+easier local testing, if your application requires a lot of network interactions
+as part of it's test suite.&lt;/p&gt;
+&lt;p&gt;You may also be interested in the other components of &lt;a class="reference external" href="http://cwrap.org"&gt;cwrap&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class="reference external" href="http://git.samba.org/?p=nss_wrapper.git"&gt;nss_wrapper&lt;/a&gt;&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;Provides information for user and group accounts&lt;/li&gt;
+&lt;li&gt;Network name resolution using a hosts file&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Name resolution could work well with &lt;a class="reference external" href="http://git.samba.org/?p=socket_wrapper.git"&gt;socket_wrapper&lt;/a&gt; and works much the same
+way.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;simon@X220:~/nss_wrapper$ &lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;127.0.0.10  simonsblog.co.uk&amp;quot;&lt;/span&gt; &amp;gt; hosts
+simon@X220:~/nss_wrapper$ &lt;span class="nv"&gt;LD_PRELOAD&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;bin/lib/libnss_wrapper.so&amp;quot;&lt;/span&gt; &lt;span class="se"&gt;\&lt;/span&gt;
+&amp;gt; &lt;span class="nv"&gt;NSS_WRAPPER_HOSTS&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;hosts &lt;span class="se"&gt;\&lt;/span&gt;
+&amp;gt; python -c &lt;span class="s2"&gt;&amp;quot;import socket; print(socket.gethostbyname(&amp;#39;simonsblog.co.uk&amp;#39;))&amp;quot;&lt;/span&gt;
+&lt;span class="m"&gt;127&lt;/span&gt;.0.0.10
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;a class="reference external" href="http://git.samba.org/?p=uid_wrapper.git"&gt;uid_wrapper&lt;/a&gt;&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;Allows uid switching as a normal user.&lt;/li&gt;
+&lt;li&gt;Start any application making it believe it is running as root.&lt;/li&gt;
+&lt;li&gt;Support for user/group changing in the local thread using the syscalls (like glibc).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Check out the article on &lt;a class="reference external" href="https://lwn.net/Articles/595320/"&gt;lwn.net&lt;/a&gt; and &lt;a class="reference external" href="http://cwrap.org"&gt;cwrap&lt;/a&gt; for more info.&lt;/p&gt;
+&lt;/div&gt;
+</content><category term="linux"></category><category term="testing"></category><category term="sockets"></category><category term="cwrap"></category></entry><entry><title>Switching from Gmail to Fastmail</title><link href="http://simonsblog.co.uk/switching-from-gmail-to-fastmail.html" rel="alternate"></link><published>2013-12-06T14:16:00+00:00</published><updated>2013-12-06T14:16:00+00:00</updated><author><name>Simon</name></author><id>tag:simonsblog.co.uk,2013-12-06:/switching-from-gmail-to-fastmail.html</id><summary type="html">&lt;img alt="Fastmail.fm page header" class="align-center" src="/images/fastmail/header-thumb.png" style="width: 400px; height: 143px;" /&gt;
+&lt;p&gt;&lt;a class="reference external" href="/images/fastmail/header.png"&gt;Large image&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Three months ago I decided to try out &lt;a class="reference external" href="http://www.fastmail.to/?STKI=11487141"&gt;fastmail.fm&lt;/a&gt; after having used
+google's &lt;a class="reference external" href="https://gmail.google.com"&gt;gmail&lt;/a&gt; as my primary email for a number of years. I kept seeing
+a number of people moving away from google after the &lt;a class="reference external" href="http://www.theguardian.com/world/the-nsa-files"&gt;NSA revelations&lt;/a&gt;  and
+the admission that &lt;a class="reference external" href="http://www.theguardian.com/technology/2013/aug/14/google-gmail-users-privacy-email-lawsuit"&gt;gmail users cannot expect privacy …&lt;/a&gt;&lt;/p&gt;</summary><content type="html">&lt;img alt="Fastmail.fm page header" class="align-center" src="/images/fastmail/header-thumb.png" style="width: 400px; height: 143px;" /&gt;
+&lt;p&gt;&lt;a class="reference external" href="/images/fastmail/header.png"&gt;Large image&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Three months ago I decided to try out &lt;a class="reference external" href="http://www.fastmail.to/?STKI=11487141"&gt;fastmail.fm&lt;/a&gt; after having used
+google's &lt;a class="reference external" href="https://gmail.google.com"&gt;gmail&lt;/a&gt; as my primary email for a number of years. I kept seeing
+a number of people moving away from google after the &lt;a class="reference external" href="http://www.theguardian.com/world/the-nsa-files"&gt;NSA revelations&lt;/a&gt;  and
+the admission that &lt;a class="reference external" href="http://www.theguardian.com/technology/2013/aug/14/google-gmail-users-privacy-email-lawsuit"&gt;gmail users cannot expect privacy&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;I have no complaints about using &lt;a class="reference external" href="https://gmail.google.com"&gt;gmail&lt;/a&gt; all these years, for a free service
+it is better than most other free options and their service has never been
+down or caused me any issues.&lt;/p&gt;
+&lt;p&gt;However you do end up living in this &lt;strong&gt;google product world&lt;/strong&gt;, an all
+encompassing world in which they will end up knowing more about you than
+even your family will know about you.&lt;/p&gt;
+&lt;p&gt;If something is free is it really right
+to expect privacy? Which goes along with the saying:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;em&gt;&amp;quot;If you don't pay for the product, then you are the product&lt;/em&gt;&amp;quot;.&lt;/blockquote&gt;
+&lt;p&gt;Maybe this is true, in which case you need to look at other options,
+&lt;a class="reference external" href="http://www.fastmail.to/?STKI=11487141"&gt;fastmail.fm&lt;/a&gt; was one of those options.
+Their offer of &lt;em&gt;Providing a Reliable and Clutter-Free Email Experience&lt;/em&gt; who
+take privacy seriously, was attractive. While they also suggest that being an
+Australian company, they &lt;a class="reference external" href="http://www.theguardian.com/technology/2013/oct/07/australias-fastmail-secure-email-nsa"&gt;fall outside the (US) NSA's jurisdiction&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;So I initially signed up for a free trial account on the Enhanced ($40 a year)
+account, which includes:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;15 GB email storage&lt;/li&gt;
+&lt;li&gt;5 GB file storage&lt;/li&gt;
+&lt;li&gt;Use your own domain&lt;/li&gt;
+&lt;li&gt;No included SMS&lt;/li&gt;
+&lt;li&gt;Advanced anti-spam&lt;/li&gt;
+&lt;li&gt;No ads&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;You can choose an email address from a substantial (~115)
+list of &lt;em&gt;fastmail&lt;/em&gt; like top level domains, a selection being:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;fastmail.fm&lt;/li&gt;
+&lt;li&gt;fastmail.to&lt;/li&gt;
+&lt;li&gt;fastmail.us&lt;/li&gt;
+&lt;li&gt;fastmail.cn&lt;/li&gt;
+&lt;li&gt;fastmail.com.au&lt;/li&gt;
+&lt;li&gt;fastmail.jp&lt;/li&gt;
+&lt;li&gt;fastmail.net&lt;/li&gt;
+&lt;li&gt;fastmail.es&lt;/li&gt;
+&lt;li&gt;fastmail.co.uk&lt;/li&gt;
+&lt;li&gt;fastmail.in&lt;/li&gt;
+&lt;li&gt;fastmail.im&lt;/li&gt;
+&lt;li&gt;fastmail.nl&lt;/li&gt;
+&lt;li&gt;fastmail.se&lt;/li&gt;
+&lt;li&gt;fastmail.mx&lt;/li&gt;
+&lt;li&gt;fastmail.tw&lt;/li&gt;
+&lt;li&gt;fmail.co.uk&lt;/li&gt;
+&lt;li&gt;sent.com&lt;/li&gt;
+&lt;li&gt;myfastmail.com&lt;/li&gt;
+&lt;li&gt;speedymail.org&lt;/li&gt;
+&lt;li&gt;fast-email.com&lt;/li&gt;
+&lt;li&gt;fastimap.com&lt;/li&gt;
+&lt;li&gt;fast-mail.org&lt;/li&gt;
+&lt;li&gt;fastemail.us&lt;/li&gt;
+&lt;li&gt;operamail.com&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;After which I set up my fastmail account to use my own domain name, simonsblog.co.uk.
+So I switched my DNS MX records via my &lt;a class="reference external" href="https://dnsimple.com/r/3d06c548b79445"&gt;dnsimple&lt;/a&gt; DNS hosting provider
+to point to fastmails servers. Fastmail do offer to handle DNS
+for you, but I'm already happily using the excellent service provided by
+&lt;a class="reference external" href="https://dnsimple.com/r/3d06c548b79445"&gt;dnsimple&lt;/a&gt; for all my DNS hosting.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;simon@X220:~$ dig +short simonsblog.co.uk mx
+&lt;span class="m"&gt;20&lt;/span&gt; in2-smtp.messagingengine.com.
+&lt;span class="m"&gt;10&lt;/span&gt; in1-smtp.messagingengine.com.
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Added an SPF record.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;simon@X220:~$ dig simonsblog.co.uk +short spf
+&lt;span class="s2"&gt;&amp;quot;v=spf1 include:spf.messagingengine.com -all&amp;quot;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;I then added a TXT record for my DKIM key, retrieved via Fastmail.fm -&amp;gt;
+Advanced settings -&amp;gt; Virtual Domains&lt;/p&gt;
+&lt;p&gt;I also set up an alias (CNAME) to access webmail via my domain.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;simon@X220:~$ dig +short mail.simonsblog.co.uk cname
+www.fastmail.fm.
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;While under this free trial, &lt;a class="reference external" href="http://www.fastmail.to/?STKI=11487141"&gt;fastmail.fm&lt;/a&gt; announced that &lt;a class="reference external" href="http://blog.fastmail.fm/2013/09/25/exciting-news-fastmail-staff-purchase-the-business-from-opera/"&gt;staff had purchased the
+business back from opera&lt;/a&gt; which was getting noticed on &lt;a class="reference external" href="https://twitter.com/jacobian/status/383084245784076288"&gt;twitter&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;This is a key issue for me, for staff to un-acquire itself just shows the belief
+the team have in it.&lt;/p&gt;
+&lt;p&gt;So three months in and I'm happily switched to using &lt;a class="reference external" href="http://www.fastmail.to/?STKI=11487141"&gt;fastmail.fm&lt;/a&gt; as my primary
+email address. Some nice features are:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;Fast loading&lt;/li&gt;
+&lt;li&gt;Infinite scrolling&lt;/li&gt;
+&lt;li&gt;Extensive configuration&lt;/li&gt;
+&lt;li&gt;Ad free&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Some not nice features:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;No native mobile app (I'm using &lt;a class="reference external" href="https://play.google.com/store/apps/details?id=com.maildroid.pro&amp;amp;hl=en"&gt;MailDroid Pro&lt;/a&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;I haven't totally unplugged myself from gmail, I still forward all gmail to
+my fastmail account, but these are becoming less and less as I move more
+accounts over to use my new address.&lt;/p&gt;
+&lt;p&gt;The process to switch has been relatively pain free and for $40
+a year seems a small price to pay to have secure and private email.&lt;/p&gt;
+</content><category term="email"></category></entry><entry><title>Just ride</title><link href="http://simonsblog.co.uk/just-ride.html" rel="alternate"></link><published>2013-02-24T09:35:00+00:00</published><updated>2013-02-24T09:35:00+00:00</updated><author><name>Simon</name></author><id>tag:simonsblog.co.uk,2013-02-24:/just-ride.html</id><summary type="html">&lt;img alt="Just Ride book cover" class="align-center" src="/images/just_ride/book-thumb.png" style="width: 394px; height: 388px;" /&gt;
+&lt;p&gt;&lt;a class="reference external" href="/images/just_ride/book.png"&gt;Book cover&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;I've just finished reading an enjoyable book about cycling called &lt;a class="reference external" href="http://www.amazon.co.uk/Just-Ride-Radically-Practical-Equipment/dp/0761155589"&gt;Just ride&lt;/a&gt;,
+(a radically practical guide to riding your bike).
+It's an interesting book for anyone who just wants to get on a bike and enjoy
+it, without being forced to adopt a sports bike attitude to riding …&lt;/p&gt;</summary><content type="html">&lt;img alt="Just Ride book cover" class="align-center" src="/images/just_ride/book-thumb.png" style="width: 394px; height: 388px;" /&gt;
+&lt;p&gt;&lt;a class="reference external" href="/images/just_ride/book.png"&gt;Book cover&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;I've just finished reading an enjoyable book about cycling called &lt;a class="reference external" href="http://www.amazon.co.uk/Just-Ride-Radically-Practical-Equipment/dp/0761155589"&gt;Just ride&lt;/a&gt;,
+(a radically practical guide to riding your bike).
+It's an interesting book for anyone who just wants to get on a bike and enjoy
+it, without being forced to adopt a sports bike attitude to riding.&lt;/p&gt;
+&lt;p&gt;It's aimed at all casual riders who ride a bike for commuting or just for
+the sheer enjoyment.&lt;/p&gt;
+&lt;p&gt;The book is slit up into 8 parts:&lt;/p&gt;
+&lt;ol class="arabic simple"&gt;
+&lt;li&gt;Riding&lt;/li&gt;
+&lt;li&gt;Suiting up&lt;/li&gt;
+&lt;li&gt;Safety&lt;/li&gt;
+&lt;li&gt;Heath and Fitness (Don't confuse the two)&lt;/li&gt;
+&lt;li&gt;Accessories&lt;/li&gt;
+&lt;li&gt;Upkeep&lt;/li&gt;
+&lt;li&gt;Technicalities&lt;/li&gt;
+&lt;li&gt;Velosophy&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Within these sections are short sub sections which cover a page or two, and are
+essentially advice/tips.&lt;/p&gt;
+&lt;p&gt;Some examples of sub-sections are:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;No ride too short&lt;/li&gt;
+&lt;li&gt;The shoes ruse&lt;/li&gt;
+&lt;li&gt;Gloves: the least necessary accessory&lt;/li&gt;
+&lt;li&gt;Kickstands, not balancing acts&lt;/li&gt;
+&lt;li&gt;Your bike is a toy. Have fun with it.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;This gives you a flavour of the attitude the writer Grant Petersen takes, when
+it comes to cycling (he's been riding a bicycle daily for over
+30 years). He promotes the term &lt;strong&gt;Unracer&lt;/strong&gt; for those of
+us who are not trying to compete in the Tour de France, and not wanting
+to appear like they &lt;em&gt;have all the gear, but no idea&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;This book focuses on the practicality of riding a bike and not on looks or
+ultra thin racers. This is not aimed at those people who spend thousands on
+the latest sports bike - to basically ride 5 miles to work on.&lt;/p&gt;
+&lt;p&gt;It's full of good tips and advice and it's a really
+quick read, and something you can pick up and start reading at any point
+within the book.&lt;/p&gt;
+&lt;p&gt;The last page of the book is a short quiz to see if indeed you are a Racer or
+Unracer. If by the end of reading this book you answered true to 6 or more
+of these questions, your an unracer, and as Grant says:&lt;/p&gt;
+&lt;p&gt;-- &amp;quot;..likely to have a lifetime of good riding ahead of you.&amp;quot;&lt;/p&gt;
+&lt;div class="section" id="conclusion"&gt;
+&lt;h2&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;Having read this book I now have a rear view mirror attached to the handlebar
+insert, this is not something I would have purchased without reading this book,
+and has made me feel more confident on the road, and I'm now not stretching
+my neck out to look behind me.&lt;/p&gt;
+&lt;p&gt;I'd recommend reading this book if you are like me, a casual rider, who just
+wants to get on and enjoy cycling, and doesn't buy into the latest and
+greatest &lt;em&gt;improvements&lt;/em&gt; that are designed mainly for those who think they are
+going to be the next Bradley Wiggins.&lt;/p&gt;
+&lt;p&gt;Just ride a bike and above all, enjoy it.&lt;/p&gt;
+&lt;/div&gt;
+</content><category term="books"></category><category term="cycling"></category></entry><entry><title>Static site generator - Pelican</title><link href="http://simonsblog.co.uk/static-site-generator-pelican.html" rel="alternate"></link><published>2013-02-03T21:50:00+00:00</published><updated>2013-02-03T21:50:00+00:00</updated><author><name>Simon</name></author><id>tag:simonsblog.co.uk,2013-02-03:/static-site-generator-pelican.html</id><summary type="html">&lt;p&gt;I &lt;a class="reference external" href="http://simonsblog.co.uk/git-a-m-initial-commit.html"&gt;initially&lt;/a&gt; set up this blog using &lt;a class="reference external" href="https://www.djangoproject.com/"&gt;django&lt;/a&gt;,
+but recently I've wanted to try out a static site generator &amp;amp; decided to try
+out &lt;a class="reference external" href="http://getpelican.com/"&gt;pelican&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;It was &lt;strong&gt;extremely&lt;/strong&gt; easy to set this up and deploy an updated blog to my site.
+It took a few hours to set up pelican and …&lt;/p&gt;</summary><content type="html">&lt;p&gt;I &lt;a class="reference external" href="http://simonsblog.co.uk/git-a-m-initial-commit.html"&gt;initially&lt;/a&gt; set up this blog using &lt;a class="reference external" href="https://www.djangoproject.com/"&gt;django&lt;/a&gt;,
+but recently I've wanted to try out a static site generator &amp;amp; decided to try
+out &lt;a class="reference external" href="http://getpelican.com/"&gt;pelican&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;It was &lt;strong&gt;extremely&lt;/strong&gt; easy to set this up and deploy an updated blog to my site.
+It took a few hours to set up pelican and import previous posts
+(converting markdown to &lt;a class="reference external" href="http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html"&gt;reStructuredText&lt;/a&gt;) and so had a new blogging platform
+up and running very quickly.&lt;/p&gt;
+&lt;div class="section" id="installing"&gt;
+&lt;h2&gt;Installing&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;simon@x220:~$ mkproject simonsblog
+&lt;span class="o"&gt;(&lt;/span&gt;simonsblog&lt;span class="o"&gt;)&lt;/span&gt;simon@x220:~/Devel/simonsblog$ pip install pelican
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Then set up pelican by answering these basic questions. Note the option to
+deploy via ftp/SSH or dropbox.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="set-up"&gt;
+&lt;h2&gt;Set up&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;simonsblog&lt;span class="o"&gt;)&lt;/span&gt;simon@x220:~/Devel/simonsblog$ pelican-quickstart
+&amp;gt; What will be the title of this web site? Simonblog
+&amp;gt; Who will be the author of this web site? Simon
+&amp;gt; What will be the default language of this web site? &lt;span class="o"&gt;[&lt;/span&gt;en&lt;span class="o"&gt;]&lt;/span&gt;
+&amp;gt; Do you want to specify a URL prefix? e.g., http://example.com   &lt;span class="o"&gt;(&lt;/span&gt;Y/n&lt;span class="o"&gt;)&lt;/span&gt;
+&amp;gt; What is your URL prefix? &lt;span class="o"&gt;(&lt;/span&gt;see above example&lt;span class="p"&gt;;&lt;/span&gt; no trailing slash&lt;span class="o"&gt;)&lt;/span&gt; http://simonsblog.co.uk
+&amp;gt; Do you want to &lt;span class="nb"&gt;enable&lt;/span&gt; article pagination? &lt;span class="o"&gt;(&lt;/span&gt;Y/n&lt;span class="o"&gt;)&lt;/span&gt;
+&amp;gt; How many articles per page &lt;span class="k"&gt;do&lt;/span&gt; you want? &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="m"&gt;10&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;
+&amp;gt; Do you want to generate a Makefile to easily manage your website? &lt;span class="o"&gt;(&lt;/span&gt;Y/n&lt;span class="o"&gt;)&lt;/span&gt;
+&amp;gt; Do you want an auto-reload &lt;span class="p"&gt;&amp;amp;&lt;/span&gt; simpleHTTP script to assist with theme and site development? &lt;span class="o"&gt;(&lt;/span&gt;Y/n&lt;span class="o"&gt;)&lt;/span&gt;
+&amp;gt; Do you want to upload your website using FTP? &lt;span class="o"&gt;(&lt;/span&gt;y/N&lt;span class="o"&gt;)&lt;/span&gt;
+&amp;gt; Do you want to upload your website using SSH? &lt;span class="o"&gt;(&lt;/span&gt;y/N&lt;span class="o"&gt;)&lt;/span&gt; y
+&amp;gt; What is the hostname of your SSH server? &lt;span class="o"&gt;[&lt;/span&gt;localhost&lt;span class="o"&gt;]&lt;/span&gt; simonsblog
+&amp;gt; What is the port of your SSH server? &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="m"&gt;22&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;
+&amp;gt; What is your username on that server? &lt;span class="o"&gt;[&lt;/span&gt;root&lt;span class="o"&gt;]&lt;/span&gt; simon
+&amp;gt; Where &lt;span class="k"&gt;do&lt;/span&gt; you want to put your web site on that server? &lt;span class="o"&gt;[&lt;/span&gt;/var/www&lt;span class="o"&gt;]&lt;/span&gt;
+&amp;gt; Do you want to upload your website using Dropbox? &lt;span class="o"&gt;(&lt;/span&gt;y/N&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Your virtualenv project should now look something like this:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;simonsblog&lt;span class="o"&gt;)&lt;/span&gt;simon@x220:~/Devel/simonsblog$ ls
+content  develop_server.sh  Makefile  output  pelicanconf.py  publishconf.py
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Update pelicanconf.py with your specific details:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;AUTHOR&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Simon&amp;quot;&lt;/span&gt;
+&lt;span class="n"&gt;SITENAME&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Simonsblog&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;SITEURL&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;http://simonsblog.local&amp;#39;&lt;/span&gt;
+
+&lt;span class="n"&gt;TIMEZONE&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;Europe/London&amp;#39;&lt;/span&gt;
+
+&lt;span class="n"&gt;DEFAULT_LANG&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;en&amp;#39;&lt;/span&gt;
+
+&lt;span class="c1"&gt;# Blogroll&lt;/span&gt;
+&lt;span class="n"&gt;LINKS&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt;  &lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;Python.org&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;http://python.org&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;),)&lt;/span&gt;
+
+&lt;span class="c1"&gt;# Social widget&lt;/span&gt;
+&lt;span class="n"&gt;SOCIAL&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;delicious&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;http://delicious.com/djangos&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+          &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;github&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;https://github.com/simonhayward&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+          &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;google+&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;https://plus.google.com/u/0/105199393791103843210/posts&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+          &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;rss&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;/feeds/all.atom.xml&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+          &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;twitter&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;https://twitter.com/simhay&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;),)&lt;/span&gt;
+
+&lt;span class="n"&gt;FILES_TO_COPY&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;extra/robots.txt&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;robots.txt&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+                 &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;extra/favicon.ico&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;favicon.ico&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;),)&lt;/span&gt;
+
+&lt;span class="n"&gt;DEFAULT_PAGINATION&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;10&lt;/span&gt;
+&lt;span class="n"&gt;THEME&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;subtle&amp;quot;&lt;/span&gt;
+&lt;span class="n"&gt;STATIC_PATHS&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;images&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;span class="n"&gt;GOOGLE_ANALYTICS&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;UA-2417620-7&amp;#39;&lt;/span&gt;
+&lt;span class="n"&gt;TWITTER_USERNAME&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;simhay&amp;#39;&lt;/span&gt;
+&lt;span class="n"&gt;DISQUS_SITENAME&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;siblog&amp;#39;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;I've created an &lt;em&gt;extra&lt;/em&gt; folder within the content folder to hold favicon.ico
+and robots.txt file.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="styling"&gt;
+&lt;h2&gt;Styling&lt;/h2&gt;
+&lt;p&gt;Pelican comes with &lt;em&gt;pelican-themes&lt;/em&gt; to manage various themes for pelican.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;simonsblog&lt;span class="o"&gt;)&lt;/span&gt;simon@x220:~/Devel/simonsblog$ &lt;span class="nb"&gt;cd&lt;/span&gt;
+&lt;span class="o"&gt;(&lt;/span&gt;simonsblog&lt;span class="o"&gt;)&lt;/span&gt;simon@x220:~$ git clone git://github.com/getpelican/pelican-themes.git
+&lt;span class="o"&gt;(&lt;/span&gt;simonsblog&lt;span class="o"&gt;)&lt;/span&gt;simon@x220:~$ pelican-themes -i pelican-themes/subtle
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="section" id="create-a-post"&gt;
+&lt;h2&gt;Create a post&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;simonsblog&lt;span class="o"&gt;)&lt;/span&gt;simon@x220:~$ cdproject &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class="nb"&gt;cd&lt;/span&gt; content
+&lt;span class="o"&gt;(&lt;/span&gt;simonsblog&lt;span class="o"&gt;)&lt;/span&gt;simon@x220:~/Devel/simonsblog/content$ vi Static-site-generator.rst
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Each file contains some metadata, for this post this is the first 7 lines:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;Static site generator
+&lt;span class="c1"&gt;#####################&lt;/span&gt;
+
+:date: &lt;span class="m"&gt;2013&lt;/span&gt;-02-03 &lt;span class="m"&gt;21&lt;/span&gt;:50
+:tags: blog, pelican
+:category: python
+:author: Simon
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;The rest of the post is standard &lt;a class="reference external" href="http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html"&gt;reStructuredText&lt;/a&gt;.
+It's a simpler set up now, as all I need is to use is vim. Once I have
+created a new file under the content directory, I'm using &lt;a class="reference external" href="http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html"&gt;reStructuredText&lt;/a&gt;,
+but you can use markdown, I can view these changes locally and simply rsync
+the generated content direct to my server. It couldn't be easier or simpler &amp;amp;
+means I can host this blog anywhere.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="viewing-changes"&gt;
+&lt;h2&gt;Viewing changes&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;simonsblog&lt;span class="o"&gt;)&lt;/span&gt;simon@x220:~$ cdproject
+&lt;span class="o"&gt;(&lt;/span&gt;simonsblog&lt;span class="o"&gt;)&lt;/span&gt;simon@x220:~/Devel/simonsblog$ ./develop_server.sh start
+&lt;span class="o"&gt;(&lt;/span&gt;simonsblog&lt;span class="o"&gt;)&lt;/span&gt;simon@x220:~/Devel/simonsblog$ firefox localhost:8000
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;When you make any further changes, these should be picked up automatically and the site
+is generated again so you can view these changes locally.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="deploy"&gt;
+&lt;h2&gt;Deploy&lt;/h2&gt;
+&lt;p&gt;Assuming you already have a host and web server set up (apache/nginx etc),
+you simply need to push the generated content out to your host - in my case
+via SSH.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;simonsblog&lt;span class="o"&gt;)&lt;/span&gt;simon@x220:~$ cdproject
+&lt;span class="o"&gt;(&lt;/span&gt;simonsblog&lt;span class="o"&gt;)&lt;/span&gt;simon@x220:~/Devel/simonsblog$ make rsync_upload
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;When you happy just close down the local http server:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;simonsblog&lt;span class="o"&gt;)&lt;/span&gt;simon@x220:~/Devel/simonsblog$ ./develop_server.sh stop
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;For me the benefits are:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;Using vim (reStructuredText)&lt;/li&gt;
+&lt;li&gt;Code syntax highlighting&lt;/li&gt;
+&lt;li&gt;Rsync deployment&lt;/li&gt;
+&lt;li&gt;Ease of use&lt;/li&gt;
+&lt;li&gt;Host content anywhere&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Having a complete &lt;a class="reference external" href="https://www.djangoproject.com/"&gt;django&lt;/a&gt; installation was maybe too much for a simple blog,
+so switching to &lt;a class="reference external" href="http://getpelican.com/"&gt;pelican&lt;/a&gt; makes perfect sense for me. If you have a blog and
+want to simplify the creation and hosting process, try &lt;a class="reference external" href="http://getpelican.com/"&gt;pelican&lt;/a&gt; it really
+stands out as a simple, easy to use static site generator.&lt;/p&gt;
+&lt;/div&gt;
+</content><category term="blog"></category><category term="pelican"></category></entry><entry><title>The Psychology of Computer Programming</title><link href="http://simonsblog.co.uk/the-psychology-of-computer-programming.html" rel="alternate"></link><published>2013-01-26T15:29:00+00:00</published><updated>2013-01-26T15:29:00+00:00</updated><author><name>Simon</name></author><id>tag:simonsblog.co.uk,2013-01-26:/the-psychology-of-computer-programming.html</id><summary type="html">&lt;img alt="The Psychology of Computer Programming Book" class="align-center" src="/images/psychology-cp/book-thumb.png" style="width: 394px; height: 297px;" /&gt;
+&lt;p&gt;&lt;a class="reference external" href="/images/psychology-cp/book.png"&gt;Book cover&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;The book &lt;a class="reference external" href="http://www.amazon.co.uk/Psychology-Computer-Programming-Silver-Anniversary/dp/0932633420"&gt;The Psychology of Computer Programming&lt;/a&gt; by Gerald M. Weinberg has
+been on my wish list for a while, ever since reading the
+&lt;a class="reference external" href="http://www.catb.org/esr/writings/homesteading/cathedral-bazaar/"&gt;cathedral &amp;amp; the bazaar&lt;/a&gt; by &lt;a class="reference external" href="http://esr.ibiblio.org/"&gt;Eric S. Raymond&lt;/a&gt;, in which he talks about how
+working using the open source approach can not only work on …&lt;/p&gt;</summary><content type="html">&lt;img alt="The Psychology of Computer Programming Book" class="align-center" src="/images/psychology-cp/book-thumb.png" style="width: 394px; height: 297px;" /&gt;
+&lt;p&gt;&lt;a class="reference external" href="/images/psychology-cp/book.png"&gt;Book cover&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;The book &lt;a class="reference external" href="http://www.amazon.co.uk/Psychology-Computer-Programming-Silver-Anniversary/dp/0932633420"&gt;The Psychology of Computer Programming&lt;/a&gt; by Gerald M. Weinberg has
+been on my wish list for a while, ever since reading the
+&lt;a class="reference external" href="http://www.catb.org/esr/writings/homesteading/cathedral-bazaar/"&gt;cathedral &amp;amp; the bazaar&lt;/a&gt; by &lt;a class="reference external" href="http://esr.ibiblio.org/"&gt;Eric S. Raymond&lt;/a&gt;, in which he talks about how
+working using the open source approach can not only work on small-large scale
+projects, but how it seems to be the best way software
+developers can work together, from disparate parts of the world.&lt;/p&gt;
+&lt;p&gt;Eric cites the book &lt;a class="reference external" href="http://www.amazon.co.uk/Psychology-Computer-Programming-Silver-Anniversary/dp/0932633420"&gt;The Psychology of Computer Programming&lt;/a&gt;, saying:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&amp;quot;Gerald M. Weinberg's The Psychology Of Computer Programming (New York, Van
+Nostrand Reinhold 1971) introduced the rather unfortunately-labeled concept
+of &lt;strong&gt;egoless programming&lt;/strong&gt;. While he was nowhere near the first person to
+realize the futility of the &lt;strong&gt;principle of command&lt;/strong&gt;, he was probably the
+first to recognize and argue the point in particular connection with
+software development.&amp;quot;&lt;/p&gt;
+&lt;p class="attribution"&gt;&amp;mdash;&lt;a class="reference external" href="http://esr.ibiblio.org/"&gt;Eric S. Raymond&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Having requested the book as an xmas gift, I finally had a copy of the
+silver anniversary edition (published back in 1998). The original edition was
+published way back in 1971, but do not let this put you off, as the ideas
+and experiences are still as relevant today as they were, way back in 1971.&lt;/p&gt;
+&lt;p&gt;This is not a long review of the book, more a recommendation to read it if you
+are a programmer or a manager of programmers, as it may probably change the
+way you program and interact with other programmers, and can make you
+a better manager.&lt;/p&gt;
+&lt;p&gt;He tackles many issues in this book, focusing on the human side of being a
+programmer. If you have worked alongside other programmers or managed a
+group of programmers, you will find yourself nodding your head at so many
+stages in this book. He highlights why teams work or do not work well
+together. Why some managers are hopeless and others excel, and what we
+as programmers and managers can do to improve our jobs and working
+environment, so we can hopefully think differently and understand more about
+what we do, and why we do it.&lt;/p&gt;
+&lt;p&gt;Some highlights for me include:&lt;/p&gt;
+&lt;p&gt;In chapter 5 &amp;quot;The Programming Team&amp;quot; he talks about managers and leadership
+and how dealing with higher management can be problematic and strained, but
+good managers understand that results will be far more easily obtained if
+all the team is on-board and each team member has full participation.&lt;/p&gt;
+&lt;p&gt;On dealing with upper management:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&amp;quot;he must be willing to stake his position as
+designated leader on the strength of his professional judgement&amp;quot;.&lt;/p&gt;
+&lt;p&gt;&amp;quot;One of the paradoxes of leadership is simply
+this: only the leader who is ready to step down has a real chance of success.&amp;quot;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;In chapter 6 &amp;quot;The Programming Project&amp;quot; he talks about how teams work together,
+and if a manager wants to have a stable project/team,  touching on the
+&lt;a class="reference external" href="http://en.wikipedia.org/wiki/Egoless_programming"&gt;egoless programming&lt;/a&gt; idea.&lt;/p&gt;
+&lt;blockquote&gt;
+&amp;quot;If a programmer is indispensable, get rid of him as quickly as possible.&amp;quot;&lt;/blockquote&gt;
+&lt;p&gt;He also observes the gender inequality in programming teams, when women are part of
+a team.&lt;/p&gt;
+&lt;blockquote&gt;
+&amp;quot;Each prejudice has its price. In a programming project, the
+exclusion of anyone from any position on any basis besides lack of
+competence robs the project of the best possible performance. Moreover,
+once one faction begins to feel that they are being judged differently
+from others, they will begin to act differently.&amp;quot;&lt;/blockquote&gt;
+&lt;p&gt;In chapter 11 &amp;quot;Programming Languages&amp;quot; he talks of the drive to improve
+programming languages to be more natural, less complex.&lt;/p&gt;
+&lt;blockquote&gt;
+&amp;quot;It is a psychological difficulty which prevents us from writing our
+problem specifications directly in machine language. Let's face up
+to it: people don't think the same way that computers do - that's why
+we use computers. Programming is at best a communication between two
+alien species, and programming languages with all their systems
+paraphernalia are an attempt to make communication simpler for one of
+those species. Which one? Not the computer, certainly, for nobody
+ever heard a complaint from a computer that it couldn't do the work.&amp;quot;&lt;/blockquote&gt;
+&lt;p&gt;He goes on to talk about some principles for programming language design:&lt;/p&gt;
+&lt;blockquote&gt;
+&amp;quot;Programming is not a branch of mathematics, it is a unique form of
+communication in which human beings take an active role and machines
+often a passive one.&amp;quot;&lt;/blockquote&gt;
+&lt;div class="section" id="conclusion"&gt;
+&lt;h2&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;Each chapter ends with questions for managers and for programmers, to analyse
+your own situation, and how the issues discussed have affected you.&lt;/p&gt;
+&lt;p&gt;I came away from reading this book, recognizing many aspects of it in my own
+programming career, and how even though computer terms and languages change,
+humans act the same as they did back when the first edition came to print,
+and there are some valuable lessons to be learned from the issues highlighted
+in the book.&lt;/p&gt;
+&lt;p&gt;I recommend this book not only because it was an enjoyable read,
+which allows you to spot and identify situations you may find yourself in,
+but how you can change your approach to working with
+others and how you can improve as a programmer as well as a manager.&lt;/p&gt;
+&lt;/div&gt;
+</content><category term="books"></category><category term="programming"></category><category term="psychology"></category></entry><entry><title>Busch &amp; Müller all weather dynamo roller</title><link href="http://simonsblog.co.uk/busch-muller-all-weather-dynamo-roller.html" rel="alternate"></link><published>2012-12-09T20:16:00+00:00</published><updated>2012-12-09T20:16:00+00:00</updated><author><name>Simon</name></author><id>tag:simonsblog.co.uk,2012-12-09:/busch-muller-all-weather-dynamo-roller.html</id><summary type="html">&lt;p&gt;After recently purchasing a Busch &amp;amp; Müller dymotec 6 dynamo, I found the
+noise level increased dramatically during wet weather. Going from a low hum
+in the dry to a higher pitch tone in wet weather.&lt;/p&gt;
+&lt;p&gt;Initially I thought this could be down to the rubber roller slipping against
+the tyre …&lt;/p&gt;</summary><content type="html">&lt;p&gt;After recently purchasing a Busch &amp;amp; Müller dymotec 6 dynamo, I found the
+noise level increased dramatically during wet weather. Going from a low hum
+in the dry to a higher pitch tone in wet weather.&lt;/p&gt;
+&lt;p&gt;Initially I thought this could be down to the rubber roller slipping against
+the tyre tread wall, so I increased the pressure - but still the noise
+continued in wet conditions.&lt;/p&gt;
+&lt;p&gt;I had seen the Busch &amp;amp; Müller all weather dynamo roller advertised on evans
+cycles website, but it seemed steep to charge £11 for an item, that was a
+simple wire roller replacement.&lt;/p&gt;
+&lt;p&gt;I then spotted this item for sale on ebay (used briefly by the owner),
+and promptly won the item for a total of £1.99.&lt;/p&gt;
+&lt;p&gt;When this arrived it looked to be in as good as new condition, so then waited
+for the next downpour before giving it a road test.&lt;/p&gt;
+&lt;div class="section" id="fitting"&gt;
+&lt;h2&gt;Fitting&lt;/h2&gt;
+&lt;img alt="Montage of parts" class="align-center" src="/images/all_weather_roller/montage1.png" style="width: 700px; height: 466px;" /&gt;
+&lt;ol class="arabic simple"&gt;
+&lt;li&gt;&lt;a class="reference external" href="/images/all_weather_roller/pieces.png"&gt;Busch &amp;amp; Müller all weather dynamo roller&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="/images/all_weather_roller/remove_cap.png"&gt;Cap removed&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="/images/all_weather_roller/fixing_clip_fitted.png"&gt;Fixing clip&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="/images/all_weather_roller/aligned.png"&gt;Aligned with tyre wall&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;With a flat head screw driver I removed the existing plastic cap, and metal
+fixing clip holding the original rubber roller, finally taking off the
+rubber roller itself.&lt;/p&gt;
+&lt;p&gt;I replaced the wire roller and metal fixing clip (easing this on with the flat
+head screw driver) and put the plastic cap back on which clicks into place.&lt;/p&gt;
+&lt;p&gt;This took less than a minute and so could be done by the side of the road, if
+a downpour hit without warning.&lt;/p&gt;
+&lt;p&gt;The most important thing is to make sure that the wire roller is aligned
+&lt;strong&gt;exactly&lt;/strong&gt; with the dynamo tread in the tyre (Note: this wire roller cannot
+be used on thin skinwall tyres), and that the pressure on the tyre side wall
+is fairly light.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="conclusion"&gt;
+&lt;h2&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;The best thing about this was the dramatic noise reduction. The difference was
+stark and the grip it had to the tyre was incredible, and my early morning
+ride was a pleasure now the high pitch tone was reduced back down to a low
+humming sound.&lt;/p&gt;
+&lt;p&gt;I'm almost tempted to use this all the time, but I can see this wearing the
+tyre wall down quicker than the rubber roller and Busch and Müller recommend
+only using this in wet/snowy conditions.&lt;/p&gt;
+&lt;/div&gt;
+</content><category term="dynamo"></category><category term="lights"></category></entry><entry><title>Dymotec 6 &amp; Lumotec IQ Cyo RT senso plus</title><link href="http://simonsblog.co.uk/dymotec-6-lumotec-iq-cyo-rt-senso-plus.html" rel="alternate"></link><published>2012-11-24T22:41:00+00:00</published><updated>2012-11-24T22:41:00+00:00</updated><author><name>Simon</name></author><id>tag:simonsblog.co.uk,2012-11-24:/dymotec-6-lumotec-iq-cyo-rt-senso-plus.html</id><summary type="html">&lt;p&gt;After visiting Berlin recently I noticed how many bikes used dynamos and
+liked the idea of a fixed front light powered by a dynamo.&lt;/p&gt;
+&lt;p&gt;The thought of not having to carry spare battries and the fact that my battery
+powered front light needed replacement anyway, I decided to try out …&lt;/p&gt;</summary><content type="html">&lt;p&gt;After visiting Berlin recently I noticed how many bikes used dynamos and
+liked the idea of a fixed front light powered by a dynamo.&lt;/p&gt;
+&lt;p&gt;The thought of not having to carry spare battries and the fact that my battery
+powered front light needed replacement anyway, I decided to try out a
+bottle dynamo.&lt;/p&gt;
+&lt;p&gt;This post is about what parts I used and how I fitted them.&lt;/p&gt;
+&lt;div class="section" id="parts"&gt;
+&lt;h2&gt;Parts&lt;/h2&gt;
+&lt;img alt="Montage of parts to fit" class="align-center" src="/images/dynamo/montage1.png" style="width: 700px; height: 466px;" /&gt;
+&lt;ol class="arabic simple"&gt;
+&lt;li&gt;&lt;a class="reference external" href="/images/dynamo/lumotec-light-pieces.png"&gt;Busch &amp;amp; Müller Lumotec IQ Cyo RT senso plus&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="/images/dynamo/dymotec6-details.png"&gt;Busch &amp;amp; Müller dymotec 6 (left mounted)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="/images/dynamo/light_bracket2.png"&gt;Busch &amp;amp; Müller Front Dynamo Bracket Cantilever&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="/images/dynamo/soubitez-dynamo-holder.png"&gt;Soubitez dynamo holder&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div class="section" id="fit-front-light-bracket"&gt;
+&lt;h2&gt;Fit front light bracket&lt;/h2&gt;
+&lt;p&gt;The Busch &amp;amp; Müller Lumotec IQ Cyo RT senso plus comes with a chrome plated
+bracket which is suitable for most bikes, but sits the light quite high
+so I purchased the Busch &amp;amp; Müller front dynamo bracket for cantilever brakes,
+which places the light lower, around 1cm above the front tyre and slips
+under the front v-brake.&lt;/p&gt;
+&lt;p&gt;I fitted the dynamo bracket with an M5 40mm bolt and a self locking nut to
+the front fork.&lt;/p&gt;
+&lt;img alt="Montage of light bracket Light bracket bolt" class="align-center" src="/images/dynamo/montage2.png" style="width: 700px; height: 233px;" /&gt;
+&lt;ol class="arabic simple"&gt;
+&lt;li&gt;&lt;a class="reference external" href="/images/dynamo/light_bracket_bolt.png"&gt;Light bracket bolt&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="/images/dynamo/light_bracket_bolt_rear.png"&gt;Light bracket bolt rear&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div class="section" id="fit-lumotec-iq-cyo-rt-senso-plus"&gt;
+&lt;h2&gt;Fit lumotec IQ cyo RT senso plus&lt;/h2&gt;
+&lt;p&gt;With a 4mm hex wrench I attached the Busch &amp;amp; Müller Lumotec IQ Cyo RT senso
+plus to the light bracket.&lt;/p&gt;
+&lt;p&gt;The light should be aimed around 10 metres onto the road.&lt;/p&gt;
+&lt;img alt="Montage of light fitting" class="align-center" src="/images/dynamo/montage3.png" style="width: 700px; height: 233px;" /&gt;
+&lt;ol class="arabic simple"&gt;
+&lt;li&gt;&lt;a class="reference external" href="/images/dynamo/light_bracket_fit1.png"&gt;Light bracket fitting&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="/images/dynamo/light_bracket_side.png"&gt;Light bracket fitting side&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div class="section" id="fit-soubitez-dynamo-bracket"&gt;
+&lt;h2&gt;Fit Soubitez dynamo bracket&lt;/h2&gt;
+&lt;p&gt;Taking a 5mm hex wrench, I took off the bolt holding the front left brake arm.&lt;/p&gt;
+&lt;p&gt;I then attached the &lt;a class="reference external" href="/images/dynamo/soubitez-dynamo-holder.png"&gt;Soubitez dynamo holder&lt;/a&gt; to the brake arm and replaced
+the 5mm bolt.&lt;/p&gt;
+&lt;img alt="Monatge front left brake" class="align-center" src="/images/dynamo/montage4.png" style="width: 700px; height: 466px;" /&gt;
+&lt;ol class="arabic simple"&gt;
+&lt;li&gt;&lt;a class="reference external" href="/images/dynamo/front-left-brake.png"&gt;Front left brake&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="/images/dynamo/front-left-remove-bolt.png"&gt;Front left bolt&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="/images/dynamo/front-left-mounted-bracket1.png"&gt;Front left mounted bracket side&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="/images/dynamo/front-left-mounted-bracket2.png"&gt;Front left mounted bracket front&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div class="section" id="fit-dymotec-6-left-sided-mount"&gt;
+&lt;h2&gt;Fit dymotec 6 (left sided mount)&lt;/h2&gt;
+&lt;p&gt;With a 4mm hex wrench I attached the dynamo to the bracket.&lt;/p&gt;
+&lt;p&gt;It's crucial to &lt;strong&gt;align the dynamo with the centre of the wheel&lt;/strong&gt;, while the
+distance between the tyre and dynamo roller should be 10mm.&lt;/p&gt;
+&lt;img alt="Montage fitting dymotec6" class="align-center" src="/images/dynamo/montage5.png" style="width: 700px; height: 466px;" /&gt;
+&lt;ol class="arabic simple"&gt;
+&lt;li&gt;&lt;a class="reference external" href="/images/dynamo/dymotec6-instructions.png"&gt;Dymotec6 fitting instructions&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="/images/dynamo/dymotec6-reverse-side-view.png"&gt;Dymotec6 reverse view&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="/images/dynamo/dymotec6-fit-1cm-from-wheel.png"&gt;Dymotec6 fit 1cm from tyre&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="/images/dynamo/dynamo-inline-centre-of-wheel.png"&gt;Align dynamo to the centre of the wheel&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;My &lt;a class="reference external" href="http://www.schwalbe.co.uk/tour/marathon-plus/"&gt;schwalbe marathon tyres&lt;/a&gt; have a dynamo track to optimise working
+with a dynamo bottle, so I aligned this with the dynamo roller.&lt;/p&gt;
+&lt;p&gt;I shortened the length of the cable to around 3cm over what was required to
+reach the dynamo connectors and I then exposed 1cm of bare wire.&lt;/p&gt;
+&lt;p&gt;I then attached each cable end to the sleeve end connectors that
+came with the light. The insulator and exposed cable ends, are pinched along the
+sleeve connectors two crimp points.&lt;/p&gt;
+&lt;img alt="Montage align dymotec 6 to wheel - fit connecting sleeves" class="align-center" src="/images/dynamo/montage6.png" style="width: 700px; height: 466px;" /&gt;
+&lt;ol class="arabic simple"&gt;
+&lt;li&gt;&lt;a class="reference external" href="/images/dynamo/dynamo-inline-tyre.png"&gt;Dymotec6 inline with dynamo track&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="/images/dynamo/dynamo-inline-tyre2.png"&gt;Dymotec6 inline with dynamo track side&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="/images/dynamo/dymotec6-pieces.png"&gt;Dymotec6 connecting components&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="/images/dynamo/cable_ends_fit.png"&gt;Cable ends with sleeve connectors&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;I then covered the sleeve connectors with the supplied connector covers that
+came with the &lt;a class="reference external" href="/images/dynamo/dymotec6-pieces.png"&gt;Dymotec6 connecting components&lt;/a&gt;. I wrapped some insulation
+tape around the sleeves for extra protection.&lt;/p&gt;
+&lt;p&gt;There are four terminals (2x supply &amp;amp; 2x earth) underneath the dymotec 6.
+The two connectors under the dymotec 6, nearest to the wheel are the supply side
+(black cable) and the other two, nearest to you are the earthing terminal
+(black &amp;amp; white cable). Pick one from each side to connect the relevant cable.&lt;/p&gt;
+&lt;p&gt;To engage the dynamo, you press down on the red button and the dynamo
+swings in to the tyre. Below the red button, to the side of the dynamo is a
+pressure adjustment (small knob), which if you turn left will decrease the
+pressure on the tyre, or if you turn right will increase the pressure on the
+tyre, useful in wet weather conditions if the dynamo is slipping on the tyre.&lt;/p&gt;
+&lt;p&gt;To disengage the dymotec 6 simply pull it away from the tyre, this is the one
+advantage over a hub dynamo, there is no drag once you disengage the dynamo.&lt;/p&gt;
+&lt;img alt="Montage of Sleeve connectors covers" class="align-center" src="/images/dynamo/montage7.png" style="width: 700px; height: 466px;" /&gt;
+&lt;ol class="arabic simple"&gt;
+&lt;li&gt;&lt;a class="reference external" href="/images/dynamo/cable_covers.png"&gt;Sleeve connectors covers&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="/images/dynamo/cable_fitted.png"&gt;Connectors fitted&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="/images/dynamo/long_view.png"&gt;Tall view of fitting&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="/images/dynamo/light_dynamo.png"&gt;Close up of fitting&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;To tidy up the cable wires, I secured the wires to the bike fork and frame,
+using black cable ties. (200mm x 2.5mm).&lt;/p&gt;
+&lt;p&gt;As I purchased the dymotec 6 from Germany it only came with german
+instructions, but SJS cycles has &lt;a class="reference external" href="http://www.sjscycles.com/Instructions/Busch_&amp;amp;_Muller/Busch_&amp;amp;_Muller_Dymotec_6_Instructions.pdf"&gt;english instructions&lt;/a&gt; to fit the dymotec 6.&lt;/p&gt;
+&lt;/div&gt;
+</content><category term="dynamo"></category><category term="lights"></category></entry><entry><title>Tiling window manager: i3</title><link href="http://simonsblog.co.uk/tiling-window-manager-i3.html" rel="alternate"></link><published>2012-11-09T17:28:00+00:00</published><updated>2012-11-09T17:28:00+00:00</updated><author><name>Simon</name></author><id>tag:simonsblog.co.uk,2012-11-09:/tiling-window-manager-i3.html</id><summary type="html">&lt;p&gt;After using the &lt;a class="reference external" href="http://awesome.naquadah.org/"&gt;awesome&lt;/a&gt; window manager for the last few years, I’ve
+switched over to a new tiling window manger &lt;a class="reference external" href="http://i3wm.org"&gt;i3&lt;/a&gt; - after trying it out,
+I’ve now completely switched over and really like the ease of use and
+increased functionality it provides.&lt;/p&gt;
+&lt;p&gt;&lt;a class="reference external" href="http://en.wikipedia.org/wiki/Tiling_window_manager"&gt;Tiling window managers&lt;/a&gt; allow me to …&lt;/p&gt;</summary><content type="html">&lt;p&gt;After using the &lt;a class="reference external" href="http://awesome.naquadah.org/"&gt;awesome&lt;/a&gt; window manager for the last few years, I’ve
+switched over to a new tiling window manger &lt;a class="reference external" href="http://i3wm.org"&gt;i3&lt;/a&gt; - after trying it out,
+I’ve now completely switched over and really like the ease of use and
+increased functionality it provides.&lt;/p&gt;
+&lt;p&gt;&lt;a class="reference external" href="http://en.wikipedia.org/wiki/Tiling_window_manager"&gt;Tiling window managers&lt;/a&gt; allow me to manage my screen space much more
+efficiently and mean I can work within multiple windows easily. I like
+the simplicity of &lt;a class="reference external" href="http://i3wm.org"&gt;i3&lt;/a&gt;, it allows for &lt;a class="reference external" href="http://i3wm.org/docs/userguide.html#_changing_the_container_layout"&gt;3 container layouts&lt;/a&gt;
+splith/splitv, stacking, tabbed. I also find it &lt;strong&gt;very&lt;/strong&gt; easy to modify
+your keyboard mappings via a simple (plain text rather than a &lt;a class="reference external" href="http://www.lua.org/"&gt;lua&lt;/a&gt;
+config file in the case of awesome wm) file in your home directory.
+&lt;a class="reference external" href="https://gist.github.com/simonhayward/11316105"&gt;~/.i3/config&lt;/a&gt;.This config file is created for you based on default
+settings when you first use i3.&lt;/p&gt;
+&lt;img alt="i3 example screenshot" class="align-center" src="/images/i3/i3-screen-thumb.png" style="width: 700px; height: 394px;" /&gt;
+&lt;p&gt;&lt;a class="reference external" href="/images/i3/i3-screen.png"&gt;View a screenshot&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;I didn’t need to add much to mine, just some short cuts I would need,
+suspend/lock (I’m using &lt;a class="reference external" href="http://i3wm.org/i3lock/"&gt;i3lock&lt;/a&gt; - which comes with the i3 suite) - the
+defaults are sane and get’s you up and running quickly.&lt;/p&gt;
+&lt;p&gt;&lt;a class="reference external" href="http://i3wm.org"&gt;i3&lt;/a&gt; has good support for multi monitors and uses &lt;a class="reference external" href="http://xorg.freedesktop.org/wiki/Projects/XRandR"&gt;xrandr&lt;/a&gt; by default.&lt;/p&gt;
+&lt;p&gt;What is most impressive is not only the simplicity of the configuration
+but the speed of it, and the minimal memory space it occupies. The
+&lt;a class="reference external" href="http://i3wm.org/docs/"&gt;docs&lt;/a&gt; are extremely well laid out and answer almost all questions you
+may have. There is a good &lt;a class="reference external" href="http://www.youtube.com/watch?v=QnYN2CTb1hM"&gt;google tech talk video on i3&lt;/a&gt; from &lt;a class="reference external" href="http://michael.stapelberg.de/"&gt;Michael
+Stapelberg&lt;/a&gt; outlining the design decisions they took and why they
+decided to built yet another window tiling manager.&lt;/p&gt;
+&lt;p&gt;My main reasons for switching are:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;Speed&lt;/li&gt;
+&lt;li&gt;Simplicity&lt;/li&gt;
+&lt;li&gt;Complete test suite&lt;/li&gt;
+&lt;li&gt;Clean design&lt;/li&gt;
+&lt;li&gt;Great documentation&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;If you are using or considering switching to a tiling manager, I
+recommend trying &lt;a class="reference external" href="http://i3wm.org"&gt;i3&lt;/a&gt;, if you are using ubuntu or debian it’s even
+easier to install as you can use their &lt;a class="reference external" href="http://i3wm.org/docs/repositories.html"&gt;repositories&lt;/a&gt;.&lt;/p&gt;
+</content><category term="window manager"></category><category term="i3"></category><category term="ubuntu"></category><category term="debian"></category><category term="linux"></category></entry><entry><title>Rotate arbitrary</title><link href="http://simonsblog.co.uk/rotate-arbitrary.html" rel="alternate"></link><published>2012-07-21T16:13:00+01:00</published><updated>2012-07-21T16:13:00+01:00</updated><author><name>Simon</name></author><id>tag:simonsblog.co.uk,2012-07-21:/rotate-arbitrary.html</id><summary type="html">&lt;p&gt;Another way to rotate by arbitrary values.&lt;/p&gt;
+&lt;p&gt;You can in python 2.x - just str.encode(“rot13”) - but for other
+rotations you could use the following (for ascii):&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;string&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;ascii_uppercase&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="n"&gt;uc&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;ascii_lowercase&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="n"&gt;lc&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;maketrans&lt;/span&gt;
+
+
+&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;rot_func&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;text&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;encode&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;True&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;rotate&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;13&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="n"&gt;letters&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;uc&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;lc&lt;/span&gt;
+    &lt;span class="n"&gt;rot&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;join …&lt;/span&gt;&lt;/pre&gt;&lt;/div&gt;</summary><content type="html">&lt;p&gt;Another way to rotate by arbitrary values.&lt;/p&gt;
+&lt;p&gt;You can in python 2.x - just str.encode(“rot13”) - but for other
+rotations you could use the following (for ascii):&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;string&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;ascii_uppercase&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="n"&gt;uc&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;ascii_lowercase&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="n"&gt;lc&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;maketrans&lt;/span&gt;
+
+
+&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;rot_func&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;text&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;encode&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;True&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;rotate&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;13&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="n"&gt;letters&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;uc&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;lc&lt;/span&gt;
+    &lt;span class="n"&gt;rot&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;join&lt;/span&gt;&lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;[:&lt;/span&gt;&lt;span class="n"&gt;rotate&lt;/span&gt;&lt;span class="p"&gt;][::&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;rotate&lt;/span&gt;&lt;span class="p"&gt;:][::&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;])[::&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;uc&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;lc&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+    &lt;span class="n"&gt;src&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;trg&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;letters&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;rot&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;encode&lt;/span&gt; &lt;span class="k"&gt;else&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;rot&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;letters&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;trans&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;maketrans&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;src&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;trg&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;text&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;translate&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;trans&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="n"&gt;text&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Text to ROT&amp;quot;&lt;/span&gt;
+&lt;span class="n"&gt;encoded&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;rot_func&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;text&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;decoded&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;rot_func&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;encoded&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;encode&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;False&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+&lt;span class="s2"&gt;Text:&lt;/span&gt;&lt;span class="se"&gt;\t&lt;/span&gt;&lt;span class="s2"&gt;{text}&lt;/span&gt;
+&lt;span class="s2"&gt;Encode:&lt;/span&gt;&lt;span class="se"&gt;\t&lt;/span&gt;&lt;span class="s2"&gt;{encoded}&lt;/span&gt;
+&lt;span class="s2"&gt;Decode:&lt;/span&gt;&lt;span class="se"&gt;\t&lt;/span&gt;&lt;span class="s2"&gt;{decoded}&lt;/span&gt;
+&lt;span class="s2"&gt;&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;format&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;**&lt;/span&gt;&lt;span class="nb"&gt;locals&lt;/span&gt;&lt;span class="p"&gt;()))&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;a class="reference external" href="https://gist.github.com/3156361"&gt;Github gist&lt;/a&gt;&lt;/p&gt;
+</content><category term="open source"></category><category term="python"></category></entry><entry><title>Favourite quotes</title><link href="http://simonsblog.co.uk/favourite-quotes.html" rel="alternate"></link><published>2012-06-25T17:05:00+01:00</published><updated>2012-06-25T17:05:00+01:00</updated><author><name>Simon</name></author><id>tag:simonsblog.co.uk,2012-06-25:/favourite-quotes.html</id><summary type="html">&lt;p&gt;A selection of my favourite quotes I’ve come across recently…&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;&lt;ul class="first"&gt;
+&lt;li&gt;&lt;strong&gt;L1 cache&lt;/strong&gt; - 3s grabbing a piece of paper&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;L2 cache&lt;/strong&gt; - 14s picking a book from a shelf&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;System RAM&lt;/strong&gt; - 4m walk down the hall&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Hard drive seek&lt;/strong&gt; - Like leaving the building to roam the
+earth for one year and …&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;</summary><content type="html">&lt;p&gt;A selection of my favourite quotes I’ve come across recently…&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;&lt;ul class="first"&gt;
+&lt;li&gt;&lt;strong&gt;L1 cache&lt;/strong&gt; - 3s grabbing a piece of paper&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;L2 cache&lt;/strong&gt; - 14s picking a book from a shelf&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;System RAM&lt;/strong&gt; - 4m walk down the hall&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Hard drive seek&lt;/strong&gt; - Like leaving the building to roam the
+earth for one year and three months&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Gustavo Duarte (via Brandon Rhodes at pycon us - &lt;a class="reference external" href="http://pyvideo.org/video/717/python-linkers-and-virtual-memory"&gt;Python Linkers and
+Virtual Memory&lt;/a&gt;)&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;“The purpose of software engineering is to control complexity, not to
+create it.”&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Pamela Zave (via Jon Bentley’s - &lt;a class="reference external" href="http://www.amazon.co.uk/Programming-Pearls-ACM-Press-Bentley/dp/0201657880"&gt;Programming Pearls&lt;/a&gt;)&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;“I think it’s better to give users the rope they want than to try and
+prevent them from hanging themselves, since otherwise they’ll just
+use the power cords as ropes and electrocute themselves.”&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Guido van Rossum - &lt;a class="reference external" href="https://lwn.net/Articles/500485/"&gt;resolving a TZ-aware local time request&lt;/a&gt;&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;“I think that if I was running a company like Microsoft I would ask
+everyone to read Code Complete, but if I were running a start up, I
+would ask no-one to read Code Complete. Code Complete is all about
+being exceptionally conservative with your programming practise. If
+you have a small company full of brilliant programmers you don’t
+really want to tie their hands, you want to let them go as far as
+they can with the language they’ve got. If you have tens of thousands
+of programmers, you would like everyone to not do anything
+interesting at all, to use the most basic of design patterns, to
+never optimize their code because it get’s harder for the person
+whose behind them or they might make a mistake during optimisation.”&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Raymond Hettinger (via &lt;a class="reference external" href="http://radiofreepython.com/episodes/3/"&gt;Radio Free Python&lt;/a&gt;)&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;“Genius is one percent inspiration, ninety-nine percent
+perspiration.”&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Thomas Edison (via Linus Torvalds &lt;a class="reference external" href="http://www.youtube.com/watch?v=MShbP3OpASA"&gt;Aalto talk&lt;/a&gt;)&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;“Yes, I really like Python, I like it for a very specific reason, I
+like Python because of all the languages I have ever used it is the
+one that maximises ease of long term maintainability. That is the
+ease with which you can read your code six months later, and the
+longer I program the more convinced I am that that is &lt;strong&gt;the&lt;/strong&gt; most
+important metric of a language…..&lt;strong&gt;bar none&lt;/strong&gt;.”&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Eric ‘ESR’ Raymond &lt;a class="reference external" href="http://youtu.be/1b17ggwkR60"&gt;presenting to the Philadelphia Area Java Users’
+Group&lt;/a&gt;&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;“The cheapest, fastest and most reliable components of a computer
+system are those that aren’t there.”&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Gordon Bell (via Jon Bentley’s - &lt;a class="reference external" href="http://www.amazon.co.uk/Programming-Pearls-ACM-Press-Bentley/dp/0201657880"&gt;Programming Pearls&lt;/a&gt;)&lt;/p&gt;
+</content><category term="python"></category><category term="quotes"></category><category term="linux"></category></entry><entry><title>Test driven development with Django</title><link href="http://simonsblog.co.uk/test-driven-development-with-django.html" rel="alternate"></link><published>2011-11-17T19:10:00+00:00</published><updated>2011-11-17T19:10:00+00:00</updated><author><name>Simon</name></author><id>tag:simonsblog.co.uk,2011-11-17:/test-driven-development-with-django.html</id><summary type="html">&lt;p&gt;I went to a &lt;a class="reference external" href="http://skillsmatter.com/podcast/ajax-ria/tdd-django-selenium/js-2958"&gt;workshop&lt;/a&gt; last night on TDD (&lt;a class="reference external" href="http://en.wikipedia.org/wiki/Test-driven_development"&gt;Test Driven Development&lt;/a&gt;)
+using &lt;a class="reference external" href="https://www.djangoproject.com/"&gt;django&lt;/a&gt; and &lt;a class="reference external" href="http://seleniumhq.org/"&gt;selenium&lt;/a&gt;, which was given by &lt;a class="reference external" href="http://harry.pythonanywhere.com/"&gt;Harry Percival&lt;/a&gt;.
+It was hosted at &lt;a class="reference external" href="http://skillsmatter.com/go/find-us/js-1520"&gt;skills matter exchange&lt;/a&gt; in London and there was free
+beer and pizza…which was an unexpected bonus!&lt;/p&gt;
+&lt;p&gt;There must have been around 35 attendees …&lt;/p&gt;</summary><content type="html">&lt;p&gt;I went to a &lt;a class="reference external" href="http://skillsmatter.com/podcast/ajax-ria/tdd-django-selenium/js-2958"&gt;workshop&lt;/a&gt; last night on TDD (&lt;a class="reference external" href="http://en.wikipedia.org/wiki/Test-driven_development"&gt;Test Driven Development&lt;/a&gt;)
+using &lt;a class="reference external" href="https://www.djangoproject.com/"&gt;django&lt;/a&gt; and &lt;a class="reference external" href="http://seleniumhq.org/"&gt;selenium&lt;/a&gt;, which was given by &lt;a class="reference external" href="http://harry.pythonanywhere.com/"&gt;Harry Percival&lt;/a&gt;.
+It was hosted at &lt;a class="reference external" href="http://skillsmatter.com/go/find-us/js-1520"&gt;skills matter exchange&lt;/a&gt; in London and there was free
+beer and pizza…which was an unexpected bonus!&lt;/p&gt;
+&lt;p&gt;There must have been around 35 attendees with a mixture of skill sets
+and backgrounds and it was an extremely good introduction not only to
+TDD but also to django framework, and almost everyone kept pace and I
+was impressed by Harry’s enthusiasm for TDD and why you should be
+adopting it for development.&lt;/p&gt;
+&lt;p&gt;I also think it highlighted the accessibility of the &lt;a class="reference external" href="https://www.djangoproject.com/"&gt;django framework&lt;/a&gt;
+and how you can pick up on it very quickly, and half way through the
+pace was picked up as everyone in the room was generally flying though
+the work. The workshop was based on the django tutorial &lt;a class="reference external" href="https://docs.djangoproject.com/en/dev/intro/tutorial01/"&gt;writing my
+first app&lt;/a&gt; which leads you through from starting a project to creating
+a polls application, which you can administer through the admin
+interface and is a gentle introduction to the &lt;a class="reference external" href="https://docs.djangoproject.com/en/dev/faq/general/#django-appears-to-be-a-mvc-framework-but-you-call-the-controller-the-view-and-the-view-the-template-how-come-you-don-t-use-the-standard-names"&gt;models / templates /
+view&lt;/a&gt; paradigm adopted by django.&lt;/p&gt;
+&lt;p&gt;So you go from installing and setting up a basic django project and
+application to firing up selenium to check each step of your progress
+along the way.&lt;/p&gt;
+&lt;p&gt;The key thing that I took away from it was the &lt;em&gt;develop - test - develop
+- test&lt;/em&gt; loop that you need to cycle through, in order to be really TDD,
+the tests direct &lt;strong&gt;all&lt;/strong&gt; development, so the steps are small and
+incremental. Even though you know creating a models.py file with an
+model class that doesn’t even extend from django.db.models.Model, you do
+&lt;em&gt;just&lt;/em&gt; enough to pass the next step of the test. Which should end up
+with you not developing unnecessary code, which can happen when you are
+developing without tests and you try to cover all possibilities without
+thinking about what the application will &lt;em&gt;actually&lt;/em&gt; deliver upon. You
+design your tests up front which you then write code to pass each
+step/test along the way. Write a test that fails, write the code to make
+it pass.&lt;/p&gt;
+&lt;p&gt;You can follow all this along simply by going to &lt;a class="reference external" href="http://harry.pythonanywhere.com/"&gt;Harry’s website&lt;/a&gt;, I
+recommended you do if you are interested in trying TDD and preferably
+with the django framework, this is really aimed at everyone and so no
+experience is necessary.&lt;/p&gt;
+&lt;p&gt;Well done to harry for delivering such a good introduction on TDD with
+django and selenium! There could be more workshops lined up, so if your
+in London and fancy coming along, check the &lt;a class="reference external" href="http://mail.python.org/mailman/listinfo/python-uk"&gt;python-uk mailing list&lt;/a&gt; to
+see when any future workshops are planned.&lt;/p&gt;
+</content><category term="django"></category><category term="selenium"></category><category term="TDD"></category><category term="python"></category></entry><entry><title>Linux window managers</title><link href="http://simonsblog.co.uk/linux-window-managers.html" rel="alternate"></link><published>2011-11-16T11:13:00+00:00</published><updated>2011-11-16T11:13:00+00:00</updated><author><name>Simon</name></author><id>tag:simonsblog.co.uk,2011-11-16:/linux-window-managers.html</id><summary type="html">&lt;p&gt;There seems to be a lot of &lt;a class="reference external" href="http://www.extremetech.com/computing/104581-linux-mint-the-new-ubuntu"&gt;resentment&lt;/a&gt; in regards to &lt;a class="reference external" href="http://www.ubuntu.com/ubuntu"&gt;Ubuntu
+desktops&lt;/a&gt; decision to switch to &lt;a class="reference external" href="http://unity.ubuntu.com/"&gt;unity&lt;/a&gt; as the default window manager
+in linux. The &lt;a class="reference external" href="https://bugs.launchpad.net/unity/+bug/668415/comments/154"&gt;comments&lt;/a&gt; by Mark Shuttleworth are interesting:&lt;/p&gt;
+&lt;blockquote&gt;
+“I admire and respect the fact that you can make free software do
+exactly what you want - that …&lt;/blockquote&gt;</summary><content type="html">&lt;p&gt;There seems to be a lot of &lt;a class="reference external" href="http://www.extremetech.com/computing/104581-linux-mint-the-new-ubuntu"&gt;resentment&lt;/a&gt; in regards to &lt;a class="reference external" href="http://www.ubuntu.com/ubuntu"&gt;Ubuntu
+desktops&lt;/a&gt; decision to switch to &lt;a class="reference external" href="http://unity.ubuntu.com/"&gt;unity&lt;/a&gt; as the default window manager
+in linux. The &lt;a class="reference external" href="https://bugs.launchpad.net/unity/+bug/668415/comments/154"&gt;comments&lt;/a&gt; by Mark Shuttleworth are interesting:&lt;/p&gt;
+&lt;blockquote&gt;
+“I admire and respect the fact that you can make free software do
+exactly what you want - that’s precisely what I set out to support
+in founding Ubuntu. What I did not set out to found was a project
+which pandered to the needs of a few, at the cost to the many.
+Especially when the few can perfectly well help themselves, and the
+many cannot.”&lt;/blockquote&gt;
+&lt;p&gt;I think I sit in the &lt;strong&gt;few&lt;/strong&gt; camp, which is why after trying &lt;a class="reference external" href="http://unity.ubuntu.com/"&gt;unity&lt;/a&gt;,
+and not liking it, chose to run a different window manager and settled
+upon a &lt;a class="reference external" href="http://en.wikipedia.org/wiki/Tiling_window_manager"&gt;tiling window manager&lt;/a&gt; (&lt;a class="reference external" href="http://awesome.naquadah.org/"&gt;awesome&lt;/a&gt;) which is extremely light on
+resources and extremely configurable via a single config file
+(~/.config/awesome/rc.lua).&lt;/p&gt;
+&lt;p&gt;I’ve transitioned from:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;&lt;a class="reference external" href="http://www.gnome.org/"&gt;gnome&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="http://www.xfce.org/"&gt;XFCE&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="http://awesome.naquadah.org/"&gt;awesome&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;This is the point of open source I &lt;em&gt;can&lt;/em&gt; up sticks and move, but what I
+think feels alien to regular open source users (in this I really mean
+everyday desktop/laptop users) is that this decision has felt forced
+upon us, sure I can apt-get install &lt;em&gt;alternative window manager&lt;/em&gt; but it
+still felt like the rug was pulled out from under us.&lt;/p&gt;
+&lt;p&gt;Saying that I’m happily in the &lt;em&gt;few&lt;/em&gt; camp rather than the &lt;em&gt;helpless&lt;/em&gt;
+camp, if anything it’s the real reason I use &lt;a class="reference external" href="http://en.wikipedia.org/wiki/Linux"&gt;linux&lt;/a&gt;. It’s also
+encouraged me to look around at other options and this being open source
+there are &lt;a class="reference external" href="http://en.wikipedia.org/wiki/X_window_manager"&gt;plenty&lt;/a&gt; of other options, and I’m actually happier now with
+a &lt;a class="reference external" href="http://en.wikipedia.org/wiki/Tiling_window_manager"&gt;tiling window manager&lt;/a&gt;, it doesn’t suck up much memory and cpu but
+the main benefit for me is that I tend to work much more from the
+keyboard, the mouse is used sparingly. The “Mod4” key (this is normally
+the Windows key on most keyboards) is your friend, one of the best
+resources I’ve found is the &lt;a class="reference external" href="https://wiki.archlinux.org/index.php/Awesome"&gt;arch linux guide&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;I’ve switched to &lt;a class="reference external" href="http://awesome.naquadah.org/"&gt;awesome&lt;/a&gt; on an old &lt;a class="reference external" href="https://wiki.archlinux.org/index.php/Awesome#Mod4_key_vs._IBM_ThinkPad_users"&gt;thinkpad&lt;/a&gt; running &lt;a class="reference external" href="http://www.gentoo.org/"&gt;gentoo&lt;/a&gt; and
+my desktop at home and work and another laptop which run &lt;a class="reference external" href="http://releases.ubuntu.com/11.10/"&gt;Ubuntu
+11.10&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;The point is there is &lt;strong&gt;choice&lt;/strong&gt; and if you are one of the &lt;em&gt;few&lt;/em&gt; or even
+just started out using &lt;a class="reference external" href="http://www.ubuntu.com/ubuntu"&gt;ubuntu&lt;/a&gt; or any other distribution and you don’t
+like this or you don’t like that, then look around for alternatives,
+there is normally someone else who has done the work for you and
+developed something which is more suitable.&lt;/p&gt;
+&lt;p&gt;Here’s my &lt;a class="reference external" href="https://gist.github.com/1369928"&gt;rc.lua config file&lt;/a&gt;, it does what I need it to do, so change
+it to suit &lt;em&gt;your&lt;/em&gt; needs, and remember free software &lt;strong&gt;can&lt;/strong&gt; do exactly
+what you want, and a little time is the only investment you need to pay.&lt;/p&gt;
+</content><category term="awesome"></category><category term="ubuntu"></category><category term="window manager"></category></entry><entry><title>Virtualenvwrapper</title><link href="http://simonsblog.co.uk/virtualenvwrapper.html" rel="alternate"></link><published>2011-09-19T21:43:00+01:00</published><updated>2011-09-19T21:43:00+01:00</updated><author><name>Simon</name></author><id>tag:simonsblog.co.uk,2011-09-19:/virtualenvwrapper.html</id><summary type="html">&lt;p&gt;If your using &lt;a class="reference external" href="http://www.virtualenv.org/"&gt;virtualenv&lt;/a&gt; then you should
+be using
+&lt;a class="reference external" href="http://www.doughellmann.com/docs/virtualenvwrapper/"&gt;virtualenvwrapper&lt;/a&gt;,
+it's a great tool to make it really easy to use multiple virtualenv's
+and work with them painlessly.&lt;/p&gt;
+&lt;div class="section" id="here-s-the-why"&gt;
+&lt;h2&gt;Here's the why&lt;/h2&gt;
+&lt;p&gt;&lt;a class="reference external" href="http://www.virtualenv.org/"&gt;Virtualenv&lt;/a&gt; is a nice way to separate out
+all your python libraries into their own individual environments,
+&lt;a class="reference external" href="http://www.doughellmann.com/docs/virtualenvwrapper/"&gt;virtualenvwrapper&lt;/a&gt;
+makes …&lt;/p&gt;&lt;/div&gt;</summary><content type="html">&lt;p&gt;If your using &lt;a class="reference external" href="http://www.virtualenv.org/"&gt;virtualenv&lt;/a&gt; then you should
+be using
+&lt;a class="reference external" href="http://www.doughellmann.com/docs/virtualenvwrapper/"&gt;virtualenvwrapper&lt;/a&gt;,
+it's a great tool to make it really easy to use multiple virtualenv's
+and work with them painlessly.&lt;/p&gt;
+&lt;div class="section" id="here-s-the-why"&gt;
+&lt;h2&gt;Here's the why&lt;/h2&gt;
+&lt;p&gt;&lt;a class="reference external" href="http://www.virtualenv.org/"&gt;Virtualenv&lt;/a&gt; is a nice way to separate out
+all your python libraries into their own individual environments,
+&lt;a class="reference external" href="http://www.doughellmann.com/docs/virtualenvwrapper/"&gt;virtualenvwrapper&lt;/a&gt;
+makes it easy to put all these environments into one convenient
+location, rather than install all your python libraries into a site
+wide, global location.&lt;/p&gt;
+&lt;p&gt;By default when you &lt;em&gt;pip install&lt;/em&gt; onto your machine, these will default
+to your global site packages location, somewhere like:
+/usr/local/lib/python2.6/dist-packages (on ubuntu)&lt;/p&gt;
+&lt;p&gt;Instead if we use virtualenv's +
+&lt;a class="reference external" href="http://www.doughellmann.com/docs/virtualenvwrapper/"&gt;virtualenvwrapper&lt;/a&gt;
+we can contain multiple python modules/libraries installed to a selected
+personal folder. I have all my virtualenv's installed in a hidden
+directory in my home folder.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;/home/simon/.virtualenvs
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;This is defined via your shell initialisation file (in my case .bashrc)&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ grep virtualenvs .bashrc
+&lt;span class="nb"&gt;export&lt;/span&gt; &lt;span class="nv"&gt;WORKON_HOME&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="nv"&gt;$HOME&lt;/span&gt;&lt;span class="s2"&gt;/.virtualenvs&amp;quot;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Within this folder all my libs are installed (once I've activated that
+virtual environment):&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;simon@simon-development:/home/simon/.virtualenvs$ ls -d */
+geo/  metrics/  monitor/  simonsblog/
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;To actually use one of these virtual environments you only have to
+&lt;em&gt;activate&lt;/em&gt; the one you wish to work in, this is where
+&lt;a class="reference external" href="http://www.doughellmann.com/docs/virtualenvwrapper/"&gt;virtualenvwrapper&lt;/a&gt;
+comes in really handy:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;simon@simon-development:/home/simon/.virtualenvs$ workon
+geo
+metrics
+monitor
+simonsblog
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;This list all my virtual environments, to select mine I simply:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;simon@simon-development:/home/simon/.virtualenvs$ workon simonsblog
+&lt;span class="o"&gt;(&lt;/span&gt;simonsblog&lt;span class="o"&gt;)&lt;/span&gt;simon@simon-development:/home/simon/Devel/simonsblog_django$
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;I'm then transferred into my virtual environment (simonsblog_django)
+and any libraries I want to install via pip or easy_install will be
+installed into my virtual environment and not globally, and using
+virtualenvwrapper.projects (as of virtualenvwrapper 2.9 there is no need
+to install this package separately) I also get dumped into my working
+folder for that project (see
+&lt;a class="reference external" href="http://www.doughellmann.com/docs/virtualenvwrapper/command_ref.html#setvirtualenvproject"&gt;setvirtualenvproject&lt;/a&gt;).&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ ls -d /home/simon/.virtualenvs/simonsblog/lib/python2.6/site-packages/*/
+
+/home/simon/.virtualenvs/simonsblog/lib/python2.6/site-packages/akismet-0.2.0-py2.6.egg-info/
+/home/simon/.virtualenvs/simonsblog/lib/python2.6/site-packages/debug_toolbar/
+/home/simon/.virtualenvs/simonsblog/lib/python2.6/site-packages/django/
+/home/simon/.virtualenvs/simonsblog/lib/python2.6/site-packages/Django-1.3-py2.6.egg-info/
+/home/simon/.virtualenvs/simonsblog/lib/python2.6/site-packages/django_debug_toolbar-0.8.5-py2.6.egg-info/
+/home/simon/.virtualenvs/simonsblog/lib/python2.6/site-packages/django_imagekit-0.3.6-py2.6.egg-info/
+/home/simon/.virtualenvs/simonsblog/lib/python2.6/site-packages/django_tagging-0.3.1-py2.6.egg-info/
+/home/simon/.virtualenvs/simonsblog/lib/python2.6/site-packages/docutils/
+/home/simon/.virtualenvs/simonsblog/lib/python2.6/site-packages/gunicorn/
+/home/simon/.virtualenvs/simonsblog/lib/python2.6/site-packages/imagekit/
+/home/simon/.virtualenvs/simonsblog/lib/python2.6/site-packages/markdown/
+....
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Whenever I do pip install &lt;em&gt;package&lt;/em&gt; all those files are dumped into my
+/home/simon/.virtualenvs/simonsblog_django/lib/python2.6/site-packages/
+directory.&lt;/p&gt;
+&lt;p&gt;The only rule is this: &lt;strong&gt;you need to install *virtualenv* &amp;amp;
+*virtualenvwrapper* as you would normally into the global site wide
+packages&lt;/strong&gt;, then once these are installed globally for everything else
+you can install to one of your virtual environments.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="here-s-the-how"&gt;
+&lt;h2&gt;Here's the how&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ sudo aptitude install python-pip python-dev build-essential
+$ sudo pip install -U pip
+$ sudo pip install virtualenv
+$ sudo pip install virtualenvwrapper
+$ mkdir &lt;span class="nv"&gt;$HOME&lt;/span&gt;/.virtualenvs
+$ vi .bashrc
+&lt;span class="nb"&gt;export&lt;/span&gt; &lt;span class="nv"&gt;WORKON_HOME&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="nv"&gt;$HOME&lt;/span&gt;&lt;span class="s2"&gt;/.virtualenvs&amp;quot;&lt;/span&gt;
+&lt;span class="nb"&gt;source&lt;/span&gt; /usr/local/bin/virtualenvwrapper.sh
+$ &lt;span class="nb"&gt;source&lt;/span&gt; bashrc
+$ mkvirtualenv myvirtualenvtest
+....
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;This will then initiate your myvirtualenvtest environment and from then
+on your installs (pip/easy_installs) will relate to your activated
+virtualenv.&lt;/p&gt;
+&lt;p&gt;My .bashrc looks something like this:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nb"&gt;export&lt;/span&gt; &lt;span class="nv"&gt;WORKON_HOME&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="nv"&gt;$HOME&lt;/span&gt;&lt;span class="s2"&gt;/.virtualenvs&amp;quot;&lt;/span&gt;
+&lt;span class="nb"&gt;export&lt;/span&gt; &lt;span class="nv"&gt;VIRTUALENVWRAPPER_HOOK_DIR&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nv"&gt;$WORKON_HOME&lt;/span&gt;
+&lt;span class="nb"&gt;source&lt;/span&gt; /usr/local/bin/virtualenvwrapper.sh
+&lt;span class="nb"&gt;export&lt;/span&gt; &lt;span class="nv"&gt;PIP_VIRTUALENV_BASE&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nv"&gt;$WORKON_HOME&lt;/span&gt;
+&lt;span class="nb"&gt;export&lt;/span&gt; &lt;span class="nv"&gt;PIP_RESPECT_VIRTUALENV&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nb"&gt;true&lt;/span&gt;
+&lt;span class="nb"&gt;export&lt;/span&gt; &lt;span class="nv"&gt;PROJECT_HOME&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nv"&gt;$HOME&lt;/span&gt;/Devel
+
+&lt;span class="c1"&gt;# alias&amp;#39; from Holger Krekel http://paste.pocoo.org/show/164838/&lt;/span&gt;
+&lt;span class="nb"&gt;alias&lt;/span&gt; &lt;span class="nv"&gt;v&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;workon
+&lt;span class="nb"&gt;alias&lt;/span&gt; v.deactivate&lt;span class="o"&gt;=&lt;/span&gt;deactivate
+&lt;span class="nb"&gt;alias&lt;/span&gt; v.mk&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;mkvirtualenv --no-site-packages&amp;#39;&lt;/span&gt;
+&lt;span class="nb"&gt;alias&lt;/span&gt; v.mk_withsitepackages&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;mkvirtualenv&amp;#39;&lt;/span&gt;
+&lt;span class="nb"&gt;alias&lt;/span&gt; v.rm&lt;span class="o"&gt;=&lt;/span&gt;rmvirtualenv
+&lt;span class="nb"&gt;alias&lt;/span&gt; v.switch&lt;span class="o"&gt;=&lt;/span&gt;workon
+&lt;span class="nb"&gt;alias&lt;/span&gt; v.add2virtualenv&lt;span class="o"&gt;=&lt;/span&gt;add2virtualenv
+&lt;span class="nb"&gt;alias&lt;/span&gt; v.cdsitepackages&lt;span class="o"&gt;=&lt;/span&gt;cdsitepackages
+&lt;span class="nb"&gt;alias&lt;/span&gt; v.cd&lt;span class="o"&gt;=&lt;/span&gt;cdvirtualenv
+&lt;span class="nb"&gt;alias&lt;/span&gt; v.lssitepackages&lt;span class="o"&gt;=&lt;/span&gt;lssitepackages
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;You'll also see in my .bashrc is a PROJECT_HOME environment variable,
+this is where I keep my project code, which again keeps my code in a
+handy convenient place, check out
+&lt;a class="reference external" href="http://www.doughellmann.com/docs/virtualenvwrapper/projects.html"&gt;projects&lt;/a&gt;
+in virtualenvwrapper for more on this, but you can do nice things like
+use templates so you can start a new django project (this is an
+extension details
+&lt;a class="reference external" href="http://www.doughellmann.com/projects/virtualenvwrapper.django/"&gt;here&lt;/a&gt;)
+and this will build up the necessary libraries for django within this
+new project.&lt;/p&gt;
+&lt;p&gt;There is loads more to &lt;a class="reference external" href="http://www.virtualenv.org/"&gt;virtualenv&lt;/a&gt; and
+&lt;a class="reference external" href="http://www.doughellmann.com/docs/virtualenvwrapper/"&gt;virtualenvwrapper&lt;/a&gt;,
+you will find that are invaluable when dealing with multiple
+projects/sites which each need their own specific python modules and
+libraries.&lt;/p&gt;
+&lt;p&gt;Also check out this &lt;a class="reference external" href="http://www.pycon.tv/video/36/"&gt;Pycon video&lt;/a&gt; that
+explains &lt;a class="reference external" href="http://www.virtualenv.org/"&gt;virtualenv&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+</content><category term="open source"></category><category term="python"></category><category term="django"></category></entry><entry><title>Add munin monitoring in 5 minutes</title><link href="http://simonsblog.co.uk/add-munin-monitoring-in-5-minutes.html" rel="alternate"></link><published>2011-08-31T14:49:00+01:00</published><updated>2011-08-31T14:49:00+01:00</updated><author><name>Simon</name></author><id>tag:simonsblog.co.uk,2011-08-31:/add-munin-monitoring-in-5-minutes.html</id><summary type="html">&lt;p&gt;This site is set up on a &lt;a class="reference external" href="http://linode.com"&gt;Linode VPS&lt;/a&gt;, the OS is &lt;a class="reference external" href="http://www.debian.org"&gt;debian&lt;/a&gt; squeeze 32
+bit, and I wanted some basic monitoring in place, so knowing how quick
+&lt;a class="reference external" href="http://munin-monitoring.org"&gt;Munin&lt;/a&gt; is to set up, I did indeed have monitoring up and running on
+this VM in no time at all.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ sudo …&lt;/pre&gt;&lt;/div&gt;</summary><content type="html">&lt;p&gt;This site is set up on a &lt;a class="reference external" href="http://linode.com"&gt;Linode VPS&lt;/a&gt;, the OS is &lt;a class="reference external" href="http://www.debian.org"&gt;debian&lt;/a&gt; squeeze 32
+bit, and I wanted some basic monitoring in place, so knowing how quick
+&lt;a class="reference external" href="http://munin-monitoring.org"&gt;Munin&lt;/a&gt; is to set up, I did indeed have monitoring up and running on
+this VM in no time at all.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ sudo aptitude install munin
+$ sudo aptitude install munin-plugins-extra
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;It’s then just a case of creating symbolic links to those plugins you
+want to use. I’m using &lt;a class="reference external" href="http://nginx.org"&gt;nginx&lt;/a&gt; and used these &lt;a class="reference external" href="https://github.com/perusio/nginx-munin"&gt;perl scripts&lt;/a&gt; to add
+monitoring and added a server config for these plugins to query on the
+nginx status.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ git clone https://github.com/perusio/nginx-munin
+$ mv nginx-munin/nginx_* /usr/share/munin/plugins/
+$ &lt;span class="nb"&gt;cd&lt;/span&gt; /etc/munin/plugins
+$ ln -s /usr/share/munin/plugins/nginx_connection_request nginx_connection_request
+$ ln -s /usr/share/munin/plugins/nginx_memory nginx_memory
+$ ln -s /usr/share/munin/plugins/nginx_request nginx_request
+$ ln -s /usr/share/munin/plugins/nginx_status nginx_status
+$ sudo aptitude install libio-all-lwp-perl &lt;span class="c1"&gt;# nginx plugins have dependencies&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;I’ve compiled nginx from source, so had to recompile with the
+&lt;em&gt;http_stub_status_module&lt;/em&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ wget http://nginx.org/download/nginx-1.0.5.tar.gz
+$ tar -zxvf nginx-1.0.5.tar.gz &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; mv nginx-1.0.5 nginx-src &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class="nb"&gt;cd&lt;/span&gt; nginx-src
+$ ./configure --prefix&lt;span class="o"&gt;=&lt;/span&gt;/opt/nginx-1.0.5 --user&lt;span class="o"&gt;=&lt;/span&gt;nginx --group&lt;span class="o"&gt;=&lt;/span&gt;nginx &lt;span class="se"&gt;\&lt;/span&gt;
+--with-http_ssl_module --with-ipv6 --with-http_stub_status_module
+$ make
+$ make install
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Then add an server config for nginx monitoring:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;server &lt;span class="o"&gt;{&lt;/span&gt;
+   server_name munin.simonsblog.co.uk&lt;span class="p"&gt;;&lt;/span&gt;
+   root /var/cache/munin/www/&lt;span class="p"&gt;;&lt;/span&gt;
+   location / &lt;span class="o"&gt;{&lt;/span&gt;
+   index index.html&lt;span class="p"&gt;;&lt;/span&gt;
+   access_log off&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="o"&gt;}&lt;/span&gt;
+server &lt;span class="o"&gt;{&lt;/span&gt;
+    server_name nginx.local&lt;span class="p"&gt;;&lt;/span&gt;
+    allow &lt;span class="m"&gt;127&lt;/span&gt;.0.0.1&lt;span class="p"&gt;;&lt;/span&gt;
+    deny all&lt;span class="p"&gt;;&lt;/span&gt;
+    location /nginx_status &lt;span class="o"&gt;{&lt;/span&gt;
+    stub_status on&lt;span class="p"&gt;;&lt;/span&gt;
+    access_log off&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="o"&gt;}&lt;/span&gt;
+&lt;span class="o"&gt;}&lt;/span&gt;
+
+$ chmod -R &lt;span class="m"&gt;755&lt;/span&gt; /usr/share/munin/plugins/
+$ /etc/init.d/nginx stop
+$ ln -sfn /opt/nginx-1.0.5 /opt/nginx &lt;span class="c1"&gt;# point to newly compiled nginx&lt;/span&gt;
+$ /etc/init.d/nginx start
+$ /etc/init.d/munin-node start
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;You should then have a working munin monitoring installation. For the
+curious you can view this via the subdomain (munin) on this domain.&lt;/p&gt;
+</content><category term="munin"></category><category term="debian"></category><category term="monitoring"></category></entry><entry><title>git -a -m "initial commit"</title><link href="http://simonsblog.co.uk/git-a-m-initial-commit.html" rel="alternate"></link><published>2011-08-20T16:20:00+01:00</published><updated>2011-08-20T16:20:00+01:00</updated><author><name>Simon</name></author><id>tag:simonsblog.co.uk,2011-08-20:/git-a-m-initial-commit.html</id><summary type="html">&lt;p&gt;I’ve decided to set this blog up after hearing a talk given at
+&lt;a class="reference external" href="http://oggcamp.org/"&gt;OggCamp&lt;/a&gt; by &lt;a class="reference external" href="http://www.lornajane.net/"&gt;LornaJane Mitchell&lt;/a&gt; entitled: careers in Open Source.&lt;/p&gt;
+&lt;p&gt;It was refreshing to hear her enthusiasm for open source but also her
+frankness about what got her started and what has lead on from her doing …&lt;/p&gt;</summary><content type="html">&lt;p&gt;I’ve decided to set this blog up after hearing a talk given at
+&lt;a class="reference external" href="http://oggcamp.org/"&gt;OggCamp&lt;/a&gt; by &lt;a class="reference external" href="http://www.lornajane.net/"&gt;LornaJane Mitchell&lt;/a&gt; entitled: careers in Open Source.&lt;/p&gt;
+&lt;p&gt;It was refreshing to hear her enthusiasm for open source but also her
+frankness about what got her started and what has lead on from her doing
+more in open source and how we and others can benefit from giving back
+to the &lt;strong&gt;open source community&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;The sunday morning (&lt;em&gt;hangover&lt;/em&gt;) slot for a talk is never the best time,
+but gave what I thought and it seems &lt;a class="reference external" href="https://twitter.com/#!/search/oggcamp"&gt;others&lt;/a&gt; an inspiring talk to get
+more involved with open source and so enhance not only your career
+prospects but also to enhance you as a person.&lt;/p&gt;
+&lt;p&gt;One of these goals is to do something like starting a blog to which this
+is my attempt. Like all new things I hope it doesn’t become like a new
+gym membership that sees frantic use for the first few weeks/months,
+then tails off to a slow decline. I hope not, but we’ll see, with
+&lt;a class="reference external" href="http://twitter.com/simhay"&gt;twitter&lt;/a&gt; / &lt;a class="reference external" href="http://identi.ca/simhay"&gt;identi.ca&lt;/a&gt; / &lt;a class="reference external" href="https://plus.google.com/"&gt;google+&lt;/a&gt; these things can all sap time, but a
+point she made which I think rings true is don’t try and write the
+perfect blog entry, if something worked for you blog about it, post it
+and get on with your life. It may contain typos and it may not be
+grammatically correct but if someone searches on google and finds your
+solution can also help them with their problem, then its all good. An
+&lt;em&gt;agile&lt;/em&gt; approach to blogging, release early and often.&lt;/p&gt;
+&lt;p&gt;This is true for me as I often have one line solutions to problems that
+I’ve found or written that I might stash away to my &lt;a class="reference external" href="https://one.ubuntu.com/"&gt;~/UbuntuOne&lt;/a&gt;
+account for later reference, maybe that also needs to be added to my
+blog from now on.&lt;/p&gt;
+&lt;p&gt;As well as wanting to set up a blog I wanted to use &lt;a class="reference external" href="http://www.python.org/"&gt;python&lt;/a&gt;,
+&lt;a class="reference external" href="http://gunicorn.org/"&gt;gunicorn&lt;/a&gt; &amp;amp; &lt;a class="reference external" href="http://nginx.net/"&gt;nginx&lt;/a&gt;, the following is a list of technologies I used:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;&lt;a class="reference external" href="https://www.djangoproject.com/"&gt;django&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="http://nginx.net/"&gt;nginx&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="http://gunicorn.org/"&gt;gunicorn&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="http://supervisord.org/"&gt;supervisord&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="http://pypi.python.org/pypi/virtualenv"&gt;virtualenv&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="http://docs.fabfile.org/"&gt;fabric&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;I wanted to get this blog up and running ASAP, so taken mostly from
+&lt;a class="reference external" href="http://www.b-list.org/"&gt;James Bennetts&lt;/a&gt; great book &lt;a class="reference external" href="http://www.amazon.co.uk/Practical-Django-Projects-Experts-Development/dp/1430219386"&gt;Practical Django Projects&lt;/a&gt;, I purchased a
+domain name, set up a &lt;a class="reference external" href="https://github.com/simonhayward/simonsblog_django"&gt;github&lt;/a&gt; repo, set up a &lt;a class="reference external" href="http://www.linode.com/"&gt;linode VPS&lt;/a&gt; and so now
+have a functioning blog.&lt;/p&gt;
+&lt;p&gt;It’s been fun setting this up and that’s one of the main reasons I’ve
+chosen &lt;a class="reference external" href="https://www.djangoproject.com/"&gt;django&lt;/a&gt; (not only because I’ve been listening to and trying to
+learn gypsy jazz guitar like the &lt;strong&gt;real&lt;/strong&gt; &lt;a class="reference external" href="http://en.wikipedia.org/wiki/Django_Reinhardt"&gt;Django Reinhardt&lt;/a&gt;) but because it
+encourages reuse, simplicity and application decoupling. I love the line
+taken from the &lt;a class="reference external" href="http://www.amazon.co.uk/Practical-Django-Projects-Experts-Development/dp/1430219386"&gt;Practical Django Projects&lt;/a&gt; book:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;em&gt;“At the end, you’ll come to a wonderful realization - that web
+development is fun again”&lt;/em&gt;&lt;/blockquote&gt;
+&lt;p&gt;So all of these feels a bit like starting a new project (hence git -a -m
+“initial commit”), with many more commits to come..&lt;/p&gt;
+</content><category term="talks"></category><category term="open source"></category><category term="oggcamp"></category><category term="blog"></category><category term="python"></category><category term="nginx"></category><category term="gunicorn"></category><category term="django"></category></entry></feed>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <title>SimonsBlog - monitoring</title>
+        <link rel="stylesheet" href="http://simonsblog.co.uk/theme/css/main.css" />
+        <link href="http://simonsblog.co.uk/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="SimonsBlog Atom Feed" />
+
+        <!--[if IE]>
+            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="http://simonsblog.co.uk/">SimonsBlog </a></h1>
+                <nav><ul>
+                    <li><a href="http://simonsblog.co.uk/category/cycling.html">cycling</a></li>
+                    <li><a href="http://simonsblog.co.uk/category/linux.html">linux</a></li>
+                    <li><a href="http://simonsblog.co.uk/category/misc.html">misc</a></li>
+                    <li><a href="http://simonsblog.co.uk/category/python.html">python</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+
+            <aside id="featured" class="body">
+                <article>
+                    <h1 class="entry-title"><a href="http://simonsblog.co.uk/add-munin-monitoring-in-5-minutes.html">Add munin monitoring in 5 minutes</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2011-08-31T14:49:00+01:00">
+                Published: Wed 31 August 2011
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="http://simonsblog.co.uk/author/simon.html">Simon</a>
+        </address>
+<p>In <a href="http://simonsblog.co.uk/category/linux.html">linux</a>.</p>
+<p>tags: <a href="http://simonsblog.co.uk/tag/munin.html">munin</a> <a href="http://simonsblog.co.uk/tag/debian.html">debian</a> <a href="http://simonsblog.co.uk/tag/monitoring.html">monitoring</a> </p>
+</footer><!-- /.post-info --><p>This site is set up on a <a class="reference external" href="http://linode.com">Linode VPS</a>, the OS is <a class="reference external" href="http://www.debian.org">debian</a> squeeze 32
+bit, and I wanted some basic monitoring in place, so knowing how quick
+<a class="reference external" href="http://munin-monitoring.org">Munin</a> is to set up, I did indeed have monitoring up and running on
+this VM in no time at all.</p>
+<div class="highlight"><pre><span></span>$ sudo aptitude install munin
+$ sudo aptitude install munin-plugins-extra
+</pre></div>
+<p>It’s then just a case of creating symbolic links to those plugins you
+want to use. I’m using <a class="reference external" href="http://nginx.org">nginx</a> and used these <a class="reference external" href="https://github.com/perusio/nginx-munin">perl scripts</a> to add
+monitoring and added a server config for these plugins to query on the
+nginx status.</p>
+<div class="highlight"><pre><span></span>$ git clone https://github.com/perusio/nginx-munin
+$ mv nginx-munin/nginx_* /usr/share/munin/plugins/
+$ <span class="nb">cd</span> /etc/munin/plugins
+$ ln -s /usr/share/munin/plugins/nginx_connection_request nginx_connection_request
+$ ln -s /usr/share/munin/plugins/nginx_memory nginx_memory
+$ ln -s /usr/share/munin/plugins/nginx_request nginx_request
+$ ln -s /usr/share/munin/plugins/nginx_status nginx_status
+$ sudo aptitude install libio-all-lwp-perl <span class="c1"># nginx plugins have dependencies</span>
+</pre></div>
+<p>I’ve compiled nginx from source, so had to recompile with the
+<em>http_stub_status_module</em></p>
+<div class="highlight"><pre><span></span>$ wget http://nginx.org/download/nginx-1.0.5.tar.gz
+$ tar -zxvf nginx-1.0.5.tar.gz <span class="o">&amp;&amp;</span> mv nginx-1.0.5 nginx-src <span class="o">&amp;&amp;</span> <span class="nb">cd</span> nginx-src
+$ ./configure --prefix<span class="o">=</span>/opt/nginx-1.0.5 --user<span class="o">=</span>nginx --group<span class="o">=</span>nginx <span class="se">\</span>
+--with-http_ssl_module --with-ipv6 --with-http_stub_status_module
+$ make
+$ make install
+</pre></div>
+<p>Then add an server config for nginx monitoring:</p>
+<div class="highlight"><pre><span></span>server <span class="o">{</span>
+   server_name munin.simonsblog.co.uk<span class="p">;</span>
+   root /var/cache/munin/www/<span class="p">;</span>
+   location / <span class="o">{</span>
+   index index.html<span class="p">;</span>
+   access_log off<span class="p">;</span>
+<span class="o">}</span>
+server <span class="o">{</span>
+    server_name nginx.local<span class="p">;</span>
+    allow <span class="m">127</span>.0.0.1<span class="p">;</span>
+    deny all<span class="p">;</span>
+    location /nginx_status <span class="o">{</span>
+    stub_status on<span class="p">;</span>
+    access_log off<span class="p">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+$ chmod -R <span class="m">755</span> /usr/share/munin/plugins/
+$ /etc/init.d/nginx stop
+$ ln -sfn /opt/nginx-1.0.5 /opt/nginx <span class="c1"># point to newly compiled nginx</span>
+$ /etc/init.d/nginx start
+$ /etc/init.d/munin-node start
+</pre></div>
+<p>You should then have a working munin monitoring installation. For the
+curious you can view this via the subdomain (munin) on this domain.</p>
+                </article>
+            </aside><!-- /#featured -->
+        <section id="extras" class="body">
+                <div class="blogroll">
+                        <h2>links</h2>
+                        <ul>
+                            <li><a href="http://getpelican.com/">Pelican</a></li>
+                            <li><a href="http://python.org/">Python.org</a></li>
+                            <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
+                            <li><a href="#">You can modify those links in your config file</a></li>
+                        </ul>
+                </div><!-- /.blogroll -->
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="http://simonsblog.co.uk/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                            <li><a href="#">You can add links in your config file</a></li>
+                            <li><a href="#">Another social link</a></li>
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

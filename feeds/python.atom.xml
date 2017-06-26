@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>SimonsBlog - python</title><link href="http://simonsblog.co.uk/" rel="alternate"></link><link href="http://simonsblog.co.uk/feeds/python.atom.xml" rel="self"></link><id>http://simonsblog.co.uk/</id><updated>2014-09-20T17:15:00+01:00</updated><entry><title>Upgrade Python in Virtualenv</title><link href="http://simonsblog.co.uk/upgrade-python-in-virtualenv.html" rel="alternate"></link><published>2014-09-20T17:15:00+01:00</published><updated>2014-09-20T17:15:00+01:00</updated><author><name>Simon</name></author><id>tag:simonsblog.co.uk,2014-09-20:/upgrade-python-in-virtualenv.html</id><summary type="html">&lt;p&gt;You can simply create a new &lt;a class="reference external" href="http://www.virtualenv.org"&gt;virtualenv&lt;/a&gt; from scratch with the new version
+of &lt;a class="reference external" href="https://www.python.org"&gt;Python&lt;/a&gt; installed, but you can also upgrade your Python binary in place
+of the old.&lt;/p&gt;
+&lt;div class="section" id="upgrade"&gt;
+&lt;h2&gt;Upgrade&lt;/h2&gt;
+&lt;p&gt;I keep my python virtual environments in a hidden folder &lt;em&gt;.virtualenvs&lt;/em&gt;
+in my home directory.&lt;/p&gt;
+&lt;p&gt;Inside my project I can …&lt;/p&gt;&lt;/div&gt;</summary><content type="html">&lt;p&gt;You can simply create a new &lt;a class="reference external" href="http://www.virtualenv.org"&gt;virtualenv&lt;/a&gt; from scratch with the new version
+of &lt;a class="reference external" href="https://www.python.org"&gt;Python&lt;/a&gt; installed, but you can also upgrade your Python binary in place
+of the old.&lt;/p&gt;
+&lt;div class="section" id="upgrade"&gt;
+&lt;h2&gt;Upgrade&lt;/h2&gt;
+&lt;p&gt;I keep my python virtual environments in a hidden folder &lt;em&gt;.virtualenvs&lt;/em&gt;
+in my home directory.&lt;/p&gt;
+&lt;p&gt;Inside my project I can see the current python 3.3 version&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;simon@X220:~$ &lt;span class="nb"&gt;cd&lt;/span&gt; .virtualenvs/
+simon@X220:~/.virtualenvs$ ls -l project/bin/python*
+lrwxrwxrwx &lt;span class="m"&gt;1&lt;/span&gt; simon simon       &lt;span class="m"&gt;9&lt;/span&gt; Apr  &lt;span class="m"&gt;4&lt;/span&gt; &lt;span class="m"&gt;16&lt;/span&gt;:03 project/bin/python -&amp;gt; python3.3
+lrwxrwxrwx &lt;span class="m"&gt;1&lt;/span&gt; simon simon       &lt;span class="m"&gt;9&lt;/span&gt; Apr  &lt;span class="m"&gt;4&lt;/span&gt; &lt;span class="m"&gt;16&lt;/span&gt;:03 project/bin/python3 -&amp;gt; python3.3
+-rwxrwxr-x &lt;span class="m"&gt;1&lt;/span&gt; simon simon &lt;span class="m"&gt;3928976&lt;/span&gt; Apr  &lt;span class="m"&gt;4&lt;/span&gt; &lt;span class="m"&gt;16&lt;/span&gt;:03 project/bin/python3.3
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;If you want to go from &lt;a class="reference external" href="https://www.python.org/download/releases/3.3.2/"&gt;Python 3.3.2&lt;/a&gt; to &lt;a class="reference external" href="https://www.python.org/download/releases/3.4.1/"&gt;Python 3.4.1&lt;/a&gt; you can &lt;a class="reference external" href="https://www.python.org/download"&gt;download&lt;/a&gt; and
+compile each release individually or if you are using &lt;a class="reference external" href="http://www.ubuntu.com"&gt;Ubuntu&lt;/a&gt; and you want
+to get a range of &lt;a class="reference external" href="https://www.python.org"&gt;Python&lt;/a&gt; versions, you can add the &lt;a class="reference external" href="https://launchpad.net/~fkrull/+archive/ubuntu/deadsnakes"&gt;Dead snakes&lt;/a&gt;
+PPA to get versions from 2.3 right through to 3.4&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;simon@X220:~/.virtualenvs$ sudo add-apt-repository ppa:fkrull/deadsnakes
+simon@X220:~/.virtualenvs$ sudo apt-get update
+simon@X220:~/.virtualenvs$ sudo aptitude install python3.4 python3.4-dev
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;You can now install this python version, by re-running the virtualenv
+initialisation over the top of your current one.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;simon@X220:~/.virtualenvs$ virtualenv -p python3.4 project
+simon@X220:~/.virtualenvs$ ls -l project/bin/python*
+lrwxrwxrwx &lt;span class="m"&gt;1&lt;/span&gt; simon simon       &lt;span class="m"&gt;9&lt;/span&gt; Sep &lt;span class="m"&gt;20&lt;/span&gt; &lt;span class="m"&gt;17&lt;/span&gt;:59 project/bin/python -&amp;gt; python3.4
+lrwxrwxrwx &lt;span class="m"&gt;1&lt;/span&gt; simon simon       &lt;span class="m"&gt;9&lt;/span&gt; Sep &lt;span class="m"&gt;20&lt;/span&gt; &lt;span class="m"&gt;17&lt;/span&gt;:59 project/bin/python3 -&amp;gt; python3.4
+-rwxrwxr-x &lt;span class="m"&gt;1&lt;/span&gt; simon simon &lt;span class="m"&gt;3928976&lt;/span&gt; Apr  &lt;span class="m"&gt;4&lt;/span&gt; &lt;span class="m"&gt;16&lt;/span&gt;:03 project/bin/python3.3
+-rwxrwxr-x &lt;span class="m"&gt;1&lt;/span&gt; simon simon &lt;span class="m"&gt;3508112&lt;/span&gt; Sep &lt;span class="m"&gt;20&lt;/span&gt; &lt;span class="m"&gt;17&lt;/span&gt;:59 project/bin/python3.4
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Your previous version is still there, as well as your new version, but the
+default symbolic link now points to your latest version.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;simon@X220:~/.virtualenvs$ &lt;span class="nb"&gt;source&lt;/span&gt; project/bin/activate &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; python -V
+Python &lt;span class="m"&gt;3&lt;/span&gt;.4.1
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;One thing you will have to do is to &lt;strong&gt;re-install all your module requirements&lt;/strong&gt;
+after the upgrade.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;project&lt;span class="o"&gt;)&lt;/span&gt;simon@dev-wishiwashi:~/Devel/project$ pip install -r requirements.txt
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+</content><category term="open source"></category><category term="python"></category><category term="django"></category><category term="virtualenv"></category></entry><entry><title>Static site generator - Pelican</title><link href="http://simonsblog.co.uk/static-site-generator-pelican.html" rel="alternate"></link><published>2013-02-03T21:50:00+00:00</published><updated>2013-02-03T21:50:00+00:00</updated><author><name>Simon</name></author><id>tag:simonsblog.co.uk,2013-02-03:/static-site-generator-pelican.html</id><summary type="html">&lt;p&gt;I &lt;a class="reference external" href="http://simonsblog.co.uk/git-a-m-initial-commit.html"&gt;initially&lt;/a&gt; set up this blog using &lt;a class="reference external" href="https://www.djangoproject.com/"&gt;django&lt;/a&gt;,
+but recently I've wanted to try out a static site generator &amp;amp; decided to try
+out &lt;a class="reference external" href="http://getpelican.com/"&gt;pelican&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;It was &lt;strong&gt;extremely&lt;/strong&gt; easy to set this up and deploy an updated blog to my site.
+It took a few hours to set up pelican and …&lt;/p&gt;</summary><content type="html">&lt;p&gt;I &lt;a class="reference external" href="http://simonsblog.co.uk/git-a-m-initial-commit.html"&gt;initially&lt;/a&gt; set up this blog using &lt;a class="reference external" href="https://www.djangoproject.com/"&gt;django&lt;/a&gt;,
+but recently I've wanted to try out a static site generator &amp;amp; decided to try
+out &lt;a class="reference external" href="http://getpelican.com/"&gt;pelican&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;It was &lt;strong&gt;extremely&lt;/strong&gt; easy to set this up and deploy an updated blog to my site.
+It took a few hours to set up pelican and import previous posts
+(converting markdown to &lt;a class="reference external" href="http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html"&gt;reStructuredText&lt;/a&gt;) and so had a new blogging platform
+up and running very quickly.&lt;/p&gt;
+&lt;div class="section" id="installing"&gt;
+&lt;h2&gt;Installing&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;simon@x220:~$ mkproject simonsblog
+&lt;span class="o"&gt;(&lt;/span&gt;simonsblog&lt;span class="o"&gt;)&lt;/span&gt;simon@x220:~/Devel/simonsblog$ pip install pelican
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Then set up pelican by answering these basic questions. Note the option to
+deploy via ftp/SSH or dropbox.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="set-up"&gt;
+&lt;h2&gt;Set up&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;simonsblog&lt;span class="o"&gt;)&lt;/span&gt;simon@x220:~/Devel/simonsblog$ pelican-quickstart
+&amp;gt; What will be the title of this web site? Simonblog
+&amp;gt; Who will be the author of this web site? Simon
+&amp;gt; What will be the default language of this web site? &lt;span class="o"&gt;[&lt;/span&gt;en&lt;span class="o"&gt;]&lt;/span&gt;
+&amp;gt; Do you want to specify a URL prefix? e.g., http://example.com   &lt;span class="o"&gt;(&lt;/span&gt;Y/n&lt;span class="o"&gt;)&lt;/span&gt;
+&amp;gt; What is your URL prefix? &lt;span class="o"&gt;(&lt;/span&gt;see above example&lt;span class="p"&gt;;&lt;/span&gt; no trailing slash&lt;span class="o"&gt;)&lt;/span&gt; http://simonsblog.co.uk
+&amp;gt; Do you want to &lt;span class="nb"&gt;enable&lt;/span&gt; article pagination? &lt;span class="o"&gt;(&lt;/span&gt;Y/n&lt;span class="o"&gt;)&lt;/span&gt;
+&amp;gt; How many articles per page &lt;span class="k"&gt;do&lt;/span&gt; you want? &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="m"&gt;10&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;
+&amp;gt; Do you want to generate a Makefile to easily manage your website? &lt;span class="o"&gt;(&lt;/span&gt;Y/n&lt;span class="o"&gt;)&lt;/span&gt;
+&amp;gt; Do you want an auto-reload &lt;span class="p"&gt;&amp;amp;&lt;/span&gt; simpleHTTP script to assist with theme and site development? &lt;span class="o"&gt;(&lt;/span&gt;Y/n&lt;span class="o"&gt;)&lt;/span&gt;
+&amp;gt; Do you want to upload your website using FTP? &lt;span class="o"&gt;(&lt;/span&gt;y/N&lt;span class="o"&gt;)&lt;/span&gt;
+&amp;gt; Do you want to upload your website using SSH? &lt;span class="o"&gt;(&lt;/span&gt;y/N&lt;span class="o"&gt;)&lt;/span&gt; y
+&amp;gt; What is the hostname of your SSH server? &lt;span class="o"&gt;[&lt;/span&gt;localhost&lt;span class="o"&gt;]&lt;/span&gt; simonsblog
+&amp;gt; What is the port of your SSH server? &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="m"&gt;22&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;
+&amp;gt; What is your username on that server? &lt;span class="o"&gt;[&lt;/span&gt;root&lt;span class="o"&gt;]&lt;/span&gt; simon
+&amp;gt; Where &lt;span class="k"&gt;do&lt;/span&gt; you want to put your web site on that server? &lt;span class="o"&gt;[&lt;/span&gt;/var/www&lt;span class="o"&gt;]&lt;/span&gt;
+&amp;gt; Do you want to upload your website using Dropbox? &lt;span class="o"&gt;(&lt;/span&gt;y/N&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Your virtualenv project should now look something like this:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;simonsblog&lt;span class="o"&gt;)&lt;/span&gt;simon@x220:~/Devel/simonsblog$ ls
+content  develop_server.sh  Makefile  output  pelicanconf.py  publishconf.py
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Update pelicanconf.py with your specific details:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;AUTHOR&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Simon&amp;quot;&lt;/span&gt;
+&lt;span class="n"&gt;SITENAME&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Simonsblog&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;SITEURL&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;http://simonsblog.local&amp;#39;&lt;/span&gt;
+
+&lt;span class="n"&gt;TIMEZONE&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;Europe/London&amp;#39;&lt;/span&gt;
+
+&lt;span class="n"&gt;DEFAULT_LANG&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;en&amp;#39;&lt;/span&gt;
+
+&lt;span class="c1"&gt;# Blogroll&lt;/span&gt;
+&lt;span class="n"&gt;LINKS&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt;  &lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;Python.org&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;http://python.org&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;),)&lt;/span&gt;
+
+&lt;span class="c1"&gt;# Social widget&lt;/span&gt;
+&lt;span class="n"&gt;SOCIAL&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;delicious&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;http://delicious.com/djangos&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+          &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;github&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;https://github.com/simonhayward&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+          &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;google+&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;https://plus.google.com/u/0/105199393791103843210/posts&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+          &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;rss&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;/feeds/all.atom.xml&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+          &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;twitter&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;https://twitter.com/simhay&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;),)&lt;/span&gt;
+
+&lt;span class="n"&gt;FILES_TO_COPY&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;extra/robots.txt&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;robots.txt&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+                 &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;extra/favicon.ico&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;favicon.ico&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;),)&lt;/span&gt;
+
+&lt;span class="n"&gt;DEFAULT_PAGINATION&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;10&lt;/span&gt;
+&lt;span class="n"&gt;THEME&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;subtle&amp;quot;&lt;/span&gt;
+&lt;span class="n"&gt;STATIC_PATHS&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;images&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;span class="n"&gt;GOOGLE_ANALYTICS&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;UA-2417620-7&amp;#39;&lt;/span&gt;
+&lt;span class="n"&gt;TWITTER_USERNAME&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;simhay&amp;#39;&lt;/span&gt;
+&lt;span class="n"&gt;DISQUS_SITENAME&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;siblog&amp;#39;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;I've created an &lt;em&gt;extra&lt;/em&gt; folder within the content folder to hold favicon.ico
+and robots.txt file.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="styling"&gt;
+&lt;h2&gt;Styling&lt;/h2&gt;
+&lt;p&gt;Pelican comes with &lt;em&gt;pelican-themes&lt;/em&gt; to manage various themes for pelican.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;simonsblog&lt;span class="o"&gt;)&lt;/span&gt;simon@x220:~/Devel/simonsblog$ &lt;span class="nb"&gt;cd&lt;/span&gt;
+&lt;span class="o"&gt;(&lt;/span&gt;simonsblog&lt;span class="o"&gt;)&lt;/span&gt;simon@x220:~$ git clone git://github.com/getpelican/pelican-themes.git
+&lt;span class="o"&gt;(&lt;/span&gt;simonsblog&lt;span class="o"&gt;)&lt;/span&gt;simon@x220:~$ pelican-themes -i pelican-themes/subtle
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="section" id="create-a-post"&gt;
+&lt;h2&gt;Create a post&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;simonsblog&lt;span class="o"&gt;)&lt;/span&gt;simon@x220:~$ cdproject &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class="nb"&gt;cd&lt;/span&gt; content
+&lt;span class="o"&gt;(&lt;/span&gt;simonsblog&lt;span class="o"&gt;)&lt;/span&gt;simon@x220:~/Devel/simonsblog/content$ vi Static-site-generator.rst
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Each file contains some metadata, for this post this is the first 7 lines:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;Static site generator
+&lt;span class="c1"&gt;#####################&lt;/span&gt;
+
+:date: &lt;span class="m"&gt;2013&lt;/span&gt;-02-03 &lt;span class="m"&gt;21&lt;/span&gt;:50
+:tags: blog, pelican
+:category: python
+:author: Simon
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;The rest of the post is standard &lt;a class="reference external" href="http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html"&gt;reStructuredText&lt;/a&gt;.
+It's a simpler set up now, as all I need is to use is vim. Once I have
+created a new file under the content directory, I'm using &lt;a class="reference external" href="http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html"&gt;reStructuredText&lt;/a&gt;,
+but you can use markdown, I can view these changes locally and simply rsync
+the generated content direct to my server. It couldn't be easier or simpler &amp;amp;
+means I can host this blog anywhere.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="viewing-changes"&gt;
+&lt;h2&gt;Viewing changes&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;simonsblog&lt;span class="o"&gt;)&lt;/span&gt;simon@x220:~$ cdproject
+&lt;span class="o"&gt;(&lt;/span&gt;simonsblog&lt;span class="o"&gt;)&lt;/span&gt;simon@x220:~/Devel/simonsblog$ ./develop_server.sh start
+&lt;span class="o"&gt;(&lt;/span&gt;simonsblog&lt;span class="o"&gt;)&lt;/span&gt;simon@x220:~/Devel/simonsblog$ firefox localhost:8000
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;When you make any further changes, these should be picked up automatically and the site
+is generated again so you can view these changes locally.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="deploy"&gt;
+&lt;h2&gt;Deploy&lt;/h2&gt;
+&lt;p&gt;Assuming you already have a host and web server set up (apache/nginx etc),
+you simply need to push the generated content out to your host - in my case
+via SSH.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;simonsblog&lt;span class="o"&gt;)&lt;/span&gt;simon@x220:~$ cdproject
+&lt;span class="o"&gt;(&lt;/span&gt;simonsblog&lt;span class="o"&gt;)&lt;/span&gt;simon@x220:~/Devel/simonsblog$ make rsync_upload
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;When you happy just close down the local http server:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;simonsblog&lt;span class="o"&gt;)&lt;/span&gt;simon@x220:~/Devel/simonsblog$ ./develop_server.sh stop
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;For me the benefits are:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;Using vim (reStructuredText)&lt;/li&gt;
+&lt;li&gt;Code syntax highlighting&lt;/li&gt;
+&lt;li&gt;Rsync deployment&lt;/li&gt;
+&lt;li&gt;Ease of use&lt;/li&gt;
+&lt;li&gt;Host content anywhere&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Having a complete &lt;a class="reference external" href="https://www.djangoproject.com/"&gt;django&lt;/a&gt; installation was maybe too much for a simple blog,
+so switching to &lt;a class="reference external" href="http://getpelican.com/"&gt;pelican&lt;/a&gt; makes perfect sense for me. If you have a blog and
+want to simplify the creation and hosting process, try &lt;a class="reference external" href="http://getpelican.com/"&gt;pelican&lt;/a&gt; it really
+stands out as a simple, easy to use static site generator.&lt;/p&gt;
+&lt;/div&gt;
+</content><category term="blog"></category><category term="pelican"></category></entry><entry><title>Rotate arbitrary</title><link href="http://simonsblog.co.uk/rotate-arbitrary.html" rel="alternate"></link><published>2012-07-21T16:13:00+01:00</published><updated>2012-07-21T16:13:00+01:00</updated><author><name>Simon</name></author><id>tag:simonsblog.co.uk,2012-07-21:/rotate-arbitrary.html</id><summary type="html">&lt;p&gt;Another way to rotate by arbitrary values.&lt;/p&gt;
+&lt;p&gt;You can in python 2.x - just str.encode(“rot13”) - but for other
+rotations you could use the following (for ascii):&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;string&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;ascii_uppercase&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="n"&gt;uc&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;ascii_lowercase&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="n"&gt;lc&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;maketrans&lt;/span&gt;
+
+
+&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;rot_func&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;text&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;encode&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;True&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;rotate&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;13&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="n"&gt;letters&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;uc&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;lc&lt;/span&gt;
+    &lt;span class="n"&gt;rot&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;join …&lt;/span&gt;&lt;/pre&gt;&lt;/div&gt;</summary><content type="html">&lt;p&gt;Another way to rotate by arbitrary values.&lt;/p&gt;
+&lt;p&gt;You can in python 2.x - just str.encode(“rot13”) - but for other
+rotations you could use the following (for ascii):&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;string&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;ascii_uppercase&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="n"&gt;uc&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;ascii_lowercase&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="n"&gt;lc&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;maketrans&lt;/span&gt;
+
+
+&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;rot_func&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;text&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;encode&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;True&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;rotate&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;13&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="n"&gt;letters&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;uc&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;lc&lt;/span&gt;
+    &lt;span class="n"&gt;rot&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;join&lt;/span&gt;&lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;[:&lt;/span&gt;&lt;span class="n"&gt;rotate&lt;/span&gt;&lt;span class="p"&gt;][::&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;rotate&lt;/span&gt;&lt;span class="p"&gt;:][::&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;])[::&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;uc&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;lc&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+    &lt;span class="n"&gt;src&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;trg&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;letters&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;rot&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;encode&lt;/span&gt; &lt;span class="k"&gt;else&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;rot&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;letters&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;trans&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;maketrans&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;src&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;trg&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;text&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;translate&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;trans&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="n"&gt;text&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Text to ROT&amp;quot;&lt;/span&gt;
+&lt;span class="n"&gt;encoded&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;rot_func&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;text&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;decoded&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;rot_func&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;encoded&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;encode&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;False&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+&lt;span class="s2"&gt;Text:&lt;/span&gt;&lt;span class="se"&gt;\t&lt;/span&gt;&lt;span class="s2"&gt;{text}&lt;/span&gt;
+&lt;span class="s2"&gt;Encode:&lt;/span&gt;&lt;span class="se"&gt;\t&lt;/span&gt;&lt;span class="s2"&gt;{encoded}&lt;/span&gt;
+&lt;span class="s2"&gt;Decode:&lt;/span&gt;&lt;span class="se"&gt;\t&lt;/span&gt;&lt;span class="s2"&gt;{decoded}&lt;/span&gt;
+&lt;span class="s2"&gt;&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;format&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;**&lt;/span&gt;&lt;span class="nb"&gt;locals&lt;/span&gt;&lt;span class="p"&gt;()))&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;a class="reference external" href="https://gist.github.com/3156361"&gt;Github gist&lt;/a&gt;&lt;/p&gt;
+</content><category term="open source"></category><category term="python"></category></entry><entry><title>Test driven development with Django</title><link href="http://simonsblog.co.uk/test-driven-development-with-django.html" rel="alternate"></link><published>2011-11-17T19:10:00+00:00</published><updated>2011-11-17T19:10:00+00:00</updated><author><name>Simon</name></author><id>tag:simonsblog.co.uk,2011-11-17:/test-driven-development-with-django.html</id><summary type="html">&lt;p&gt;I went to a &lt;a class="reference external" href="http://skillsmatter.com/podcast/ajax-ria/tdd-django-selenium/js-2958"&gt;workshop&lt;/a&gt; last night on TDD (&lt;a class="reference external" href="http://en.wikipedia.org/wiki/Test-driven_development"&gt;Test Driven Development&lt;/a&gt;)
+using &lt;a class="reference external" href="https://www.djangoproject.com/"&gt;django&lt;/a&gt; and &lt;a class="reference external" href="http://seleniumhq.org/"&gt;selenium&lt;/a&gt;, which was given by &lt;a class="reference external" href="http://harry.pythonanywhere.com/"&gt;Harry Percival&lt;/a&gt;.
+It was hosted at &lt;a class="reference external" href="http://skillsmatter.com/go/find-us/js-1520"&gt;skills matter exchange&lt;/a&gt; in London and there was free
+beer and pizza…which was an unexpected bonus!&lt;/p&gt;
+&lt;p&gt;There must have been around 35 attendees …&lt;/p&gt;</summary><content type="html">&lt;p&gt;I went to a &lt;a class="reference external" href="http://skillsmatter.com/podcast/ajax-ria/tdd-django-selenium/js-2958"&gt;workshop&lt;/a&gt; last night on TDD (&lt;a class="reference external" href="http://en.wikipedia.org/wiki/Test-driven_development"&gt;Test Driven Development&lt;/a&gt;)
+using &lt;a class="reference external" href="https://www.djangoproject.com/"&gt;django&lt;/a&gt; and &lt;a class="reference external" href="http://seleniumhq.org/"&gt;selenium&lt;/a&gt;, which was given by &lt;a class="reference external" href="http://harry.pythonanywhere.com/"&gt;Harry Percival&lt;/a&gt;.
+It was hosted at &lt;a class="reference external" href="http://skillsmatter.com/go/find-us/js-1520"&gt;skills matter exchange&lt;/a&gt; in London and there was free
+beer and pizza…which was an unexpected bonus!&lt;/p&gt;
+&lt;p&gt;There must have been around 35 attendees with a mixture of skill sets
+and backgrounds and it was an extremely good introduction not only to
+TDD but also to django framework, and almost everyone kept pace and I
+was impressed by Harry’s enthusiasm for TDD and why you should be
+adopting it for development.&lt;/p&gt;
+&lt;p&gt;I also think it highlighted the accessibility of the &lt;a class="reference external" href="https://www.djangoproject.com/"&gt;django framework&lt;/a&gt;
+and how you can pick up on it very quickly, and half way through the
+pace was picked up as everyone in the room was generally flying though
+the work. The workshop was based on the django tutorial &lt;a class="reference external" href="https://docs.djangoproject.com/en/dev/intro/tutorial01/"&gt;writing my
+first app&lt;/a&gt; which leads you through from starting a project to creating
+a polls application, which you can administer through the admin
+interface and is a gentle introduction to the &lt;a class="reference external" href="https://docs.djangoproject.com/en/dev/faq/general/#django-appears-to-be-a-mvc-framework-but-you-call-the-controller-the-view-and-the-view-the-template-how-come-you-don-t-use-the-standard-names"&gt;models / templates /
+view&lt;/a&gt; paradigm adopted by django.&lt;/p&gt;
+&lt;p&gt;So you go from installing and setting up a basic django project and
+application to firing up selenium to check each step of your progress
+along the way.&lt;/p&gt;
+&lt;p&gt;The key thing that I took away from it was the &lt;em&gt;develop - test - develop
+- test&lt;/em&gt; loop that you need to cycle through, in order to be really TDD,
+the tests direct &lt;strong&gt;all&lt;/strong&gt; development, so the steps are small and
+incremental. Even though you know creating a models.py file with an
+model class that doesn’t even extend from django.db.models.Model, you do
+&lt;em&gt;just&lt;/em&gt; enough to pass the next step of the test. Which should end up
+with you not developing unnecessary code, which can happen when you are
+developing without tests and you try to cover all possibilities without
+thinking about what the application will &lt;em&gt;actually&lt;/em&gt; deliver upon. You
+design your tests up front which you then write code to pass each
+step/test along the way. Write a test that fails, write the code to make
+it pass.&lt;/p&gt;
+&lt;p&gt;You can follow all this along simply by going to &lt;a class="reference external" href="http://harry.pythonanywhere.com/"&gt;Harry’s website&lt;/a&gt;, I
+recommended you do if you are interested in trying TDD and preferably
+with the django framework, this is really aimed at everyone and so no
+experience is necessary.&lt;/p&gt;
+&lt;p&gt;Well done to harry for delivering such a good introduction on TDD with
+django and selenium! There could be more workshops lined up, so if your
+in London and fancy coming along, check the &lt;a class="reference external" href="http://mail.python.org/mailman/listinfo/python-uk"&gt;python-uk mailing list&lt;/a&gt; to
+see when any future workshops are planned.&lt;/p&gt;
+</content><category term="django"></category><category term="selenium"></category><category term="TDD"></category><category term="python"></category></entry><entry><title>Virtualenvwrapper</title><link href="http://simonsblog.co.uk/virtualenvwrapper.html" rel="alternate"></link><published>2011-09-19T21:43:00+01:00</published><updated>2011-09-19T21:43:00+01:00</updated><author><name>Simon</name></author><id>tag:simonsblog.co.uk,2011-09-19:/virtualenvwrapper.html</id><summary type="html">&lt;p&gt;If your using &lt;a class="reference external" href="http://www.virtualenv.org/"&gt;virtualenv&lt;/a&gt; then you should
+be using
+&lt;a class="reference external" href="http://www.doughellmann.com/docs/virtualenvwrapper/"&gt;virtualenvwrapper&lt;/a&gt;,
+it's a great tool to make it really easy to use multiple virtualenv's
+and work with them painlessly.&lt;/p&gt;
+&lt;div class="section" id="here-s-the-why"&gt;
+&lt;h2&gt;Here's the why&lt;/h2&gt;
+&lt;p&gt;&lt;a class="reference external" href="http://www.virtualenv.org/"&gt;Virtualenv&lt;/a&gt; is a nice way to separate out
+all your python libraries into their own individual environments,
+&lt;a class="reference external" href="http://www.doughellmann.com/docs/virtualenvwrapper/"&gt;virtualenvwrapper&lt;/a&gt;
+makes …&lt;/p&gt;&lt;/div&gt;</summary><content type="html">&lt;p&gt;If your using &lt;a class="reference external" href="http://www.virtualenv.org/"&gt;virtualenv&lt;/a&gt; then you should
+be using
+&lt;a class="reference external" href="http://www.doughellmann.com/docs/virtualenvwrapper/"&gt;virtualenvwrapper&lt;/a&gt;,
+it's a great tool to make it really easy to use multiple virtualenv's
+and work with them painlessly.&lt;/p&gt;
+&lt;div class="section" id="here-s-the-why"&gt;
+&lt;h2&gt;Here's the why&lt;/h2&gt;
+&lt;p&gt;&lt;a class="reference external" href="http://www.virtualenv.org/"&gt;Virtualenv&lt;/a&gt; is a nice way to separate out
+all your python libraries into their own individual environments,
+&lt;a class="reference external" href="http://www.doughellmann.com/docs/virtualenvwrapper/"&gt;virtualenvwrapper&lt;/a&gt;
+makes it easy to put all these environments into one convenient
+location, rather than install all your python libraries into a site
+wide, global location.&lt;/p&gt;
+&lt;p&gt;By default when you &lt;em&gt;pip install&lt;/em&gt; onto your machine, these will default
+to your global site packages location, somewhere like:
+/usr/local/lib/python2.6/dist-packages (on ubuntu)&lt;/p&gt;
+&lt;p&gt;Instead if we use virtualenv's +
+&lt;a class="reference external" href="http://www.doughellmann.com/docs/virtualenvwrapper/"&gt;virtualenvwrapper&lt;/a&gt;
+we can contain multiple python modules/libraries installed to a selected
+personal folder. I have all my virtualenv's installed in a hidden
+directory in my home folder.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;/home/simon/.virtualenvs
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;This is defined via your shell initialisation file (in my case .bashrc)&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ grep virtualenvs .bashrc
+&lt;span class="nb"&gt;export&lt;/span&gt; &lt;span class="nv"&gt;WORKON_HOME&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="nv"&gt;$HOME&lt;/span&gt;&lt;span class="s2"&gt;/.virtualenvs&amp;quot;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Within this folder all my libs are installed (once I've activated that
+virtual environment):&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;simon@simon-development:/home/simon/.virtualenvs$ ls -d */
+geo/  metrics/  monitor/  simonsblog/
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;To actually use one of these virtual environments you only have to
+&lt;em&gt;activate&lt;/em&gt; the one you wish to work in, this is where
+&lt;a class="reference external" href="http://www.doughellmann.com/docs/virtualenvwrapper/"&gt;virtualenvwrapper&lt;/a&gt;
+comes in really handy:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;simon@simon-development:/home/simon/.virtualenvs$ workon
+geo
+metrics
+monitor
+simonsblog
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;This list all my virtual environments, to select mine I simply:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;simon@simon-development:/home/simon/.virtualenvs$ workon simonsblog
+&lt;span class="o"&gt;(&lt;/span&gt;simonsblog&lt;span class="o"&gt;)&lt;/span&gt;simon@simon-development:/home/simon/Devel/simonsblog_django$
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;I'm then transferred into my virtual environment (simonsblog_django)
+and any libraries I want to install via pip or easy_install will be
+installed into my virtual environment and not globally, and using
+virtualenvwrapper.projects (as of virtualenvwrapper 2.9 there is no need
+to install this package separately) I also get dumped into my working
+folder for that project (see
+&lt;a class="reference external" href="http://www.doughellmann.com/docs/virtualenvwrapper/command_ref.html#setvirtualenvproject"&gt;setvirtualenvproject&lt;/a&gt;).&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ ls -d /home/simon/.virtualenvs/simonsblog/lib/python2.6/site-packages/*/
+
+/home/simon/.virtualenvs/simonsblog/lib/python2.6/site-packages/akismet-0.2.0-py2.6.egg-info/
+/home/simon/.virtualenvs/simonsblog/lib/python2.6/site-packages/debug_toolbar/
+/home/simon/.virtualenvs/simonsblog/lib/python2.6/site-packages/django/
+/home/simon/.virtualenvs/simonsblog/lib/python2.6/site-packages/Django-1.3-py2.6.egg-info/
+/home/simon/.virtualenvs/simonsblog/lib/python2.6/site-packages/django_debug_toolbar-0.8.5-py2.6.egg-info/
+/home/simon/.virtualenvs/simonsblog/lib/python2.6/site-packages/django_imagekit-0.3.6-py2.6.egg-info/
+/home/simon/.virtualenvs/simonsblog/lib/python2.6/site-packages/django_tagging-0.3.1-py2.6.egg-info/
+/home/simon/.virtualenvs/simonsblog/lib/python2.6/site-packages/docutils/
+/home/simon/.virtualenvs/simonsblog/lib/python2.6/site-packages/gunicorn/
+/home/simon/.virtualenvs/simonsblog/lib/python2.6/site-packages/imagekit/
+/home/simon/.virtualenvs/simonsblog/lib/python2.6/site-packages/markdown/
+....
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Whenever I do pip install &lt;em&gt;package&lt;/em&gt; all those files are dumped into my
+/home/simon/.virtualenvs/simonsblog_django/lib/python2.6/site-packages/
+directory.&lt;/p&gt;
+&lt;p&gt;The only rule is this: &lt;strong&gt;you need to install *virtualenv* &amp;amp;
+*virtualenvwrapper* as you would normally into the global site wide
+packages&lt;/strong&gt;, then once these are installed globally for everything else
+you can install to one of your virtual environments.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="here-s-the-how"&gt;
+&lt;h2&gt;Here's the how&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ sudo aptitude install python-pip python-dev build-essential
+$ sudo pip install -U pip
+$ sudo pip install virtualenv
+$ sudo pip install virtualenvwrapper
+$ mkdir &lt;span class="nv"&gt;$HOME&lt;/span&gt;/.virtualenvs
+$ vi .bashrc
+&lt;span class="nb"&gt;export&lt;/span&gt; &lt;span class="nv"&gt;WORKON_HOME&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="nv"&gt;$HOME&lt;/span&gt;&lt;span class="s2"&gt;/.virtualenvs&amp;quot;&lt;/span&gt;
+&lt;span class="nb"&gt;source&lt;/span&gt; /usr/local/bin/virtualenvwrapper.sh
+$ &lt;span class="nb"&gt;source&lt;/span&gt; bashrc
+$ mkvirtualenv myvirtualenvtest
+....
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;This will then initiate your myvirtualenvtest environment and from then
+on your installs (pip/easy_installs) will relate to your activated
+virtualenv.&lt;/p&gt;
+&lt;p&gt;My .bashrc looks something like this:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nb"&gt;export&lt;/span&gt; &lt;span class="nv"&gt;WORKON_HOME&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="nv"&gt;$HOME&lt;/span&gt;&lt;span class="s2"&gt;/.virtualenvs&amp;quot;&lt;/span&gt;
+&lt;span class="nb"&gt;export&lt;/span&gt; &lt;span class="nv"&gt;VIRTUALENVWRAPPER_HOOK_DIR&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nv"&gt;$WORKON_HOME&lt;/span&gt;
+&lt;span class="nb"&gt;source&lt;/span&gt; /usr/local/bin/virtualenvwrapper.sh
+&lt;span class="nb"&gt;export&lt;/span&gt; &lt;span class="nv"&gt;PIP_VIRTUALENV_BASE&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nv"&gt;$WORKON_HOME&lt;/span&gt;
+&lt;span class="nb"&gt;export&lt;/span&gt; &lt;span class="nv"&gt;PIP_RESPECT_VIRTUALENV&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nb"&gt;true&lt;/span&gt;
+&lt;span class="nb"&gt;export&lt;/span&gt; &lt;span class="nv"&gt;PROJECT_HOME&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nv"&gt;$HOME&lt;/span&gt;/Devel
+
+&lt;span class="c1"&gt;# alias&amp;#39; from Holger Krekel http://paste.pocoo.org/show/164838/&lt;/span&gt;
+&lt;span class="nb"&gt;alias&lt;/span&gt; &lt;span class="nv"&gt;v&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;workon
+&lt;span class="nb"&gt;alias&lt;/span&gt; v.deactivate&lt;span class="o"&gt;=&lt;/span&gt;deactivate
+&lt;span class="nb"&gt;alias&lt;/span&gt; v.mk&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;mkvirtualenv --no-site-packages&amp;#39;&lt;/span&gt;
+&lt;span class="nb"&gt;alias&lt;/span&gt; v.mk_withsitepackages&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;mkvirtualenv&amp;#39;&lt;/span&gt;
+&lt;span class="nb"&gt;alias&lt;/span&gt; v.rm&lt;span class="o"&gt;=&lt;/span&gt;rmvirtualenv
+&lt;span class="nb"&gt;alias&lt;/span&gt; v.switch&lt;span class="o"&gt;=&lt;/span&gt;workon
+&lt;span class="nb"&gt;alias&lt;/span&gt; v.add2virtualenv&lt;span class="o"&gt;=&lt;/span&gt;add2virtualenv
+&lt;span class="nb"&gt;alias&lt;/span&gt; v.cdsitepackages&lt;span class="o"&gt;=&lt;/span&gt;cdsitepackages
+&lt;span class="nb"&gt;alias&lt;/span&gt; v.cd&lt;span class="o"&gt;=&lt;/span&gt;cdvirtualenv
+&lt;span class="nb"&gt;alias&lt;/span&gt; v.lssitepackages&lt;span class="o"&gt;=&lt;/span&gt;lssitepackages
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;You'll also see in my .bashrc is a PROJECT_HOME environment variable,
+this is where I keep my project code, which again keeps my code in a
+handy convenient place, check out
+&lt;a class="reference external" href="http://www.doughellmann.com/docs/virtualenvwrapper/projects.html"&gt;projects&lt;/a&gt;
+in virtualenvwrapper for more on this, but you can do nice things like
+use templates so you can start a new django project (this is an
+extension details
+&lt;a class="reference external" href="http://www.doughellmann.com/projects/virtualenvwrapper.django/"&gt;here&lt;/a&gt;)
+and this will build up the necessary libraries for django within this
+new project.&lt;/p&gt;
+&lt;p&gt;There is loads more to &lt;a class="reference external" href="http://www.virtualenv.org/"&gt;virtualenv&lt;/a&gt; and
+&lt;a class="reference external" href="http://www.doughellmann.com/docs/virtualenvwrapper/"&gt;virtualenvwrapper&lt;/a&gt;,
+you will find that are invaluable when dealing with multiple
+projects/sites which each need their own specific python modules and
+libraries.&lt;/p&gt;
+&lt;p&gt;Also check out this &lt;a class="reference external" href="http://www.pycon.tv/video/36/"&gt;Pycon video&lt;/a&gt; that
+explains &lt;a class="reference external" href="http://www.virtualenv.org/"&gt;virtualenv&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+</content><category term="open source"></category><category term="python"></category><category term="django"></category></entry></feed>

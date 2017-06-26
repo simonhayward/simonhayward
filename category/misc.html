@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <title>SimonsBlog - misc</title>
+        <link rel="stylesheet" href="http://simonsblog.co.uk/theme/css/main.css" />
+        <link href="http://simonsblog.co.uk/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="SimonsBlog Atom Feed" />
+
+        <!--[if IE]>
+            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="http://simonsblog.co.uk/">SimonsBlog </a></h1>
+                <nav><ul>
+                    <li><a href="http://simonsblog.co.uk/category/cycling.html">cycling</a></li>
+                    <li><a href="http://simonsblog.co.uk/category/linux.html">linux</a></li>
+                    <li class="active"><a href="http://simonsblog.co.uk/category/misc.html">misc</a></li>
+                    <li><a href="http://simonsblog.co.uk/category/python.html">python</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+
+            <aside id="featured" class="body">
+                <article>
+                    <h1 class="entry-title"><a href="http://simonsblog.co.uk/switching-from-gmail-to-fastmail.html">Switching from Gmail to Fastmail</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2013-12-06T14:16:00+00:00">
+                Published: Fri 06 December 2013
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="http://simonsblog.co.uk/author/simon.html">Simon</a>
+        </address>
+<p>In <a href="http://simonsblog.co.uk/category/misc.html">misc</a>.</p>
+<p>tags: <a href="http://simonsblog.co.uk/tag/email.html">email</a> </p>
+</footer><!-- /.post-info --><img alt="Fastmail.fm page header" class="align-center" src="/images/fastmail/header-thumb.png" style="width: 400px; height: 143px;" />
+<p><a class="reference external" href="/images/fastmail/header.png">Large image</a></p>
+<p>Three months ago I decided to try out <a class="reference external" href="http://www.fastmail.to/?STKI=11487141">fastmail.fm</a> after having used
+google's <a class="reference external" href="https://gmail.google.com">gmail</a> as my primary email for a number of years. I kept seeing
+a number of people moving away from google after the <a class="reference external" href="http://www.theguardian.com/world/the-nsa-files">NSA revelations</a>  and
+the admission that <a class="reference external" href="http://www.theguardian.com/technology/2013/aug/14/google-gmail-users-privacy-email-lawsuit">gmail users cannot expect privacy</a>.</p>
+<p>I have no complaints about using <a class="reference external" href="https://gmail.google.com">gmail</a> all these years, for a free service
+it is better than most other free options and their service has never been
+down or caused me any issues.</p>
+<p>However you do end up living in this <strong>google product world</strong>, an all
+encompassing world in which they will end up knowing more about you than
+even your family will know about you.</p>
+<p>If something is free is it really right
+to expect privacy? Which goes along with the saying:</p>
+<blockquote>
+<em>&quot;If you don't pay for the product, then you are the product</em>&quot;.</blockquote>
+<p>Maybe this is true, in which case you need to look at other options,
+<a class="reference external" href="http://www.fastmail.to/?STKI=11487141">fastmail.fm</a> was one of those options.
+Their offer of <em>Providing a Reliable and Clutter-Free Email Experience</em> who
+take privacy seriously, was attractive. While they also suggest that being an
+Australian company, they <a class="reference external" href="http://www.theguardian.com/technology/2013/oct/07/australias-fastmail-secure-email-nsa">fall outside the (US) NSA's jurisdiction</a>.</p>
+<p>So I initially signed up for a free trial account on the Enhanced ($40 a year)
+account, which includes:</p>
+<ul class="simple">
+<li>15 GB email storage</li>
+<li>5 GB file storage</li>
+<li>Use your own domain</li>
+<li>No included SMS</li>
+<li>Advanced anti-spam</li>
+<li>No ads</li>
+</ul>
+<p>You can choose an email address from a substantial (~115)
+list of <em>fastmail</em> like top level domains, a selection being:</p>
+<ul class="simple">
+<li>fastmail.fm</li>
+<li>fastmail.to</li>
+<li>fastmail.us</li>
+<li>fastmail.cn</li>
+<li>fastmail.com.au</li>
+<li>fastmail.jp</li>
+<li>fastmail.net</li>
+<li>fastmail.es</li>
+<li>fastmail.co.uk</li>
+<li>fastmail.in</li>
+<li>fastmail.im</li>
+<li>fastmail.nl</li>
+<li>fastmail.se</li>
+<li>fastmail.mx</li>
+<li>fastmail.tw</li>
+<li>fmail.co.uk</li>
+<li>sent.com</li>
+<li>myfastmail.com</li>
+<li>speedymail.org</li>
+<li>fast-email.com</li>
+<li>fastimap.com</li>
+<li>fast-mail.org</li>
+<li>fastemail.us</li>
+<li>operamail.com</li>
+</ul>
+<p>After which I set up my fastmail account to use my own domain name, simonsblog.co.uk.
+So I switched my DNS MX records via my <a class="reference external" href="https://dnsimple.com/r/3d06c548b79445">dnsimple</a> DNS hosting provider
+to point to fastmails servers. Fastmail do offer to handle DNS
+for you, but I'm already happily using the excellent service provided by
+<a class="reference external" href="https://dnsimple.com/r/3d06c548b79445">dnsimple</a> for all my DNS hosting.</p>
+<div class="highlight"><pre><span></span>simon@X220:~$ dig +short simonsblog.co.uk mx
+<span class="m">20</span> in2-smtp.messagingengine.com.
+<span class="m">10</span> in1-smtp.messagingengine.com.
+</pre></div>
+<p>Added an SPF record.</p>
+<div class="highlight"><pre><span></span>simon@X220:~$ dig simonsblog.co.uk +short spf
+<span class="s2">&quot;v=spf1 include:spf.messagingengine.com -all&quot;</span>
+</pre></div>
+<p>I then added a TXT record for my DKIM key, retrieved via Fastmail.fm -&gt;
+Advanced settings -&gt; Virtual Domains</p>
+<p>I also set up an alias (CNAME) to access webmail via my domain.</p>
+<div class="highlight"><pre><span></span>simon@X220:~$ dig +short mail.simonsblog.co.uk cname
+www.fastmail.fm.
+</pre></div>
+<p>While under this free trial, <a class="reference external" href="http://www.fastmail.to/?STKI=11487141">fastmail.fm</a> announced that <a class="reference external" href="http://blog.fastmail.fm/2013/09/25/exciting-news-fastmail-staff-purchase-the-business-from-opera/">staff had purchased the
+business back from opera</a> which was getting noticed on <a class="reference external" href="https://twitter.com/jacobian/status/383084245784076288">twitter</a>.</p>
+<p>This is a key issue for me, for staff to un-acquire itself just shows the belief
+the team have in it.</p>
+<p>So three months in and I'm happily switched to using <a class="reference external" href="http://www.fastmail.to/?STKI=11487141">fastmail.fm</a> as my primary
+email address. Some nice features are:</p>
+<ul class="simple">
+<li>Fast loading</li>
+<li>Infinite scrolling</li>
+<li>Extensive configuration</li>
+<li>Ad free</li>
+</ul>
+<p>Some not nice features:</p>
+<ul class="simple">
+<li>No native mobile app (I'm using <a class="reference external" href="https://play.google.com/store/apps/details?id=com.maildroid.pro&amp;hl=en">MailDroid Pro</a>)</li>
+</ul>
+<p>I haven't totally unplugged myself from gmail, I still forward all gmail to
+my fastmail account, but these are becoming less and less as I move more
+accounts over to use my new address.</p>
+<p>The process to switch has been relatively pain free and for $40
+a year seems a small price to pay to have secure and private email.</p>
+                </article>
+            </aside><!-- /#featured -->
+                <section id="content" class="body">
+                    <h1>Other articles</h1>
+                    <hr />
+                    <ol id="posts-list" class="hfeed">
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="http://simonsblog.co.uk/the-psychology-of-computer-programming.html" rel="bookmark"
+                           title="Permalink to The Psychology of Computer Programming">The Psychology of Computer Programming</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2013-01-26T15:29:00+00:00">
+                Published: Sat 26 January 2013
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="http://simonsblog.co.uk/author/simon.html">Simon</a>
+        </address>
+<p>In <a href="http://simonsblog.co.uk/category/misc.html">misc</a>.</p>
+<p>tags: <a href="http://simonsblog.co.uk/tag/books.html">books</a> <a href="http://simonsblog.co.uk/tag/programming.html">programming</a> <a href="http://simonsblog.co.uk/tag/psychology.html">psychology</a> </p>
+</footer><!-- /.post-info -->                <img alt="The Psychology of Computer Programming Book" class="align-center" src="/images/psychology-cp/book-thumb.png" style="width: 394px; height: 297px;" />
+<p><a class="reference external" href="/images/psychology-cp/book.png">Book cover</a></p>
+<p>The book <a class="reference external" href="http://www.amazon.co.uk/Psychology-Computer-Programming-Silver-Anniversary/dp/0932633420">The Psychology of Computer Programming</a> by Gerald M. Weinberg has
+been on my wish list for a while, ever since reading the
+<a class="reference external" href="http://www.catb.org/esr/writings/homesteading/cathedral-bazaar/">cathedral &amp; the bazaar</a> by <a class="reference external" href="http://esr.ibiblio.org/">Eric S. Raymond</a>, in which he talks about how
+working using the open source approach can not only work on …</p>
+                <a class="readmore" href="http://simonsblog.co.uk/the-psychology-of-computer-programming.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="http://simonsblog.co.uk/favourite-quotes.html" rel="bookmark"
+                           title="Permalink to Favourite quotes">Favourite quotes</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2012-06-25T17:05:00+01:00">
+                Published: Mon 25 June 2012
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="http://simonsblog.co.uk/author/simon.html">Simon</a>
+        </address>
+<p>In <a href="http://simonsblog.co.uk/category/misc.html">misc</a>.</p>
+<p>tags: <a href="http://simonsblog.co.uk/tag/python.html">python</a> <a href="http://simonsblog.co.uk/tag/quotes.html">quotes</a> <a href="http://simonsblog.co.uk/tag/linux.html">linux</a> </p>
+</footer><!-- /.post-info -->                <p>A selection of my favourite quotes I’ve come across recently…</p>
+<ul class="simple">
+<li><ul class="first">
+<li><strong>L1 cache</strong> - 3s grabbing a piece of paper</li>
+<li><strong>L2 cache</strong> - 14s picking a book from a shelf</li>
+<li><strong>System RAM</strong> - 4m walk down the hall</li>
+<li><strong>Hard drive seek</strong> - Like leaving the building to roam the
+earth for one year and …</li></ul></li></ul>
+                <a class="readmore" href="http://simonsblog.co.uk/favourite-quotes.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="http://simonsblog.co.uk/git-a-m-initial-commit.html" rel="bookmark"
+                           title="Permalink to git -a -m "initial commit"">git -a -m &quot;initial commit&quot;</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2011-08-20T16:20:00+01:00">
+                Published: Sat 20 August 2011
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="http://simonsblog.co.uk/author/simon.html">Simon</a>
+        </address>
+<p>In <a href="http://simonsblog.co.uk/category/misc.html">misc</a>.</p>
+<p>tags: <a href="http://simonsblog.co.uk/tag/talks.html">talks</a> <a href="http://simonsblog.co.uk/tag/open-source.html">open source</a> <a href="http://simonsblog.co.uk/tag/oggcamp.html">oggcamp</a> <a href="http://simonsblog.co.uk/tag/blog.html">blog</a> <a href="http://simonsblog.co.uk/tag/python.html">python</a> <a href="http://simonsblog.co.uk/tag/nginx.html">nginx</a> <a href="http://simonsblog.co.uk/tag/gunicorn.html">gunicorn</a> <a href="http://simonsblog.co.uk/tag/django.html">django</a> </p>
+</footer><!-- /.post-info -->                <p>I’ve decided to set this blog up after hearing a talk given at
+<a class="reference external" href="http://oggcamp.org/">OggCamp</a> by <a class="reference external" href="http://www.lornajane.net/">LornaJane Mitchell</a> entitled: careers in Open Source.</p>
+<p>It was refreshing to hear her enthusiasm for open source but also her
+frankness about what got her started and what has lead on from her doing …</p>
+                <a class="readmore" href="http://simonsblog.co.uk/git-a-m-initial-commit.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+                </ol><!-- /#posts-list -->
+                </section><!-- /#content -->
+        <section id="extras" class="body">
+                <div class="blogroll">
+                        <h2>links</h2>
+                        <ul>
+                            <li><a href="http://getpelican.com/">Pelican</a></li>
+                            <li><a href="http://python.org/">Python.org</a></li>
+                            <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
+                            <li><a href="#">You can modify those links in your config file</a></li>
+                        </ul>
+                </div><!-- /.blogroll -->
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="http://simonsblog.co.uk/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                            <li><a href="#">You can add links in your config file</a></li>
+                            <li><a href="#">Another social link</a></li>
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

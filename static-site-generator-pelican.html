@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <title>Static site generator - Pelican</title>
+        <link rel="stylesheet" href="http://simonsblog.co.uk/theme/css/main.css" />
+        <link href="http://simonsblog.co.uk/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="SimonsBlog Atom Feed" />
+
+        <!--[if IE]>
+            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="http://simonsblog.co.uk/">SimonsBlog </a></h1>
+                <nav><ul>
+                    <li><a href="http://simonsblog.co.uk/category/cycling.html">cycling</a></li>
+                    <li><a href="http://simonsblog.co.uk/category/linux.html">linux</a></li>
+                    <li><a href="http://simonsblog.co.uk/category/misc.html">misc</a></li>
+                    <li class="active"><a href="http://simonsblog.co.uk/category/python.html">python</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="http://simonsblog.co.uk/static-site-generator-pelican.html" rel="bookmark"
+           title="Permalink to Static site generator - Pelican">Static site generator - Pelican</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2013-02-03T21:50:00+00:00">
+                Published: Sun 03 February 2013
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="http://simonsblog.co.uk/author/simon.html">Simon</a>
+        </address>
+<p>In <a href="http://simonsblog.co.uk/category/python.html">python</a>.</p>
+<p>tags: <a href="http://simonsblog.co.uk/tag/blog.html">blog</a> <a href="http://simonsblog.co.uk/tag/pelican.html">pelican</a> </p>
+</footer><!-- /.post-info -->      <p>I <a class="reference external" href="http://simonsblog.co.uk/git-a-m-initial-commit.html">initially</a> set up this blog using <a class="reference external" href="https://www.djangoproject.com/">django</a>,
+but recently I've wanted to try out a static site generator &amp; decided to try
+out <a class="reference external" href="http://getpelican.com/">pelican</a>.</p>
+<p>It was <strong>extremely</strong> easy to set this up and deploy an updated blog to my site.
+It took a few hours to set up pelican and import previous posts
+(converting markdown to <a class="reference external" href="http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html">reStructuredText</a>) and so had a new blogging platform
+up and running very quickly.</p>
+<div class="section" id="installing">
+<h2>Installing</h2>
+<div class="highlight"><pre><span></span>simon@x220:~$ mkproject simonsblog
+<span class="o">(</span>simonsblog<span class="o">)</span>simon@x220:~/Devel/simonsblog$ pip install pelican
+</pre></div>
+<p>Then set up pelican by answering these basic questions. Note the option to
+deploy via ftp/SSH or dropbox.</p>
+</div>
+<div class="section" id="set-up">
+<h2>Set up</h2>
+<div class="highlight"><pre><span></span><span class="o">(</span>simonsblog<span class="o">)</span>simon@x220:~/Devel/simonsblog$ pelican-quickstart
+&gt; What will be the title of this web site? Simonblog
+&gt; Who will be the author of this web site? Simon
+&gt; What will be the default language of this web site? <span class="o">[</span>en<span class="o">]</span>
+&gt; Do you want to specify a URL prefix? e.g., http://example.com   <span class="o">(</span>Y/n<span class="o">)</span>
+&gt; What is your URL prefix? <span class="o">(</span>see above example<span class="p">;</span> no trailing slash<span class="o">)</span> http://simonsblog.co.uk
+&gt; Do you want to <span class="nb">enable</span> article pagination? <span class="o">(</span>Y/n<span class="o">)</span>
+&gt; How many articles per page <span class="k">do</span> you want? <span class="o">[</span><span class="m">10</span><span class="o">]</span>
+&gt; Do you want to generate a Makefile to easily manage your website? <span class="o">(</span>Y/n<span class="o">)</span>
+&gt; Do you want an auto-reload <span class="p">&amp;</span> simpleHTTP script to assist with theme and site development? <span class="o">(</span>Y/n<span class="o">)</span>
+&gt; Do you want to upload your website using FTP? <span class="o">(</span>y/N<span class="o">)</span>
+&gt; Do you want to upload your website using SSH? <span class="o">(</span>y/N<span class="o">)</span> y
+&gt; What is the hostname of your SSH server? <span class="o">[</span>localhost<span class="o">]</span> simonsblog
+&gt; What is the port of your SSH server? <span class="o">[</span><span class="m">22</span><span class="o">]</span>
+&gt; What is your username on that server? <span class="o">[</span>root<span class="o">]</span> simon
+&gt; Where <span class="k">do</span> you want to put your web site on that server? <span class="o">[</span>/var/www<span class="o">]</span>
+&gt; Do you want to upload your website using Dropbox? <span class="o">(</span>y/N<span class="o">)</span>
+</pre></div>
+<p>Your virtualenv project should now look something like this:</p>
+<div class="highlight"><pre><span></span><span class="o">(</span>simonsblog<span class="o">)</span>simon@x220:~/Devel/simonsblog$ ls
+content  develop_server.sh  Makefile  output  pelicanconf.py  publishconf.py
+</pre></div>
+<p>Update pelicanconf.py with your specific details:</p>
+<div class="highlight"><pre><span></span><span class="n">AUTHOR</span> <span class="o">=</span> <span class="s2">&quot;Simon&quot;</span>
+<span class="n">SITENAME</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;Simonsblog&quot;</span><span class="p">)</span>
+<span class="n">SITEURL</span> <span class="o">=</span> <span class="s1">&#39;http://simonsblog.local&#39;</span>
+
+<span class="n">TIMEZONE</span> <span class="o">=</span> <span class="s1">&#39;Europe/London&#39;</span>
+
+<span class="n">DEFAULT_LANG</span> <span class="o">=</span> <span class="s1">&#39;en&#39;</span>
+
+<span class="c1"># Blogroll</span>
+<span class="n">LINKS</span> <span class="o">=</span>  <span class="p">((</span><span class="s1">&#39;Python.org&#39;</span><span class="p">,</span> <span class="s1">&#39;http://python.org&#39;</span><span class="p">),)</span>
+
+<span class="c1"># Social widget</span>
+<span class="n">SOCIAL</span> <span class="o">=</span> <span class="p">((</span><span class="s1">&#39;delicious&#39;</span><span class="p">,</span> <span class="s1">&#39;http://delicious.com/djangos&#39;</span><span class="p">),</span>
+          <span class="p">(</span><span class="s1">&#39;github&#39;</span><span class="p">,</span> <span class="s1">&#39;https://github.com/simonhayward&#39;</span><span class="p">),</span>
+          <span class="p">(</span><span class="s1">&#39;google+&#39;</span><span class="p">,</span> <span class="s1">&#39;https://plus.google.com/u/0/105199393791103843210/posts&#39;</span><span class="p">),</span>
+          <span class="p">(</span><span class="s1">&#39;rss&#39;</span><span class="p">,</span> <span class="s1">&#39;/feeds/all.atom.xml&#39;</span><span class="p">),</span>
+          <span class="p">(</span><span class="s1">&#39;twitter&#39;</span><span class="p">,</span> <span class="s1">&#39;https://twitter.com/simhay&#39;</span><span class="p">),)</span>
+
+<span class="n">FILES_TO_COPY</span> <span class="o">=</span> <span class="p">((</span><span class="s1">&#39;extra/robots.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;robots.txt&#39;</span><span class="p">),</span>
+                 <span class="p">(</span><span class="s1">&#39;extra/favicon.ico&#39;</span><span class="p">,</span> <span class="s1">&#39;favicon.ico&#39;</span><span class="p">),)</span>
+
+<span class="n">DEFAULT_PAGINATION</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">THEME</span> <span class="o">=</span> <span class="s2">&quot;subtle&quot;</span>
+<span class="n">STATIC_PATHS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;images&#39;</span><span class="p">]</span>
+<span class="n">GOOGLE_ANALYTICS</span> <span class="o">=</span> <span class="s1">&#39;UA-2417620-7&#39;</span>
+<span class="n">TWITTER_USERNAME</span> <span class="o">=</span> <span class="s1">&#39;simhay&#39;</span>
+<span class="n">DISQUS_SITENAME</span> <span class="o">=</span> <span class="s1">&#39;siblog&#39;</span>
+</pre></div>
+<p>I've created an <em>extra</em> folder within the content folder to hold favicon.ico
+and robots.txt file.</p>
+</div>
+<div class="section" id="styling">
+<h2>Styling</h2>
+<p>Pelican comes with <em>pelican-themes</em> to manage various themes for pelican.</p>
+<div class="highlight"><pre><span></span><span class="o">(</span>simonsblog<span class="o">)</span>simon@x220:~/Devel/simonsblog$ <span class="nb">cd</span>
+<span class="o">(</span>simonsblog<span class="o">)</span>simon@x220:~$ git clone git://github.com/getpelican/pelican-themes.git
+<span class="o">(</span>simonsblog<span class="o">)</span>simon@x220:~$ pelican-themes -i pelican-themes/subtle
+</pre></div>
+</div>
+<div class="section" id="create-a-post">
+<h2>Create a post</h2>
+<div class="highlight"><pre><span></span><span class="o">(</span>simonsblog<span class="o">)</span>simon@x220:~$ cdproject <span class="o">&amp;&amp;</span> <span class="nb">cd</span> content
+<span class="o">(</span>simonsblog<span class="o">)</span>simon@x220:~/Devel/simonsblog/content$ vi Static-site-generator.rst
+</pre></div>
+<p>Each file contains some metadata, for this post this is the first 7 lines:</p>
+<div class="highlight"><pre><span></span>Static site generator
+<span class="c1">#####################</span>
+
+:date: <span class="m">2013</span>-02-03 <span class="m">21</span>:50
+:tags: blog, pelican
+:category: python
+:author: Simon
+</pre></div>
+<p>The rest of the post is standard <a class="reference external" href="http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html">reStructuredText</a>.
+It's a simpler set up now, as all I need is to use is vim. Once I have
+created a new file under the content directory, I'm using <a class="reference external" href="http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html">reStructuredText</a>,
+but you can use markdown, I can view these changes locally and simply rsync
+the generated content direct to my server. It couldn't be easier or simpler &amp;
+means I can host this blog anywhere.</p>
+</div>
+<div class="section" id="viewing-changes">
+<h2>Viewing changes</h2>
+<div class="highlight"><pre><span></span><span class="o">(</span>simonsblog<span class="o">)</span>simon@x220:~$ cdproject
+<span class="o">(</span>simonsblog<span class="o">)</span>simon@x220:~/Devel/simonsblog$ ./develop_server.sh start
+<span class="o">(</span>simonsblog<span class="o">)</span>simon@x220:~/Devel/simonsblog$ firefox localhost:8000
+</pre></div>
+<p>When you make any further changes, these should be picked up automatically and the site
+is generated again so you can view these changes locally.</p>
+</div>
+<div class="section" id="deploy">
+<h2>Deploy</h2>
+<p>Assuming you already have a host and web server set up (apache/nginx etc),
+you simply need to push the generated content out to your host - in my case
+via SSH.</p>
+<div class="highlight"><pre><span></span><span class="o">(</span>simonsblog<span class="o">)</span>simon@x220:~$ cdproject
+<span class="o">(</span>simonsblog<span class="o">)</span>simon@x220:~/Devel/simonsblog$ make rsync_upload
+</pre></div>
+<p>When you happy just close down the local http server:</p>
+<div class="highlight"><pre><span></span><span class="o">(</span>simonsblog<span class="o">)</span>simon@x220:~/Devel/simonsblog$ ./develop_server.sh stop
+</pre></div>
+<p>For me the benefits are:</p>
+<ul class="simple">
+<li>Using vim (reStructuredText)</li>
+<li>Code syntax highlighting</li>
+<li>Rsync deployment</li>
+<li>Ease of use</li>
+<li>Host content anywhere</li>
+</ul>
+<p>Having a complete <a class="reference external" href="https://www.djangoproject.com/">django</a> installation was maybe too much for a simple blog,
+so switching to <a class="reference external" href="http://getpelican.com/">pelican</a> makes perfect sense for me. If you have a blog and
+want to simplify the creation and hosting process, try <a class="reference external" href="http://getpelican.com/">pelican</a> it really
+stands out as a simple, easy to use static site generator.</p>
+</div>
+
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="blogroll">
+                        <h2>links</h2>
+                        <ul>
+                            <li><a href="http://getpelican.com/">Pelican</a></li>
+                            <li><a href="http://python.org/">Python.org</a></li>
+                            <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
+                            <li><a href="#">You can modify those links in your config file</a></li>
+                        </ul>
+                </div><!-- /.blogroll -->
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="http://simonsblog.co.uk/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                            <li><a href="#">You can add links in your config file</a></li>
+                            <li><a href="#">Another social link</a></li>
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

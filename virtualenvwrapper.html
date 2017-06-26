@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <title>Virtualenvwrapper</title>
+        <link rel="stylesheet" href="http://simonsblog.co.uk/theme/css/main.css" />
+        <link href="http://simonsblog.co.uk/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="SimonsBlog Atom Feed" />
+
+        <!--[if IE]>
+            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="http://simonsblog.co.uk/">SimonsBlog </a></h1>
+                <nav><ul>
+                    <li><a href="http://simonsblog.co.uk/category/cycling.html">cycling</a></li>
+                    <li><a href="http://simonsblog.co.uk/category/linux.html">linux</a></li>
+                    <li><a href="http://simonsblog.co.uk/category/misc.html">misc</a></li>
+                    <li class="active"><a href="http://simonsblog.co.uk/category/python.html">python</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="http://simonsblog.co.uk/virtualenvwrapper.html" rel="bookmark"
+           title="Permalink to Virtualenvwrapper">Virtualenvwrapper</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2011-09-19T21:43:00+01:00">
+                Published: Mon 19 September 2011
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="http://simonsblog.co.uk/author/simon.html">Simon</a>
+        </address>
+<p>In <a href="http://simonsblog.co.uk/category/python.html">python</a>.</p>
+<p>tags: <a href="http://simonsblog.co.uk/tag/open-source.html">open source</a> <a href="http://simonsblog.co.uk/tag/python.html">python</a> <a href="http://simonsblog.co.uk/tag/django.html">django</a> </p>
+</footer><!-- /.post-info -->      <p>If your using <a class="reference external" href="http://www.virtualenv.org/">virtualenv</a> then you should
+be using
+<a class="reference external" href="http://www.doughellmann.com/docs/virtualenvwrapper/">virtualenvwrapper</a>,
+it's a great tool to make it really easy to use multiple virtualenv's
+and work with them painlessly.</p>
+<div class="section" id="here-s-the-why">
+<h2>Here's the why</h2>
+<p><a class="reference external" href="http://www.virtualenv.org/">Virtualenv</a> is a nice way to separate out
+all your python libraries into their own individual environments,
+<a class="reference external" href="http://www.doughellmann.com/docs/virtualenvwrapper/">virtualenvwrapper</a>
+makes it easy to put all these environments into one convenient
+location, rather than install all your python libraries into a site
+wide, global location.</p>
+<p>By default when you <em>pip install</em> onto your machine, these will default
+to your global site packages location, somewhere like:
+/usr/local/lib/python2.6/dist-packages (on ubuntu)</p>
+<p>Instead if we use virtualenv's +
+<a class="reference external" href="http://www.doughellmann.com/docs/virtualenvwrapper/">virtualenvwrapper</a>
+we can contain multiple python modules/libraries installed to a selected
+personal folder. I have all my virtualenv's installed in a hidden
+directory in my home folder.</p>
+<div class="highlight"><pre><span></span>/home/simon/.virtualenvs
+</pre></div>
+<p>This is defined via your shell initialisation file (in my case .bashrc)</p>
+<div class="highlight"><pre><span></span>$ grep virtualenvs .bashrc
+<span class="nb">export</span> <span class="nv">WORKON_HOME</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$HOME</span><span class="s2">/.virtualenvs&quot;</span>
+</pre></div>
+<p>Within this folder all my libs are installed (once I've activated that
+virtual environment):</p>
+<div class="highlight"><pre><span></span>simon@simon-development:/home/simon/.virtualenvs$ ls -d */
+geo/  metrics/  monitor/  simonsblog/
+</pre></div>
+<p>To actually use one of these virtual environments you only have to
+<em>activate</em> the one you wish to work in, this is where
+<a class="reference external" href="http://www.doughellmann.com/docs/virtualenvwrapper/">virtualenvwrapper</a>
+comes in really handy:</p>
+<div class="highlight"><pre><span></span>simon@simon-development:/home/simon/.virtualenvs$ workon
+geo
+metrics
+monitor
+simonsblog
+</pre></div>
+<p>This list all my virtual environments, to select mine I simply:</p>
+<div class="highlight"><pre><span></span>simon@simon-development:/home/simon/.virtualenvs$ workon simonsblog
+<span class="o">(</span>simonsblog<span class="o">)</span>simon@simon-development:/home/simon/Devel/simonsblog_django$
+</pre></div>
+<p>I'm then transferred into my virtual environment (simonsblog_django)
+and any libraries I want to install via pip or easy_install will be
+installed into my virtual environment and not globally, and using
+virtualenvwrapper.projects (as of virtualenvwrapper 2.9 there is no need
+to install this package separately) I also get dumped into my working
+folder for that project (see
+<a class="reference external" href="http://www.doughellmann.com/docs/virtualenvwrapper/command_ref.html#setvirtualenvproject">setvirtualenvproject</a>).</p>
+<div class="highlight"><pre><span></span>$ ls -d /home/simon/.virtualenvs/simonsblog/lib/python2.6/site-packages/*/
+
+/home/simon/.virtualenvs/simonsblog/lib/python2.6/site-packages/akismet-0.2.0-py2.6.egg-info/
+/home/simon/.virtualenvs/simonsblog/lib/python2.6/site-packages/debug_toolbar/
+/home/simon/.virtualenvs/simonsblog/lib/python2.6/site-packages/django/
+/home/simon/.virtualenvs/simonsblog/lib/python2.6/site-packages/Django-1.3-py2.6.egg-info/
+/home/simon/.virtualenvs/simonsblog/lib/python2.6/site-packages/django_debug_toolbar-0.8.5-py2.6.egg-info/
+/home/simon/.virtualenvs/simonsblog/lib/python2.6/site-packages/django_imagekit-0.3.6-py2.6.egg-info/
+/home/simon/.virtualenvs/simonsblog/lib/python2.6/site-packages/django_tagging-0.3.1-py2.6.egg-info/
+/home/simon/.virtualenvs/simonsblog/lib/python2.6/site-packages/docutils/
+/home/simon/.virtualenvs/simonsblog/lib/python2.6/site-packages/gunicorn/
+/home/simon/.virtualenvs/simonsblog/lib/python2.6/site-packages/imagekit/
+/home/simon/.virtualenvs/simonsblog/lib/python2.6/site-packages/markdown/
+....
+</pre></div>
+<p>Whenever I do pip install <em>package</em> all those files are dumped into my
+/home/simon/.virtualenvs/simonsblog_django/lib/python2.6/site-packages/
+directory.</p>
+<p>The only rule is this: <strong>you need to install *virtualenv* &amp;
+*virtualenvwrapper* as you would normally into the global site wide
+packages</strong>, then once these are installed globally for everything else
+you can install to one of your virtual environments.</p>
+</div>
+<div class="section" id="here-s-the-how">
+<h2>Here's the how</h2>
+<div class="highlight"><pre><span></span>$ sudo aptitude install python-pip python-dev build-essential
+$ sudo pip install -U pip
+$ sudo pip install virtualenv
+$ sudo pip install virtualenvwrapper
+$ mkdir <span class="nv">$HOME</span>/.virtualenvs
+$ vi .bashrc
+<span class="nb">export</span> <span class="nv">WORKON_HOME</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$HOME</span><span class="s2">/.virtualenvs&quot;</span>
+<span class="nb">source</span> /usr/local/bin/virtualenvwrapper.sh
+$ <span class="nb">source</span> bashrc
+$ mkvirtualenv myvirtualenvtest
+....
+</pre></div>
+<p>This will then initiate your myvirtualenvtest environment and from then
+on your installs (pip/easy_installs) will relate to your activated
+virtualenv.</p>
+<p>My .bashrc looks something like this:</p>
+<div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">WORKON_HOME</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$HOME</span><span class="s2">/.virtualenvs&quot;</span>
+<span class="nb">export</span> <span class="nv">VIRTUALENVWRAPPER_HOOK_DIR</span><span class="o">=</span><span class="nv">$WORKON_HOME</span>
+<span class="nb">source</span> /usr/local/bin/virtualenvwrapper.sh
+<span class="nb">export</span> <span class="nv">PIP_VIRTUALENV_BASE</span><span class="o">=</span><span class="nv">$WORKON_HOME</span>
+<span class="nb">export</span> <span class="nv">PIP_RESPECT_VIRTUALENV</span><span class="o">=</span><span class="nb">true</span>
+<span class="nb">export</span> <span class="nv">PROJECT_HOME</span><span class="o">=</span><span class="nv">$HOME</span>/Devel
+
+<span class="c1"># alias&#39; from Holger Krekel http://paste.pocoo.org/show/164838/</span>
+<span class="nb">alias</span> <span class="nv">v</span><span class="o">=</span>workon
+<span class="nb">alias</span> v.deactivate<span class="o">=</span>deactivate
+<span class="nb">alias</span> v.mk<span class="o">=</span><span class="s1">&#39;mkvirtualenv --no-site-packages&#39;</span>
+<span class="nb">alias</span> v.mk_withsitepackages<span class="o">=</span><span class="s1">&#39;mkvirtualenv&#39;</span>
+<span class="nb">alias</span> v.rm<span class="o">=</span>rmvirtualenv
+<span class="nb">alias</span> v.switch<span class="o">=</span>workon
+<span class="nb">alias</span> v.add2virtualenv<span class="o">=</span>add2virtualenv
+<span class="nb">alias</span> v.cdsitepackages<span class="o">=</span>cdsitepackages
+<span class="nb">alias</span> v.cd<span class="o">=</span>cdvirtualenv
+<span class="nb">alias</span> v.lssitepackages<span class="o">=</span>lssitepackages
+</pre></div>
+<p>You'll also see in my .bashrc is a PROJECT_HOME environment variable,
+this is where I keep my project code, which again keeps my code in a
+handy convenient place, check out
+<a class="reference external" href="http://www.doughellmann.com/docs/virtualenvwrapper/projects.html">projects</a>
+in virtualenvwrapper for more on this, but you can do nice things like
+use templates so you can start a new django project (this is an
+extension details
+<a class="reference external" href="http://www.doughellmann.com/projects/virtualenvwrapper.django/">here</a>)
+and this will build up the necessary libraries for django within this
+new project.</p>
+<p>There is loads more to <a class="reference external" href="http://www.virtualenv.org/">virtualenv</a> and
+<a class="reference external" href="http://www.doughellmann.com/docs/virtualenvwrapper/">virtualenvwrapper</a>,
+you will find that are invaluable when dealing with multiple
+projects/sites which each need their own specific python modules and
+libraries.</p>
+<p>Also check out this <a class="reference external" href="http://www.pycon.tv/video/36/">Pycon video</a> that
+explains <a class="reference external" href="http://www.virtualenv.org/">virtualenv</a>.</p>
+</div>
+
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="blogroll">
+                        <h2>links</h2>
+                        <ul>
+                            <li><a href="http://getpelican.com/">Pelican</a></li>
+                            <li><a href="http://python.org/">Python.org</a></li>
+                            <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
+                            <li><a href="#">You can modify those links in your config file</a></li>
+                        </ul>
+                </div><!-- /.blogroll -->
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="http://simonsblog.co.uk/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                            <li><a href="#">You can add links in your config file</a></li>
+                            <li><a href="#">Another social link</a></li>
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>
