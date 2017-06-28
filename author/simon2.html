@@ -26,6 +26,36 @@
                     <ol id="posts-list" class="hfeed" start="9">
             <li><article class="hentry">
                 <header>
+                    <h1><a href="http://simonsblog.co.uk/rotate-arbitrary.html" rel="bookmark"
+                           title="Permalink to Rotate arbitrary">Rotate arbitrary</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2012-07-21T16:13:00+01:00">
+                Published: Sat 21 July 2012
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="http://simonsblog.co.uk/author/simon.html">Simon</a>
+        </address>
+<p>In <a href="http://simonsblog.co.uk/category/python.html">python</a>.</p>
+<p>tags: <a href="http://simonsblog.co.uk/tag/open-source.html">open source</a> <a href="http://simonsblog.co.uk/tag/python.html">python</a> </p>
+</footer><!-- /.post-info -->                <p>Another way to rotate by arbitrary values.</p>
+<p>You can in python 2.x - just str.encode(“rot13”) - but for other
+rotations you could use the following (for ascii):</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">string</span> <span class="kn">import</span> <span class="n">ascii_uppercase</span> <span class="k">as</span> <span class="n">uc</span><span class="p">,</span> <span class="n">ascii_lowercase</span> <span class="k">as</span> <span class="n">lc</span><span class="p">,</span> <span class="n">maketrans</span>
+
+
+<span class="k">def</span> <span class="nf">rot_func</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">encode</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">rotate</span><span class="o">=</span><span class="mi">13</span><span class="p">):</span>
+    <span class="n">letters</span> <span class="o">=</span> <span class="n">uc</span> <span class="o">+</span> <span class="n">lc</span>
+    <span class="n">rot</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join …</span></pre></div>
+                <a class="readmore" href="http://simonsblog.co.uk/rotate-arbitrary.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
                     <h1><a href="http://simonsblog.co.uk/favourite-quotes.html" rel="bookmark"
                            title="Permalink to Favourite quotes">Favourite quotes</a></h1>
                 </header>
